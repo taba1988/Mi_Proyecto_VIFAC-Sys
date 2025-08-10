@@ -1,0 +1,426 @@
+/* Estilos Generales del Cuerpo */
+body {
+    /* Configuración del fondo de la página */
+    background-image: none;
+    background-size: 900px;
+    background-repeat: no-repeat;
+    background-position: calc(20% + 100px) center;
+    background-attachment: fixed;
+    background-color: #e6f3ff;
+    color: #000;
+    overflow-y: auto;
+}
+
+/* Estilos del Encabezado */
+.header-container {
+    /* Contenedor Flexbox para el encabezado con estilos de tarjeta */
+    background-color: #0093DD;
+    padding: 15px 30px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    flex-wrap: wrap;
+    z-index: 10;
+}
+
+.header-container .left-text {
+    /* Estilos para el texto de la izquierda en el encabezado */
+    font-size: 32px;
+    font-weight: bold;
+    color: #333652;
+}
+
+.header-container .right-text {
+    /* Estilos para el texto de la derecha en el encabezado */
+    font-family: 'Bad Script', cursive;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 16px;
+    color: #333652;
+    margin-right: 20px;
+}
+
+/* Estilos para los iconos del encabezado */
+.header-icons .bi {
+    /* Estilos de los iconos y su transición */
+    color: white;
+    font-size: 1.8rem;
+    transition: color 0.2s ease-in-out;
+}
+
+.header-icons .bi:hover {
+    /* Efecto de hover en los iconos */
+    color: #f0f0f0;
+}
+
+/* Estilos para la estructura de columnas principal del dashboard */
+.dashboard-content-row {
+    /* Layout principal del dashboard usando Flexbox */
+    display: flex;
+    align-items: flex-start;
+    min-height: calc(100vh - 180px);
+}
+
+/* Ajustes al área principal del dashboard */
+.dashboard-main-area {
+    /* Área principal del contenido, que ocupa el espacio restante */
+    flex-grow: 1;
+    padding: 0 20px;
+    margin-left: 15px;
+    padding-bottom: 70px;
+}
+
+.logo-right-col {
+    /* Columna del logo con posicionamiento sticky */
+    position: sticky !important;
+    top: 20px !important;
+    align-self: flex-start !important;
+    padding-left: 0;
+}
+
+/* Estilos de iconos fijos en la parte inferior */
+.fixed-icons {
+    /* Contenedor de iconos con posición fija */
+    position: fixed !important;
+    bottom: 70px !important;
+    left: calc(var(--bs-gutter-x, 1.5rem) * .5) !important;
+    z-index: 999 !important;
+    width: auto;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.fixed-icons .d-flex {
+    /* Layout Flexbox para los iconos fijos */
+    justify-content: flex-start;
+    margin-left: 0 !important;
+    gap: 1.5rem;
+    padding: 0 1rem;
+    margin-top: 1rem;
+}
+
+.fixed-icon-link {
+    /* Enlace individual de los iconos fijos */
+    position: relative;
+    text-decoration: none;
+    color: inherit;
+    overflow: visible;
+    display: inline-block;
+}
+
+.fixed-icon-link i {
+    /* Estilos para el icono */
+    font-size: 2rem;
+    color: #6c757d;
+    transition: color 0.2s ease-in-out;
+}
+
+.fixed-icon-link:hover i {
+    /* Efecto de hover en el icono */
+    color: #333;
+}
+
+.menu-text-vertical {
+    /* Estilos para el texto emergente (tooltip) */
+    position: absolute;
+    left: 50%;
+    bottom: 100%;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    white-space: nowrap;
+    transform: translate(-50%, 10px);
+    pointer-events: none;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.85rem;
+}
+
+.fixed-icon-link:hover .menu-text-vertical {
+    /* Muestra el texto emergente al pasar el mouse */
+    opacity: 1;
+    transform: translate(-50%, 0);
+    pointer-events: auto;
+}
+
+/* Estilos para Carrusel, Tarjetas, Gráficos de Barra y Enlaces Rápidos */
+#dynamicCarousel {
+    /* Contenedor del carrusel */
+    max-width: 100%;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+#dynamicCarousel .carousel-item img {
+    /* Estilos de las imágenes dentro del carrusel */
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.carousel-caption {
+    /* Estilos para la leyenda del carrusel */
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.card-section {
+    /* Contenedor de una sección de tarjetas */
+    margin-bottom: 40px;
+}
+
+.card {
+    /* Estilos de la tarjeta */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+    /* Efecto de hover en la tarjeta */
+    transform: translateY(-5px);
+}
+
+.card-img-top {
+    /* Estilos para la imagen superior de la tarjeta */
+    height: 180px;
+    object-fit: cover;
+}
+
+.card-body {
+    /* Estilos para el cuerpo de la tarjeta */
+    padding: 1.25rem;
+}
+
+.card-title {
+    /* Estilos para el título de la tarjeta */
+    font-size: 1.15rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.card-text {
+    /* Estilos para el texto de la tarjeta */
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* Contenedor y barras de ejemplo para gráficos */
+.chart-container-placeholder {
+    /* Contenedor para el gráfico de barras de ejemplo */
+    height: 150px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin-top: 15px;
+}
+
+.bar-chart {
+    /* Contenedor del gráfico de barras */
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: flex-end;
+    justify-content: space-around;
+    gap: 5px;
+}
+
+.bar-chart .bar {
+    /* Estilos de las barras del gráfico */
+    width: 20%;
+    background-color: #007bff;
+    transition: height 0.5s ease;
+    border-radius: 3px 3px 0 0;
+}
+
+.link-section .list-group-item {
+    /* Estilos de los elementos de la lista de enlaces */
+    border-radius: 5px;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.link-section .list-group-item i {
+    /* Estilos del icono en los enlaces */
+    color: #007bff;
+}
+
+.link-section .list-group-item:hover {
+    /* Efecto de hover en los enlaces */
+    background-color: #007bff;
+    color: white;
+}
+
+.link-section .list-group-item:hover i {
+    /* Efecto de hover en el icono dentro del enlace */
+    color: white;
+}
+
+/* Estilos de pie de página (Footer) */
+footer {
+    /* Estilos del footer con posición fija */
+    background-color: #f8f9fa;
+    padding: 10px 0;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+footer .d-flex {
+    /* Layout Flexbox del contenido del footer */
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+footer .text-muted {
+    /* Estilos del texto del footer */
+    text-align: left;
+    flex: 1;
+    color: #6c757d !important;
+}
+
+footer .mt-2.mt-md-0 {
+    /* Estilos para el texto de la derecha en el footer */
+    text-align: right;
+    flex: 1;
+}
+
+footer .link-dark {
+    /* Estilos para los enlaces del footer */
+    color: #6c757d !important;
+    text-decoration: none;
+}
+
+footer .link-dark:hover {
+    /* Efecto de hover en los enlaces del footer */
+    text-decoration: underline;
+}
+
+/* Media Queries para Responsividad */
+@media (max-width: 767px) {
+    /* Ajustes del footer para pantallas pequeñas */
+    footer .text-muted,
+    footer .mt-2.mt-md-0 {
+        flex: none;
+        text-align: center;
+        width: 100%;
+    }
+
+    /* Ajustes para el encabezado en móvil */
+    .header-container .left-text,
+    .header-container .right-text {
+        width: 100%;
+        text-align: center;
+    }
+    .header-icons {
+        width: 100%;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    /* Ajustes al área principal del dashboard */
+    .dashboard-main-area {
+        width: 100%;
+        margin-left: 0;
+        padding: 0 10px;
+    }
+    .logo-right-col {
+        width: 100%;
+        position: static !important;
+        margin-top: 20px;
+        order: -1;
+    }
+
+    /* Iconos fijos en móvil */
+    .fixed-icons {
+        position: static !important;
+        bottom: auto !important;
+        left: auto !important;
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        background-color: #f8f9fa;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        margin-left: 0 !important;
+    }
+    .fixed-icons .d-flex {
+        gap: 0.5rem;
+        margin-left: 0 !important;
+        padding: 0;
+        margin-top: 0;
+    }
+
+    .fixed-icon-link {
+        flex-direction: column;
+        align-items: center;
+    }
+    .menu-text-vertical {
+        position: static;
+        opacity: 1;
+        transform: none;
+        pointer-events: auto;
+        background-color: transparent;
+        color: #333;
+        font-size: 0.75rem;
+        padding: 0;
+        margin-top: 0.2rem;
+    }
+    .fixed-icon-link:hover .menu-text-vertical {
+        opacity: 1;
+        transform: none;
+    }
+
+    /* Ajustes para las tarjetas y carrusel en pantallas pequeñas */
+    .card-section .col-md-4 {
+        width: 100%;
+    }
+    .dashboard-main-area .card-img-top {
+        height: 150px;
+    }
+    .dashboard-main-area .carousel-item img {
+        height: 200px;
+    }
+    .link-section {
+        margin-bottom: 100px;
+    }
+}
+
+/* Definición de la animación de giro lateral controlado */
+@keyframes giroLateral {
+    0%, 100% {
+        transform: rotateY(0deg);
+    }
+    50% {
+        transform: rotateY(180deg);
+    }
+}
+
+/* Aplica la animación a la imagen del logo */
+.logo-right-col img {
+    animation: giroLateral 6s ease-in-out infinite;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+}
+#dynamicCarousel .carousel-item img {
+    /* Ajuste el alto y el ancho para las imágenes del carrusel */
+    height: 350px;
+    width: 100%; /* Por ejemplo, 100% del contenedor */
+    object-fit: cover;
+}
