@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Contraseña</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/recuperar.css">
+</head>
+<body class="bg-white">
+    <div class="header-container">
+        <div class="left-text">Recuperar Contraseña</div>
+        <div class="center-text">MAXI-LIMPIEZA</div>
+        <div class="right-text">Calidad que se siente</div>
+    </div>
+
+    <div id="layoutAuthentication">
+        <div id="layoutAuthentication_content">
+            <main>
+                <div class="container">
+                    <div class="row justify-content-start mt-4">
+                        <div class="col-sm-10 col-md-7 col-lg-5">
+                            <div class="card shadow-lg border-7 rounded-lg mt-2">
+                                <div class="card-header">
+                                    <h3 class="text-center font-weight-secondary my-3">Recuperación de Contraseña</h3>
+                                </div>
+                                <div class="card-body mx-2">
+                                    <form id="password-reset-form">
+                                        <div class="small mb-3 text-muted">Ingrese su dirección de correo electrónico y le enviaremos un enlace para restablecer su contraseña.</div>
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" required />
+                                            <label for="inputEmail">Correo Electrónico</label>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                                            <a class="small" href="login.html">Volver al inicio de sesión</a>
+                                            <button class="btn btn-outline-primary" type="submit">Restablecer</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="form-group mb-0 mt-4">
+                                    <div class="card-footer text-auto py-3">
+                                        <div class="col-sm-12" style="font-size:12px;">
+                                            <figure class="text-center">
+                                                <p style="text-align: justify;">
+                                                    Este es el sistema <b>VIFAC-Sys</b>. Si olvidó su contraseña, ingrese su correo electrónico registrado.
+                                                    Se le enviará un enlace seguro para restablecerla. Si no recibe el correo en unos minutos,
+                                                    revise su carpeta de spam o contáctese con el administrador del sistema 
+                                                    recuerde que su contraseña debe tener como minimo 8 caracteres que contenga (Mayusculas, Minusculas, Numeros y Caractaeres especiales).
+                                                </p>
+                                            </figure>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <div id="layoutAuthentication_footer" style="color: #D9D9D9;">
+            <footer class="py-3 bg-light mb-5">
+                <div class="container-fluid px-3">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="text-muted"> &copy; 2025</div>
+                        <div>
+                            <a href="#" class="link-dark text-muted">Política de privacidad</a>
+                            &middot;
+                            <a href="#" class="link-dark text-muted">Diseñado por O.T.G “VIFAC-Sys</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/recuperar.js"></script>
+</body>
+</html>
