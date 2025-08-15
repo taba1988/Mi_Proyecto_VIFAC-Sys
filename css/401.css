@@ -1,4 +1,4 @@
-        /* Configuración básica de la página para usar Flexbox y ocupar toda la altura */
+/* Configuración básica de la página para usar Flexbox y ocupar toda la altura */
 body {
     display: flex;
     flex-direction: column;
