@@ -1,0 +1,57 @@
+.card-section {
+    /* Oculta la sección de tarjetas por defecto */
+    display: none;
+}
+/* Estilos para los elementos de la lista lateral */
+.procesos-scroll li {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    user-select: none;
+}
+/* Efecto de hover en los elementos de la lista */
+.procesos-scroll li:hover {
+    background-color: #e0e0e0;
+}
+/* Estilo para el elemento de la lista que está activo */
+.procesos-scroll li.active {
+    background-color: #0093DD;
+    color: white;
+}
+/* Contenedor principal de la navegación con Flexbox para alinear el footer */
+nav {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+}
+/* Estilos para el pie de página lateral */
+.aside-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ccc;
+}
+/* Estilos para los botones dentro del pie de página lateral */
+.aside-footer button {
+    background: none;
+    border: none;
+    color: black;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 14px;
+}
+/* Efecto de hover en los botones del pie de página */
+.aside-footer button:hover {
+    color: #0093DD;
+}
+
+.card-body p.card-text {
+    /* Ajusta el margen inferior para párrafos dentro del cuerpo de la tarjeta */
+    margin-bottom: 0.2rem !important;
+}

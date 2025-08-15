@@ -1,0 +1,64 @@
+        /* Estilos para el layout general de la página, usando Flexbox */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    align-items: center; 
+}
+/* Estilos para el contenedor principal de la página de error */
+#layoutError {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; 
+    flex-grow: 1;
+    text-align: center; 
+}
+/* Estilos para el código de error principal */
+.error-code {
+    font-size: 6rem;
+    color: #333652;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+/* Estilos para el mensaje descriptivo del error */
+.error-message {
+    font-size: 1.5rem;
+    color: #343a40;
+    margin-bottom: 20px;
+}
+/* Estilos para el enlace de retorno */
+.return-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+/* Estilo del enlace al pasar el cursor */
+.return-link:hover {
+    text-decoration: underline;
+}
+/* Estilos para el icono de la flecha dentro del enlace */
+.bi-arrow-left {
+    margin-right: 0.5rem;
+}
+/* Estilos para el pie de página */
+#layoutError_footer {
+    background-color: #f8f9fa;
+    width: 100%; 
+    margin-top: auto; 
+}
+/* Contenedor fluido para el contenido del pie de página */
+.footer-container-fluid {
+    padding: 1rem 15px; 
+    display: flex; 
+    justify-content: space-between; 
+    flex-wrap: wrap; 
+}
+/* Estilos para el texto pequeño dentro del pie de página */
+.footer-container-fluid small {
+    color: #6c757d;
+    font-size: 0.875rem;
+}
