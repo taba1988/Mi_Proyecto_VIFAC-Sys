@@ -23,13 +23,17 @@ function abrirModalUsuario() {
   document.getElementById("formUsuario").reset();
   document.getElementById("item").value = usuarios.length + 1;
   document.getElementById("usuarioId").value = "";
+  document.getElementById("dropdownRol").textContent = "Seleccionar rol";
+  document.getElementById("rolInput").value = "";
+  document.getElementById("dropdownEstado").textContent = "Seleccionar";
+  document.getElementById("estadoInput").value = "";
   limpiarValidaciones();
   modalUsuarios.show();
 }
 
 // Limpiar validaciones
 function limpiarValidaciones() {
-  const inputs = document.querySelectorAll("#formUsuario input, #formUsuario select");
+  const inputs = document.querySelectorAll("#formUsuario input");
   inputs.forEach((input) => {
     input.classList.remove("is-invalid", "is-valid");
   });
@@ -53,7 +57,8 @@ function validarFormulario() {
   const correo = document.getElementById("correoElectronico").value.trim();
   const usuario = document.getElementById("usuario").value.trim();
   const contrasena = document.getElementById("contrasena").value;
-  const rol = document.getElementById("rol").value;
+  const rol = document.getElementById("rolInput").value;
+  const estado = document.getElementById("estadoInput").value;
 
   if (!nombre) {
     document.getElementById("nombre").classList.add("is-invalid");
@@ -61,30 +66,25 @@ function validarFormulario() {
   }
 
   if (!/^\d{10}$/.test(documento)) {
-  document.getElementById("documento").classList.add("is-invalid");
-  document.getElementById("documentoFeedback").textContent =
-    "Documento no válido";
-  valido = false;
-} else {
+    document.getElementById("documento").classList.add("is-invalid");
+    document.getElementById("documentoFeedback").textContent = "Documento no válido";
+    valido = false;
+  } else {
     const docDuplicado = usuarios.some(
       (u) => u.documento === documento && u.id !== usuarioEditandoId
     );
     if (docDuplicado) {
       document.getElementById("documento").classList.add("is-invalid");
-      document.getElementById("documentoFeedback").textContent =
-        "El documento ya existe";
+      document.getElementById("documentoFeedback").textContent = "El documento ya existe";
       valido = false;
     }
   }
 
-  // Teléfono
-if (!/^\d{10}$/.test(telefono)) {
-  document.getElementById("telefono").classList.add("is-invalid");
-  document.getElementById("telefonoFeedback").textContent =
-    "Teléfono no válido";
-  valido = false;
-}
-
+  if (!/^\d{10}$/.test(telefono)) {
+    document.getElementById("telefono").classList.add("is-invalid");
+    document.getElementById("telefonoFeedback").textContent = "Teléfono no válido";
+    valido = false;
+  }
 
   const regexCorreo = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   if (!regexCorreo.test(correo)) {
@@ -94,8 +94,7 @@ if (!/^\d{10}$/.test(telefono)) {
 
   if (!usuario) {
     document.getElementById("usuario").classList.add("is-invalid");
-    document.getElementById("usuarioFeedback").textContent =
-      "Debe ingresar un nombre de usuario";
+    document.getElementById("usuarioFeedback").textContent = "Debe ingresar un nombre de usuario";
     valido = false;
   } else {
     const usuarioDuplicado = usuarios.some(
@@ -103,16 +102,14 @@ if (!/^\d{10}$/.test(telefono)) {
     );
     if (usuarioDuplicado) {
       document.getElementById("usuario").classList.add("is-invalid");
-      document.getElementById("usuarioFeedback").textContent =
-        "El nombre de usuario ya existe";
+      document.getElementById("usuarioFeedback").textContent = "El nombre de usuario ya existe";
       valido = false;
     }
   }
 
   if (!usuarioEditandoId && !contrasena) {
     document.getElementById("contrasena").classList.add("is-invalid");
-    document.getElementById("contrasenaFeedback").textContent =
-      "Debe ingresar una contraseña";
+    document.getElementById("contrasenaFeedback").textContent = "Debe ingresar una contraseña";
     valido = false;
   } else if (contrasena) {
     const contrasenaDuplicada = usuarios.some(
@@ -120,8 +117,7 @@ if (!/^\d{10}$/.test(telefono)) {
     );
     if (contrasenaDuplicada) {
       document.getElementById("contrasena").classList.add("is-invalid");
-      document.getElementById("contrasenaFeedback").textContent =
-        "Esta contraseña ya fue usada por otro usuario";
+      document.getElementById("contrasenaFeedback").textContent = "Esta contraseña ya fue usada por otro usuario";
       valido = false;
     } else if (!esContrasenaSegura(contrasena)) {
       document.getElementById("contrasena").classList.add("is-invalid");
@@ -132,8 +128,13 @@ if (!/^\d{10}$/.test(telefono)) {
   }
 
   if (!rol) {
-    document.getElementById("rol").classList.add("is-invalid");
-    document.getElementById("rolFeedback").textContent = "Debe seleccionar un rol";
+    document.getElementById("rolInput").classList.add("is-invalid");
+    document.getElementById("rolFeedback").textContent = "Por favor, seleccione un rol";
+    valido = false;
+  }
+
+  if (!estado) {
+    document.getElementById("estadoInput").classList.add("is-invalid");
     valido = false;
   }
 
@@ -153,8 +154,8 @@ function guardarUsuario() {
   const correo = document.getElementById("correoElectronico").value.trim();
   const usuario = document.getElementById("usuario").value.trim();
   const contrasena = document.getElementById("contrasena").value;
-  const rol = document.getElementById("rol").value;
-  const estado = document.getElementById("estado").value;
+  const rol = document.getElementById("rolInput").value;
+  const estado = document.getElementById("estadoInput").value;
 
   if (usuarioEditandoId !== null) {
     const indice = usuarios.findIndex((u) => u.id === usuarioEditandoId);
@@ -235,8 +236,13 @@ function editarUsuario(id) {
   document.getElementById("correoElectronico").value = usuario.correo;
   document.getElementById("usuario").value = usuario.usuario;
   document.getElementById("contrasena").value = "";
-  document.getElementById("rol").value = usuario.rol;
-  document.getElementById("estado").value = usuario.estado;
+
+  document.getElementById("rolInput").value = usuario.rol;
+  document.getElementById("dropdownRol").textContent = usuario.rol;
+
+  document.getElementById("estadoInput").value = usuario.estado;
+  document.getElementById("dropdownEstado").textContent = usuario.estado;
+
   document.getElementById("usuarioId").value = usuario.id;
   limpiarValidaciones();
   modalUsuarios.show();
@@ -256,7 +262,42 @@ function buscarUsuario(event) {
   actualizarTablaUsuarios(filtro);
 }
 
-// Inicial
+// Función genérica para manejar dropdowns
+function setupDropdown(dropdownButtonId, hiddenInputId) {
+    const button = document.getElementById(dropdownButtonId);
+    const hiddenInput = document.getElementById(hiddenInputId);
+    const items = button.nextElementSibling.querySelectorAll(".dropdown-item");
+
+    items.forEach(item => {
+        item.addEventListener("click", function (e) {
+            e.preventDefault();
+            const value = this.getAttribute("data-value");
+            button.textContent = value;        // Actualiza el botón
+            hiddenInput.value = value;         // Guarda en el hidden input
+        });
+    });
+}
+
+// Inicialización
 document.addEventListener("DOMContentLoaded", () => {
   actualizarTablaUsuarios();
+  setupDropdown("dropdownRol", "rolInput");
+  setupDropdown("dropdownEstado", "estadoInput");
 });
+// Función genérica para conectar un dropdown con un input hidden
+function setupDropdown(dropdownButtonId, hiddenInputId) {
+    const button = document.getElementById(dropdownButtonId);
+    const hiddenInput = document.getElementById(hiddenInputId);
+    const items = button.nextElementSibling.querySelectorAll(".dropdown-item");
+
+    items.forEach(item => {
+        item.addEventListener("click", function (e) {
+            e.preventDefault();
+            const value = this.getAttribute("data-value");
+            // Actualiza el texto del botón
+            button.textContent = value;
+            // Guarda el valor en el hidden input
+            hiddenInput.value = value;
+        });
+    });
+}

@@ -1,58 +1,69 @@
-/* Estilos generales para el fondo de la página */
+/* Estilos del encabezado e identidad de marca */
+.header-logo {
+  width: 70px;
+  height: 70px;
+}
+
+.nombre-empresa {
+  background-color: #0093DD;
+  border-radius: 5px;
+}
+
+.nombre-empresa-title {
+  font-size: calc(1rem + 0.5vw);
+  color: #333652;
+}
+
+.nombre-empresa-slogan {
+  font-size: 16px;
+  color: #333652;
+}
+
+/* Estilos proporcionados por el usuario */
 body {
     background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
-/* Estilos para el encabezado */
+
+html,
+body {
+    height: 100%;
+}
+
 header {
     padding: 1rem;
 }
-/* Alineación vertical de celdas en tablas */
+
 .table th,
 .table td {
     vertical-align: middle;
 }
-/* Estilos para el encabezado de un modal */
+
 .modal-header {
     background-color: #0d6efd;
     color: white;
 }
-/* Estilos para el botón primario en el pie de un modal */
+
 .modal-footer .btn-primary {
     background-color: #0d6efd;
 }
-/* Estilos para el pie de página */
+
 footer {
     background-color: #f1f1f1;
     padding: 1rem;
     border-top: 1px solid #dee2e6;
+    flex-shrink: 0;
 }
-/* Estilos para la última celda de tablas */
+
 .table td:last-child,
 .table th:last-child {
     width: 80px;
     text-align: center;
     white-space: nowrap;
 }
-/* Asegura que el HTML y el body ocupen el 100% de la altura */
-html,
-body {
-    height: 100%;
-}
-/* Configura el body para un layout Flexbox de columna */
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-color: #f8f9fa;
-}
-/* Permite que el contenido principal ocupe el espacio disponible */
+
 main.container {
     flex: 1 0 auto;
-}
-/* Evita que el footer se encoja en un layout flex y define sus estilos */
-footer {
-    flex-shrink: 0;
-    background-color: #f1f1f1;
-    padding: 1rem;
-    border-top: 1px solid #dee2e6;
 }

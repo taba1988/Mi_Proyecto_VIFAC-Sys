@@ -256,3 +256,31 @@ document.addEventListener('DOMContentLoaded', () => {
     roleSelect.value = periodoInicial;
   }
 });
+/**
+ * Oculta todas las secciones de tarjetas y muestra solo la sección del proceso seleccionado.
+ *
+ * @param {string} proceso - El ID del proceso a mostrar (por ejemplo, 'ingresos', 'egresos').
+ */
+function seleccionarProceso(proceso) {
+    document.querySelectorAll('.card-section').forEach(section => {
+        section.style.display = 'none';
+    });
+    document.getElementById(proceso).style.display = 'block';
+}
+
+/**
+ * Selecciona un proceso, llama a la función para mostrar la sección correspondiente
+ * y cierra el offcanvas.
+ *
+ * @param {string} proceso - El ID del proceso a seleccionar.
+ */
+function seleccionarProcesoCerrar(proceso) {
+    seleccionarProceso(proceso);
+    
+    // Cierra el offcanvas de Bootstrap
+    var offcanvasElement = document.getElementById('offcanvasMenu');
+    var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+    if (offcanvas) {
+        offcanvas.hide();
+    }
+}

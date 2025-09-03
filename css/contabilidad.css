@@ -55,3 +55,43 @@ nav {
     /* Ajusta el margen inferior para párrafos dentro del cuerpo de la tarjeta */
     margin-bottom: 0.2rem !important;
 }
+/* Estilos para el offcanvas */
+.offcanvas {
+    width: auto;
+    min-width: 250px;
+    max-width: 70vw;
+}
+
+/* Estilos para el cuerpo del offcanvas */
+.offcanvas-body {
+    padding: 1rem;
+}
+
+/* Estilos para los elementos de la lista dentro del offcanvas */
+.offcanvas-body .list-unstyled li {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-bottom: 0.2rem;
+    border-radius: 5px;
+}
+
+/* Efecto al pasar el cursor sobre los elementos de la lista */
+.offcanvas-body .list-unstyled li:hover {
+    background-color: #e2e6ea;
+}
+
+/* Estilos para los botones de "Inicio" y "Cerrar Sesión" */
+.offcanvas-body .d-flex.flex-column .btn {
+    padding: 0.5rem 1rem;
+    text-align: left;
+    margin-bottom: 0.2rem;
+    border-radius: 5px;
+    border: none;
+    background-color: transparent;
+}
+
+/* Efecto al pasar el cursor sobre los botones */
+.offcanvas-body .d-flex.flex-column .btn:hover {
+    background-color: #e2e6ea;
+}

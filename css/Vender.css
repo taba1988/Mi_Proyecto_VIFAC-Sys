@@ -123,3 +123,35 @@ img {
   background-color: #D3D3D3;
   color: white;
 }
+/* Ancho en móviles */
+#formBuscar {
+    width: 45%;
+}
+
+/* Ancho en pantallas grandes (≥992px) */
+@media (min-width: 992px) {
+    #formBuscar {
+        width: 25%;
+    }
+}
+.icon-hover-text {
+    position: relative;
+}
+
+.menu-text-hover {
+    position: absolute;
+    bottom: 100%;       /* coloca el texto arriba del icono */
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, transform 0.2s;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.icon-hover-text:hover .menu-text-hover {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0); /* aparece justo arriba del icono */
+}

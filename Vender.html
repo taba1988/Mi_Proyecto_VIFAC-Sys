@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="css/Vender.css" />
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100 mt-2">
 
 <header class="bg-white px-3 my-3 mt-1">
     <div class="container-fluid d-flex flex-wrap justify-content-between align-items-center gap-3">
@@ -25,25 +25,36 @@
               <h4 class="mb-0">Vender</h4>
             </div>
         </div>
+        
+        <div class="d-flex align-items-center gap-2">
+    <!-- Formulario de búsqueda -->
+    <form class="input-group flex-grow-1" id="formBuscar" onsubmit="buscarProducto(event)">
+        <input type="text" class="form-control" placeholder="Buscar producto..." id="campoBuscarDesktop">
+        <button class="btn btn-outline-primary" type="submit">
+            <i class="bi bi-search"></i>
+        </button>
+    </form>
 
-        <form class="input-group w-25" onsubmit="buscarProducto(event)">
-            <input type="text" class="form-control" placeholder="Buscar producto..." id="campoBuscarDesktop">
-            <button class="btn btn-outline-primary" type="submit"><i class="bi bi-search"></i></button>
-        </form>
+    <!-- Botones -->
+    <div class="d-flex gap-2 flex-shrink-0">
+        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalAbrirCaja">Abrir Caja</button>
+        <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalCerrarCaja">Cerrar Caja</button>
+    </div>
+</div>
 
-
-        <div class="d-flex gap-2">
-            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalAbrirCaja">Abrir Caja</button>
-            <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalCerrarCaja">Cerrar Caja</button>
-        </div>
     </div>
 </header>
 
+<div class="d-flex justify-content-end">
+  <button class="btn btn-outline d-lg-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCategorias" aria-controls="offcanvasCategorias">
+    <i class="bi bi-list" style="font-size: 1.5rem;"></i>
+  </button>
+</div>
 
 <main class="container-fluid flex-grow-1 mt-0 mb-3 bg-light">
-    <div class="row">
+    <div class="row flex-column-reverse flex-lg-row">
 
-        <aside class="col-lg-2 mb-3" aria-label="Barra lateral de categorías">
+        <aside class="col-lg-2 mb-3 d-none d-lg-block" aria-label="Barra lateral de categorías">
             <nav class="border rounded p-3 h-100">
                 <h5 class="fw-bold mb-3">Categorías</h5>
                 <ul class="categoria-scroll list-unstyled">
@@ -56,25 +67,17 @@
                     <li role="button" onclick="mostrarProductos('limpieza')">Limpieza</li>
                     <li role="button" onclick="mostrarProductos('higienicos')">Higiénicos</li>
                 </ul>
-                <div class="col-md-6 d-flex flex-column gap-1" style="max-width: 150px;">
-                    <button
-                        class="btn p-0 d-flex align-items-center gap-1"
-                        onclick="window.location.href='index.html'"
-                        title="Atrás"
-                        style="background: none; border: none; color: black;">
-                        <i class="bi bi-arrow-left" style="font-size: 1.5rem;"></i>
-                        <span style="font-size: 14px;">Inicio</span>
-                    </button>
-
-                    <button
-                        class="btn p-0 d-flex align-items-center gap-2"
-                        onclick="window.location.href='login.html'"
-                        title="Cerrar Sesión"
-                        style="background: none; border: none; color: black;">
-                        <i class="bi bi-box-arrow-right" style="font-size: 1.5rem;"></i>
-                        <span style="font-size: 14px;">Cerrar Sesión</span>
-                    </button>
+                <div class="d-flex justify-content-center align-items-center gap-5 mt-5">
+                   <a href="index.html" class="menu-link d-flex flex-column align-items-center text-decoration-none text-dark icon-hover-text">
+                       <i class="bi bi-house-door-fill fs-4"></i>
+                       <span class="menu-text-hover">Inicio</span>
+                   </a>
+                   <a href="login.html" class="menu-link d-flex flex-column align-items-center text-decoration-none text-dark icon-hover-text">
+                       <i class="bi bi-box-arrow-right fs-4"></i>
+                       <span class="menu-text-hover">Cerrar Sesión</span>
+                   </a>
                 </div>
+
 
             </nav>
         </aside>
@@ -337,6 +340,70 @@
         </div>
     </div>
 </div>
+
+<!-- OFFCANVAS PARA CATEGORIAS Y BOTONES -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCategorias" aria-labelledby="offcanvasCategoriasLabel" style="height: 80vh; max-width: 300px;">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasCategoriasLabel">Categorías</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+  </div>
+  <div class="offcanvas-body d-flex flex-column justify-content-between p-0">
+    <!-- Lista de categorías -->
+    <ul class="list-unstyled p-3 mb-3 flex-grow-1 categoria-scroll">
+      <li role="button" onclick="mostrarProductos('jabon'); var offcanvasEl = bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasCategorias')); offcanvasEl.hide();">Jabón líquido</li>
+      <li role="button" onclick="mostrarProductos('ambientadores'); bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasCategorias')).hide();">Ambientadores</li>
+      <li role="button" onclick="mostrarProductos('esencias'); bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasCategorias')).hide();">Esencias</li>
+      <li role="button" onclick="mostrarProductos('aseo'); bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasCategorias')).hide();">Elementos de aseo</li>
+      <li role="button" onclick="mostrarProductos('proteccion'); bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasCategorias')).hide();">Protección personal</li>
+      <li role="button" onclick="mostrarProductos('kits'); bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasCategorias')).hide();">Kits</li>
+      <li role="button" onclick="mostrarProductos('limpieza'); bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasCategorias')).hide();">Limpieza</li>
+      <li role="button" onclick="mostrarProductos('higienicos'); bootstrap.Offcanvas.getInstance(document.getElementById('offcanvasCategorias')).hide();">Higiénicos</li>
+    </ul>
+
+  <!-- Botones Inicio y Cerrar Sesión (offcanvas) -->
+<div class="d-flex justify-content-center align-items-center gap-5 position-relative" style="top: -40px;">
+    <a href="index.html" class="d-flex flex-column align-items-center text-decoration-none text-dark">
+        <i class="bi bi-house-door-fill fs-1"></i>
+        <span>Inicio</span>
+    </a>
+    <a href="login.html" class="d-flex flex-column align-items-center text-decoration-none text-dark">
+        <i class="bi bi-box-arrow-right fs-1"></i>
+        <span>Cerrar Sesión</span>
+    </a>
+</div>
+</div>
+</div>
+
+<!-- Calculadora flotante -->
+<div id="calculadoraContainer" style="display:none; position:fixed; bottom:80px; right:20px; width:250px; background:white; border:1px solid #ccc; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.2); z-index:1050; padding:10px;">
+    <input type="text" id="calcPantalla" class="form-control mb-2 text-end" readonly style="font-size:1.2rem;">
+    <div class="d-grid gap-1" style="grid-template-columns: repeat(4, 1fr); display:grid;">
+        <button onclick="calcClick('7')">7</button>
+        <button onclick="calcClick('8')">8</button>
+        <button onclick="calcClick('9')">9</button>
+        <button onclick="calcClick('/')">/</button>
+
+        <button onclick="calcClick('4')">4</button>
+        <button onclick="calcClick('5')">5</button>
+        <button onclick="calcClick('6')">6</button>
+        <button onclick="calcClick('*')">*</button>
+
+        <button onclick="calcClick('1')">1</button>
+        <button onclick="calcClick('2')">2</button>
+        <button onclick="calcClick('3')">3</button>
+        <button onclick="calcClick('-')">-</button>
+
+        <button onclick="calcClick('0')">0</button>
+        <button onclick="calcClick('.')">.</button>
+        <button onclick="calcularResultado()">=</button>
+        <button onclick="calcClick('+')">+</button>
+
+        <!-- Nueva fila con botón C -->
+        <button onclick="calcClear()" style="grid-column: span 4; background:#dc3545; color:white;">C</button>
+    </div>
+    <button class="btn btn-sm btn-secondary mt-2 w-100" onclick="cerrarCalculadora()">Cerrar</button>
+</div>
+
 
 <input type="hidden" id="totalVentaHidden">
 

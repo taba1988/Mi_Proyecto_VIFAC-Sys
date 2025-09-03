@@ -566,3 +566,39 @@ document.addEventListener('DOMContentLoaded', function() {
         aceptarBtn.addEventListener('click', aceptarCliente);
     }
 });
+// Mostrar / ocultar calculadora
+document.getElementById('btnCalculadora').addEventListener('click', function() {
+    const calc = document.getElementById('calculadoraContainer');
+    calc.style.display = (calc.style.display === 'none' || calc.style.display === '') ? 'block' : 'none';
+});
+
+// Cerrar calculadora
+function cerrarCalculadora() {
+    document.getElementById('calculadoraContainer').style.display = 'none';
+}
+
+// Variables de control
+let calcValor = '';
+
+// Insertar número u operador
+function calcClick(valor) {
+    calcValor += valor;
+    document.getElementById('calcPantalla').value = calcValor;
+}
+
+// Calcular resultado
+function calcularResultado() {
+    try {
+        calcValor = eval(calcValor).toString();
+        document.getElementById('calcPantalla').value = calcValor;
+    } catch {
+        document.getElementById('calcPantalla').value = 'Error';
+        calcValor = '';
+    }
+}
+
+// Limpiar pantalla con botón C
+function calcClear() {
+    calcValor = '';
+    document.getElementById('calcPantalla').value = '';
+}

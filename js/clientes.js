@@ -207,3 +207,17 @@ function buscarCliente(event) {
 document.addEventListener("DOMContentLoaded", () => {
   listarClientes();
 });
+document.addEventListener("DOMContentLoaded", function () {
+  const dropdownButton = document.getElementById("dropdownEstado");
+  const hiddenInput = document.getElementById("estado");
+  const dropdownItems = document.querySelectorAll("#dropdownEstado + .dropdown-menu .dropdown-item");
+
+  dropdownItems.forEach(item => {
+    item.addEventListener("click", function (e) {
+      e.preventDefault();
+      const value = this.getAttribute("data-value");
+      dropdownButton.textContent = value;  // cambia el texto del botón
+      hiddenInput.value = value;           // asigna el valor al input oculto
+    });
+  });
+});

@@ -1,47 +1,128 @@
-/* Estilos generales para el fondo de la página */
+/* ================================
+   Reset y estilos generales
+   ================================ */
+html,
 body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
     background-color: #f8f9fa;
+    color: #000;
+    overflow-y: auto;
 }
-/* Estilos para el encabezado */
+
+/* Permite que el contenido principal ocupe el espacio disponible */
+main.container {
+    flex: 1 0 auto;
+}
+
+/* ================================
+   Encabezado
+   ================================ */
 header {
     padding: 1rem;
+    background-color: #f8f9fa;
 }
-/* Alineación vertical de celdas en tablas */
+
+/* Ícono del header */
+header .bi-person-lines-fill {
+    font-size: 2.5rem; /* fs-1 */
+    color: #17a2b8; /* text-info */
+}
+
+/* Nombre de la empresa */
+.nombre-empresa {
+    border-radius: 5px;
+    background-color: #0093DD;
+    padding: 0.5rem 1rem;
+    text-align: center;
+}
+
+.nombre-empresa .titulo {
+    font-weight: bold;
+    font-size: calc(1rem + 0.5vw);
+    color: #333652;
+}
+
+.nombre-empresa .subtitulo {
+    font-style: italic;
+    font-size: 16px;
+    color: #333652;
+}
+
+/* ================================
+   Barra de búsqueda
+   ================================ */
+.barra-busqueda {
+    display: flex;
+    width: 100%;
+    max-width: 400px; /* ajusta ancho máximo si quieres */
+}
+
+.barra-busqueda input {
+    flex: 1;
+}
+
+.barra-busqueda button {
+    flex: 0 0 auto;
+}
+
+/* ================================
+   Tablas
+   ================================ */
 .table th,
 .table td {
     vertical-align: middle;
 }
-/* Estilos para el encabezado de un modal */
+
+.table td:last-child,
+.table th:last-child {
+    width: 80px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* ================================
+   Modales
+   ================================ */
 .modal-header {
     background-color: #0d6efd;
     color: white;
 }
-/* Estilos para el botón primario en el pie de un modal */
+
 .modal-footer .btn-primary {
     background-color: #0d6efd;
 }
-/* Estilos para el pie de página */
+
+/* ================================
+   Pie de página
+   ================================ */
 footer {
+    flex-shrink: 0;
     background-color: #f1f1f1;
     padding: 1rem;
     border-top: 1px solid #dee2e6;
 }
-/* Estilos del icono dentro de un botón de método */
+
+/* ================================
+   Botones de método de pago
+   ================================ */
 .btn-metodo i {
     color: #212529;
     transition: color 0.2s;
 }
-/* Efectos de hover y estado activo para el botón de método */
+
 .btn-metodo:hover,
 .btn-metodo.active {
-    background-color: #0000 !important;
+    background-color: transparent !important;
 }
-/* Estilos del icono al pasar el mouse o en estado activo */
+
 .btn-metodo:hover i,
 .btn-metodo.active i {
-    color: #0000 !important;
+    color: transparent !important;
 }
-/* Estilos de un botón de método */
+
 .metodo-btn {
     width: 42px;
     height: 42px;
@@ -52,51 +133,21 @@ footer {
     justify-content: center;
     transition: background-color 0.2s, color 0.2s;
 }
-/* Efecto de hover para el botón de método */
+
 .metodo-btn:hover {
     background-color: #e9ecef;
 }
-/* Estilos para el icono dentro del botón de método */
+
 .icono-metodo {
     font-size: 1.6rem;
     color: black;
     transition: color 0.2s;
 }
-/* Estilos para el estado activo del botón de método */
+
 .metodo-btn.active {
     background-color: #e9ecef;
 }
-/* Estilos del icono en estado activo */
+
 .metodo-btn.active .icono-metodo {
     color: #333652;
-}
-/* Estilos para la última celda de tablas */
-.table td:last-child,
-.table th:last-child {
-    width: 80px;
-    text-align: center;
-    white-space: nowrap;
-}
-/* Asegura que el HTML y el body ocupen el 100% de la altura */
-html,
-body {
-    height: 100%;
-}
-/* Configura el body para un layout Flexbox de columna */
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-color: #f8f9fa;
-}
-/* Permite que el contenido principal ocupe el espacio disponible */
-main.container {
-    flex: 1 0 auto;
-}
-/* Estilos finales para el pie de página */
-footer {
-    flex-shrink: 0;
-    background-color: #f1f1f1;
-    padding: 1rem;
-    border-top: 1px solid #dee2e6;
 }

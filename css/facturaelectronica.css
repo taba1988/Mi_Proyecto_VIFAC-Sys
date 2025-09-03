@@ -55,6 +55,58 @@ body {
     color: #333;
 }
 
+/* Reglas ESPECÍFICAS para dispositivos móviles */
+@media (max-width: 767.98px) {
+    /* Ocultar el logo circular y eliminar el espacio que ocupa */
+    .rounded-circle {
+        display: none !important;
+        height: 0 !important;
+        width: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important; /* Asegura que no haya desbordamiento */
+    }
+
+    /* Ocultar el cuadro del QR y eliminar el espacio que ocupa */
+    .qr-code {
+        display: none !important;
+        height: 0 !important;
+        width: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+    }
+
+    /* Reducir el tamaño de fuente para el encabezado principal en móviles */
+    header .fw-bold {
+        font-size: 1.2rem !important;
+    }
+
+    /* Reducir el tamaño de fuente para el lema en móviles */
+    header .fst-italic {
+        font-size: 0.8rem !important;
+    }
+
+    /* Reducir el tamaño de fuente para los detalles de la factura en móviles */
+    .invoice-details {
+        font-size: 0.7rem !important;
+    }
+
+    /* Asegurar que los contenedores de datos de emisor y cliente se apilen en móviles */
+    .row {
+        flex-direction: column !important;
+    }
+    .col-md-6 {
+        max-width: 100% !important;
+    }
+
+    /* Ajustar padding del contenedor principal en móviles */
+    .container-fluid {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
+
 /* Reglas específicas para la impresión */
 @media print {
     /* Forzar al navegador a imprimir fondos y colores */
@@ -91,9 +143,28 @@ body {
     .card {
         margin-bottom: 0 !important;
     }
+
+    /* Mostrar el logo circular al imprimir (anulando el display: none de móvil) */
+    .rounded-circle {
+        display: block !important; /* Hace que el logo sea visible */
+        height: 100px !important; /* Restaura la altura original */
+        width: 100px !important;  /* Restaura el ancho original */
+        margin-right: 1rem !important; /* Asegura el margen si lo tenías */
+        padding: 0 !important;
+        overflow: visible !important;
+    }
+
+    /* Mostrar el cuadro del QR al imprimir */
+    .qr-code {
+        display: block !important;
+        height: auto !important;
+        width: auto !important;
+        margin: 0 !important;
+        padding: 5px !important;
+    }
 }
 
 /* Clase para ocultar elementos que no deben ser impresos */
 .no-print {
-    display: none; 
+    display: none;
 }

@@ -9,11 +9,16 @@
     <link rel="stylesheet" href="css/facturaPOS.css">
 </head>
 <body>
+    <!-- Contenedor principal del comprobante -->
     <div class="receipt">
+
+        <!-- Encabezado: Logo y lema -->
         <div class="header">
             <div class="logo">MAXI-LIMPIEZA</div>
             <div class="info fst-italic">Calidad que se Siente</div>
         </div>
+
+        <!-- Información de la transacción -->
         <div class="transaction-info">
             <p><strong>Factura:</strong> #001</p>
             <p><strong>NIT:</strong> #0000-0</p>
@@ -36,9 +41,12 @@
             <p><strong>Plazo:</strong> 0</p>
             <hr class="mb-1 mt-1" style="border-top: 1px dashed black;">
         </div>
+
+        <!-- Tabla de productos -->
         <table>
             <thead>
-                <tr style="border-bottom: none;"> <th>REG</th>
+                <tr style="border-bottom: none;">
+                    <th>REG</th>
                     <th>SKU</th>
                     <th>PRODUCTO</th>
                     <th style="text-align: center;">CANT x UNIT</th>
@@ -62,6 +70,8 @@
                 </tr>
             </tbody>
         </table>
+
+        <!-- Sección de totales -->
         <div class="total-section">
             <div>
                 <span>Subtotal:</span>
@@ -80,6 +90,8 @@
                 <span class="total-amount"><strong>$26.775</strong></span>
             </div>
         </div>
+
+        <!-- Detalle de forma de pago -->
         <div class="payment-detail-header">
             -------------------------- [ Detalle forma de pago ] --------------------------
         </div>
@@ -88,6 +100,8 @@
             <p><strong>Recibido:</strong> $30.000</p>
             <p><strong>Cambio:</strong> $3.225</p>
         </div>
+
+        <!-- Detalle de impuestos -->
         <div class="tax-detail-header">
             ---------------------------- [ Detalle Inpuestos ] ----------------------------
         </div>
@@ -98,10 +112,16 @@ TIPO %   BASE    INPUESTO
 GRA 19%  22500   4275
             </pre>
         </div>
+
+        <!-- Totales de unidades y referencias -->
         <hr class="mt-2 mb-1" style="border-top: 1px dashed black;">
         <p><strong>Total Und:</strong> 3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Total ref:</strong> 2</p>
         <hr class="mt-1 mb-1" style="border-top: 1px dashed black;">
+
+        <!-- Leyenda sobre documento equivalente POS -->
         <p style="text-align: center;"><strong>Documento equivalente Electronico Tiquete de maquina registradora con sistema P.O.S</strong></p>
+
+        <!-- Tabla adicional -->
         <table style="width: 100%; border-collapse: collapse; font-size: 0.7em; margin-top: 5px;">
             <thead>
                 <tr>
@@ -111,23 +131,31 @@ GRA 19%  22500   4275
                 </tr>
             </thead>
         </table>
+
+        <!-- QR y código CUDE -->
         <div style="text-align: center;">
             <div style="width: 100px; height: 100px; border: 1px solid #ccc; margin: 0 auto 3px auto; display: flex; justify-content: center; align-items: center; font-size: 0.7em; color: #777;">
                 QR
             </div>
             <p style="font-size: 0.8em; overflow-wrap: break-word;"><strong>CUDE</strong> ??????=================???????????????????????????????????????????????????</p>
         </div>
+
+        <!-- Validación DIAN -->
         <hr class="mt-1 mb-1" style="border-top: 1px dashed black;">
         <div style="text-align: center; font-size: 0.7em; color: #777; line-height: 1.0;">
             <p style="margin-bottom: 0.2em;">Documento validado por la DIAN</p>
             <p style="margin-bottom: 0.2em;">Fecha de Validacion: <strong>dd/mm/aaaa</strong></p>
         </div>
+
+        <!-- Resolución DIAN -->
         <hr class="mt-1 mb-1" style="border-top: 1px dashed black;">
         <div style="text-align: center; font-size: 0.65em; color: #777; line-height: 1.0;">
             <p style="margin-bottom: 0.2em;">RESOLUCION DIAN # HABILITACION 1234567890123456</p>
             <p style="margin-bottom: 0.2em;">DESDE DD/MM/AAAA HASTA DD/MM/AAAA</p>
             <p style="margin-bottom: 0;">PEFIJO POSA DEL 1001 HASTA 15000</p>
         </div>
+
+        <!-- Mensaje de cierre -->
         <hr class="mt-2 mb-2" style="border-top: 1px dashed black;">
         <div class="footer">
             <p style="font-size: 2em;">¡Gracias por su compra!</p>
@@ -135,10 +163,12 @@ GRA 19%  22500   4275
         </div>
     </div>
 
+    <!-- Botón de impresión -->
     <div class="print-button">
         <button onclick="window.print()" class="btn btn-outline-secondary">Imprimir Ticket</button>
     </div>
 
+    <!-- Scripts de Bootstrap y archivo JS propio -->
     <script src="js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

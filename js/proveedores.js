@@ -308,3 +308,30 @@ function buscarProveedores(event) {
 document.addEventListener("DOMContentLoaded", () => {
     actualizarTablaProveedores();
 });
+// Actualiza el botón y el input hidden al seleccionar una opción
+document.querySelectorAll('.dropdown-item').forEach(item => {
+    item.addEventListener('click', function(e) {
+        e.preventDefault();
+        const value = this.getAttribute('data-value');
+        const button = document.getElementById('dropdownEstado');
+        button.textContent = this.textContent; // Cambia el texto del botón
+        document.getElementById('estado').value = value; // Actualiza hidden
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+            // Manejador para los dropdowns
+            document.querySelectorAll('.dropdown-menu .dropdown-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const parentDropdown = this.closest('.dropdown');
+                    const button = parentDropdown.querySelector('.dropdown-toggle');
+                    const hiddenInput = parentDropdown.nextElementSibling;
+                    const value = this.getAttribute('data-value');
+
+                    // Actualiza el texto del botón y el valor del campo oculto
+                    button.textContent = this.textContent;
+                    hiddenInput.value = value;
+                });
+            });
+        });
