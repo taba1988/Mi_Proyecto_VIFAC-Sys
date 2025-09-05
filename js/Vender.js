@@ -108,7 +108,7 @@ function mostrarTodosLosProductos() {
 function buscarProducto(event) {
     if (event) event.preventDefault();
     const input = document.getElementById('campoBuscarDesktop');
-    const valor = (input?.value || '').trim().toLowerCase();
+    const valor = (input && input.value || '').trim().toLowerCase();
     const contenedorCards = document.getElementById('contenedorCards');
     contenedorCards.innerHTML = '';
 
@@ -136,23 +136,27 @@ function buscarProducto(event) {
     document.querySelectorAll('.categoria-scroll li').forEach(li => li.classList.remove('seleccionado'));
 }
 
-function limpiarBusqueda() {
+    function limpiarBusqueda() {
     const input = document.getElementById('campoBuscarHeader');
     if (input) input.value = '';
 }
-
-function seleccionarEntrada(tipo) {
-    entradaSeleccionada = tipo;
-    document.getElementById('btnCodigoBarras')?.classList.toggle('active', tipo === 'codigoBarras');
-    document.getElementById('btnTeclado')?.classList.toggle('active', tipo === 'teclado');
+    
+    function seleccionarEntrada(tipo) {
+        entradaSeleccionada = tipo;
+       const btnCodigoBarras = document.getElementById('btnCodigoBarras');
+    if (btnCodigoBarras) btnCodigoBarras.classList.toggle('active', tipo === 'codigoBarras');
+    
+    const btnTeclado = document.getElementById('btnTeclado');
+    if (btnTeclado) btnTeclado.classList.toggle('active', tipo === 'teclado');
 }
-
-function agregarAlCarritoHTML(nombre, medida, precio) {
-    const carritoLista = document.getElementById('carritoLista');
-    const productoExistente = Array.from(carritoLista.querySelectorAll('li')).find(item =>
-        item.querySelector('.fw-bold')?.textContent.trim() === nombre
-    );
-
+    
+    function agregarAlCarritoHTML(nombre, medida, precio) {
+        const carritoLista = document.getElementById('carritoLista');
+       const productoExistente = Array.from(carritoLista.querySelectorAll('li')).find(item => {
+       const elemento = item.querySelector('.fw-bold');
+       return elemento && elemento.textContent.trim() === nombre;
+    });
+    
     if (productoExistente) {
         const cantidadInput = productoExistente.querySelector('.cantidad-input');
         cantidadInput.value = parseInt(cantidadInput.value) + 1;
@@ -586,16 +590,16 @@ function calcClick(valor) {
     document.getElementById('calcPantalla').value = calcValor;
 }
 
-// Calcular resultado
 function calcularResultado() {
     try {
         calcValor = eval(calcValor).toString();
         document.getElementById('calcPantalla').value = calcValor;
-    } catch {
+    } catch (e) { 
         document.getElementById('calcPantalla').value = 'Error';
         calcValor = '';
     }
 }
+
 
 // Limpiar pantalla con botón C
 function calcClear() {
