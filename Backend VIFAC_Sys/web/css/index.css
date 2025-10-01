@@ -1,0 +1,160 @@
+/* Estilos personalizados*/
+@import url('https://fonts.googleapis.com/css2?family=Bad+Script&display=swap');
+
+body {
+    background-image: none;
+    background-size: 900px;
+    background-repeat: no-repeat;
+    background-position: calc(20% + 100px) center;
+    background-attachment: fixed;
+    background-color: #f7f7f2;
+    color: #000;
+    overflow-y: auto;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Estilos del Encabezado */
+.header-container {
+    background-color: #0093DD;
+    padding: 15px 30px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    flex-wrap: wrap;
+    z-index: 10;
+}
+
+.header-container .left-text {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333652;
+}
+
+.header-container .right-text {
+    font-family: 'Bad Script', cursive;
+    font-weight: bold;
+    font-size: 16px;
+    color: #333652;
+    margin-right: 20px;
+}
+
+/* Estilos para los iconos del encabezado */
+.header-icons .bi {
+    color: white;
+    font-size: 1.8rem;
+    transition: color 0.2s ease-in-out;
+}
+
+.header-icons .bi:hover {
+    color: #f0f0f0;
+}
+
+.header-icons .badge {
+    font-size: 0.75em;
+}
+
+.user-avatar {
+    border: 2px solid #3772ff;
+}
+
+.sidebar-left, .offcanvas-body {
+    background-color: #f7f7f2;
+}
+
+.accordion-item {
+    border: none;
+}
+
+.accordion-button {
+    color: #333652;
+    background-color: transparent;
+    font-weight: bold;
+}
+
+.accordion-button:not(.collapsed) {
+    color: #3772ff;
+    background-color: #e9ecef;
+    box-shadow: none;
+}
+
+.list-group-item-action:hover {
+    color: #3772ff;
+}
+
+.fixed-icons .menu-link {
+    text-decoration: none;
+    color: #333652;
+}
+
+/* Solo para pantallas grandes (desktop) */
+@media (min-width: 768px) {
+    .fixed-icons {
+        margin-top: 130px !important;
+    }
+
+    /* Oculta el offcanvas button en pantallas de escritorio */
+    .offcanvas-button {
+        display: none;
+    }
+}
+
+.logo-right-col img {
+    border: 2px solid #3772ff;
+}
+
+.logo-right-col p {
+    font-family: 'Bad Script', cursive;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 14px;
+    color: #333652;
+}
+
+.card {
+    border-radius: 10px;
+}
+
+.card-img-top {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+/* Estilos para el offcanvas */
+.offcanvas {
+    width: auto;
+    min-width: 250px;
+    max-width: 80vw;
+}
+
+.carousel-indicators [data-bs-target] {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #333652;
+}
+
+.carousel-indicators .active {
+    background-color: #0093DD;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    width: 3rem;
+    height: 3rem;
+    background-size: 100% 100%;
+}
+
+.carousel-inner img {
+    border-radius: 10px;
+}
+
+.fixed-icons {
+  transform: translateY(50px) !important;
+}
+/* Ajusta la posición de los íconos en el offcanvas móvil */
+.offcanvas .fixed-icons {
+  margin-bottom: 30px; /* súbelos */
+}

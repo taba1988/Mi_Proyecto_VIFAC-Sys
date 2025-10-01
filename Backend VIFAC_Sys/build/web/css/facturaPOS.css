@@ -1,0 +1,179 @@
+/* Estilos base para el cuerpo de la página, ideal para un recibo */
+body {
+    font-family: sans-serif;
+    font-size: 10px;
+    line-height: 1.1;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+}
+/* Contenedor principal del recibo, con ancho fijo y centrado */
+.receipt {
+    width: 280px;
+    margin: 5px auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+/* Estilos para el encabezado del recibo */
+.header {
+    text-align: center;
+    margin-bottom: 5px;
+}
+/* Estilos para el logo o nombre de la empresa */
+.logo {
+    color: #333652;
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 3px;
+}
+/* Estilos para la información de contacto */
+.info {
+    font-size: 0.8em;
+    color: #666;
+    margin-bottom: 1px;
+}
+/* Estilos para la información de la transacción */
+.transaction-info {
+    margin-bottom: 5px;
+    font-size: 0.8em;
+    line-height: 1.0;
+}
+.transaction-info p {
+    margin-bottom: 2px;
+}
+/* Contenedor para la lista de ítems */
+.items {
+    margin-bottom: 5px;
+}
+/* Estilos para cada ítem de la lista */
+.item {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px dashed #ccc;
+    padding-bottom: 2px;
+    margin-bottom: 2px;
+    font-size: 0.8em;
+}
+/* Estilos para la sección de totales */
+.total-section {
+    text-align: right;
+    margin-top: 5px;
+    border-top: 1px dotted #ccc;
+    padding-top: 5px;
+}
+.total-section div {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1px;
+}
+/* Estilos para la etiqueta de total */
+.total-label {
+    font-weight: bold;
+    margin-left: 3px;
+}
+/* Estilos para el monto total */
+.total-amount {
+    font-weight: bold;
+    color: black;
+    font-size: 1em;
+}
+/* Estilos para la información de pago */
+.payment-info {
+    margin-top: 5px;
+    font-size: 0.8em;
+    line-height: 1.0;
+}
+.payment-info p {
+    margin-bottom: 1px;
+}
+/* Estilos para el pie de página del recibo */
+.footer {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.65em;
+    color: #666;
+}
+/* Estilos para las tablas */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75em;
+    margin-bottom: 5px;
+}
+th, td {
+    padding: 3px;
+    text-align: left;
+}
+/* Alineación de la cuarta columna (cantidad) */
+th:nth-child(4), td:nth-child(4) {
+    text-align: center;
+}
+/* Alineación de la quinta columna (monto) */
+th:nth-child(5), td:nth-child(5) {
+    text-align: right;
+}
+/* Borde inferior para el encabezado de la tabla */
+thead tr {
+    border-bottom: 1px solid #ccc;
+}
+/* Borde inferior para las filas de la tabla */
+tbody tr {
+    border-bottom: 1px dotted #eee;
+}
+/* Borde superior para la primera fila del cuerpo de la tabla */
+tbody tr:first-child {
+    border-top: 1px dotted black;
+}
+/* Estilos para el código QR */
+.qr-code {
+    text-align: center;
+    margin-top: 5px;
+    font-size: 0.7em;
+    color: #333;
+}
+/* Estilo para la línea divisoria */
+hr {
+    border: none;
+    border-top: 1px dotted black;
+    margin: 5px 0;
+}
+/* Estilos para los encabezados de detalles de pago e impuestos */
+.payment-detail-header, .tax-detail-header {
+    text-align: center;
+    margin: 10px 0;
+    font-size: 0.8em;
+}
+/* Reglas para la impresión */
+@media print {
+    /* Define el tamaño de la página para una impresora de recibos */
+    @page {
+        size: 3.15in auto;
+        margin: 0;
+    }
+    body {
+        width: auto !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+    }
+    .receipt {
+        width: 280px !important;
+        margin: 0 auto !important;
+        border: none !important;
+        padding: 5px !important;
+    }
+    /* Oculta el botón de imprimir en la vista de impresión */
+    .print-button {
+        display: none !important;
+    }
+}
+/* Contenedor del botón de imprimir */
+.print-button {
+    text-align: center;
+    margin-top: 10px;
+}
+/* Estilos para el botón de imprimir */
+.print-button button {
+    padding: 8px 15px;
+    font-size: 0.9em;
+    cursor: pointer;
+}

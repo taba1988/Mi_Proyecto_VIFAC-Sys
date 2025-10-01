@@ -1,0 +1,196 @@
+/* Estilos generales para body y layout */
+html, body {
+    height: 100%;
+}
+
+body {
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Permite que el contenido principal ocupe el espacio disponible */
+main.container {
+    flex: 1 0 auto;
+}
+
+/* Evita que el footer se encoja en un layout flex */
+footer {
+    background-color: #f1f1f1;
+    padding: 1rem;
+    border-top: 1px solid #dee2e6;
+    flex-shrink: 0;
+}
+
+/* Estilos generales para el encabezado */
+header {
+    padding: 1rem;
+}
+
+/* Encabezado de logo y título "Inventario" */
+header .logo-titulo {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+header .logo-titulo img {
+    width: 70px;
+    height: 70px;
+}
+
+header .logo-titulo h4 {
+    margin-bottom: 0;
+}
+
+/* Estilos generales para body y layout */
+html, body {
+    height: 100%;
+}
+
+body {
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Permite que el contenido principal ocupe el espacio disponible */
+main.container {
+    flex: 1 0 auto;
+}
+
+/* Evita que el footer se encoja en un layout flex */
+footer {
+    background-color: #f1f1f1;
+    padding: 1rem;
+    border-top: 1px solid #dee2e6;
+    flex-shrink: 0;
+}
+
+/* Estilos generales para el encabezado */
+header {
+    padding: 1rem;
+}
+
+/* Encabezado de logo y título "Inventario" */
+header .logo-titulo {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+header .logo-titulo img {
+    width: 70px;
+    height: 70px;
+}
+
+header .logo-titulo h4 {
+    margin-bottom: 0;
+}
+
+/* Encabezado del bloque MAXI-LIMPIEZA */
+header .header-bloque-azul {
+    border-radius: 5px;
+    background-color: #0093DD;
+    padding: 0.7rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+header .header-bloque-azul .titulo-principal {
+    font-weight: bold;
+    font-size: calc(0.8rem + 0.5vw);
+    color: #333652;
+}
+
+header .header-bloque-azul .subtitulo {
+    font-family: 'Bad Script', cursive;
+    font-weight: bold;
+    font-size: 16px;
+    color: #333652;
+    margin-right:10px;
+}
+
+/* Contenedor de método de lectura */
+header .metodo-lectura {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+}
+
+header .metodo-lectura h5 {
+    margin-bottom: 0;
+}
+
+/* Botones método de lectura */
+.metodo-btn {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.metodo-btn:hover {
+    background-color: #e9ecef;
+}
+
+.metodo-btn.active {
+    background-color: #e9ecef;
+}
+
+.icono-metodo {
+    font-size: 1.6rem;
+    color: black;
+    transition: color 0.2s;
+}
+
+.metodo-btn.active .icono-metodo,
+.btn-metodo:hover i,
+.btn-metodo.active i {
+    color: #333652 !important;
+}
+
+/* Alineación vertical de celdas en tablas */
+.table th, .table td {
+    vertical-align: middle;
+}
+
+/* Estilos de la última celda de tablas */
+.table td:last-child, .table th:last-child {
+    width: 80px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Estilos para modales */
+.modal-header {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.modal-footer .btn-primary {
+    background-color: #0d6efd;
+}
+
+.modal-content,
+.modal-dialog {
+    overflow: visible !important;
+}
+
+/* Inputs y botones generales */
+input.form-control, select.form-select, .btn {
+    border-radius: 5px;
+}
