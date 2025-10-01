@@ -409,7 +409,31 @@
            </div>
         </div>
     </div>
+                    
+<!-- Modal de Bienvenida -->
+<div class="modal fade" id="modalBienvenida" tabindex="-1" aria-labelledby="modalBienvenidaLabel" aria-hidden="true"
+     data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h3 class="modal-title" id="modalBienvenidaLabel"><strong>¡Has ingresado con éxito!</strong></h3>
+            </div>
+            <div class="modal-body">
+                <p>✅ Recuerda seguir las <strong>buenas prácticas de seguridad</strong> en la información que se almacena en este sistema.</p>
+                <p>🔒 No olvides <strong>cerrar sesión</strong> al finalizar tu jornada laboral.</p>
+                <p>⏱️ Por seguridad, el sistema se cerrará automáticamente tras <strong>10 minutos de inactividad</strong>.</p>
+                <p>🔑 Recuerda <strong>cambiar tu contraseña periódicamente</strong> para mantener tu cuenta segura.</p>
+            </div>
+            <div class="modal-footer">
+                <a href="index.jsp" class="btn btn-primary">Aceptar</a>
+                <a href="logoutServlet" class="btn btn-secondary">Rechazar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/index.js"></script>
+    <script src="js/Bienvenida.js"></script>
 </body>
 </html>

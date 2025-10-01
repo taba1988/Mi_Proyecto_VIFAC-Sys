@@ -1,8 +1,3 @@
-<%-- 
-    Document   : mensajeVienvenida
-    Created on : 10/09/2025, 02:51:50 AM
-    Author     : ORLANDUVALIE TABARES GUTIERREZ
---%>
 
 <%-- 
     Página: bienvenida.jsp

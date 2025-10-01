@@ -53,7 +53,7 @@
 
 <div class="d-flex justify-content-end">
   <button class="btn btn-outline d-lg-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCategorias" aria-controls="offcanvasCategorias">
-    <i class="bi bi-list fs-3"></i>
+    <i class="bi bi-list fs-1"></i>
   </button>
 </div>
 
@@ -252,8 +252,6 @@
         </div>
     </div>
 </div>
-    
-    //boton descuento % venta general
 
 <div class="modal fade" id="modalDescuento" data-bs-backdrop="static"data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDescuentoLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -282,8 +280,6 @@
         </div>
     </div>
 </div>
-       
-    //Boton descuento producto especifico
 
 <div class="modal fade" id="modalDescuentoProducto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDescuentoProductoLabel" aria-hidden="true">
   <div class="modal-dialog">
