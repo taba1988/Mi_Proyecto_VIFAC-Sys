@@ -1,7 +1,7 @@
 /*
  * Clientes.jsx
  * Componente React que mantiene la visual del JSP original y consume el servlet ClientesServlet.
- * Comentarios a nivel de bloque solo donde es necesario.
+ * Comentarios agregados para aclarar funcionalidad sin modificar código.
  */
 
 import React, { useState, useEffect } from "react";
@@ -9,13 +9,13 @@ import "./clientes.css";
 
 function Clientes() {
   /*
-   * Estado:
-   * - clientes: lista obtenida desde el servlet
+   * Estados del componente:
+   * - clientes: lista de clientes obtenida del backend
    * - busqueda: texto de la barra de búsqueda
-   * - mostrarModal: controla visualización del modal
-   * - formData: objeto con los campos del formulario (coinciden con parámetros esperados por el servlet)
-   * - mostrarExito: controla visualización del modal de éxito
-   * - mensajeExito: mensaje a mostrar en el modal de éxito
+   * - mostrarModal: controla visualización del modal de agregar/editar cliente
+   * - formData: objeto que contiene los datos del cliente a agregar o editar
+   * - mostrarExito: controla visualización del modal de confirmación de acción exitosa
+   * - mensajeExito: mensaje que se muestra en el modal de éxito
    */
   const [clientes, setClientes] = useState([]);
   const [busqueda, setBusqueda] = useState("");
@@ -35,34 +35,36 @@ function Clientes() {
   const [mostrarExito, setMostrarExito] = useState(false);
   const [mensajeExito, setMensajeExito] = useState("");
 
-  /* URL base del servlet (ajusta el host/puerto/context si hace falta) */
+  /* URL base del servlet del backend */
   const URL_SERVLET = "http://localhost:8084/Mi_Proyecto_VIFAC-Sys/ClientesServlet";
 
-  /* Cargar lista de clientes desde el backend */
+  /* Función para cargar clientes desde el backend. Si query tiene valor, realiza búsqueda. */
   const fetchClientes = async (query = "") => {
     try {
       const params = new URLSearchParams();
       params.append("accion", query ? "buscar" : "listar");
       if (query) params.append("busqueda", query);
+
       const res = await fetch(`${URL_SERVLET}?${params.toString()}`, {
         method: "GET",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         credentials: "include"
       });
+
       if (!res.ok) throw new Error("Error al obtener clientes");
       const data = await res.json();
-      setClientes(data);
+      setClientes(data); // Actualiza el estado con los clientes recibidos
     } catch (err) {
       console.error("fetchClientes:", err);
     }
   };
 
-  /* Efecto inicial: cargar clientes al montar */
+  /* useEffect: se ejecuta al montar el componente para cargar clientes inicialmente */
   useEffect(() => {
     fetchClientes();
   }, []);
 
-  /* Modal: abrir vacío para agregar */
+  /* Abrir modal vacío para agregar un nuevo cliente */
   const abrirModalCliente = () => {
     setFormData({
       idCliente: "",
@@ -79,7 +81,7 @@ function Clientes() {
     setMostrarModal(true);
   };
 
-  /* Modal: abrir con datos para editar */
+  /* Abrir modal con datos para editar un cliente existente */
   const abrirModalEditar = (cliente) => {
     setFormData({
       idCliente: cliente.idClientes ?? cliente.idCliente ?? "",
@@ -96,17 +98,18 @@ function Clientes() {
     setMostrarModal(true);
   };
 
+  /* Cierra el modal de cliente */
   const cerrarModal = () => setMostrarModal(false);
 
+  /* Cierra el modal de éxito */
   const cerrarExito = () => setMostrarExito(false);
 
-  /* Manejo de cambios en inputs del formulario */
+  /* Manejo de cambios en los inputs del formulario */
   const manejarCambio = (e) => {
     const { name, value } = e.target;
 
-    // Validaciones específicas
+    // Validación de campos numéricos: solo permite números y máximo 10 dígitos
     if (name === "documento_NIT" || name === "telefono") {
-      // Solo números y máximo 10 dígitos
       const soloNumeros = value.replace(/[^0-9]/g, "").slice(0, 10);
       setFormData((prev) => ({ ...prev, [name]: soloNumeros }));
     } else {
@@ -114,10 +117,10 @@ function Clientes() {
     }
   };
 
-  /* Validación de correo electrónico */
+  /* Valida el formato del correo electrónico */
   const validarEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  /* Verificar si la cédula ya existe en la lista de clientes (excluye al cliente actual al editar) */
+  /* Verifica si la cédula ya existe en la lista (excluyendo el cliente actual al editar) */
   const cedulaExiste = (cedula) => {
     return clientes.some((c) => {
       const id = c.idCliente ?? c.idClientes;
@@ -125,8 +128,9 @@ function Clientes() {
     });
   };
 
-  /* Guardar cliente: agregar o editar */
+  /* Guarda el cliente: agrega uno nuevo o edita existente */
   const guardarCliente = async () => {
+    // Validaciones básicas antes de enviar al backend
     if (!formData.documento_NIT || formData.documento_NIT.length < 5) {
       alert("Ingrese una cédula válida.");
       return;
@@ -167,10 +171,10 @@ function Clientes() {
 
       const result = await res.json();
       if (result.status === "success") {
-        await fetchClientes();
+        await fetchClientes(); // Refresca la lista
         cerrarModal();
         setMensajeExito(formData.idCliente ? "Cliente editado con éxito" : "Cliente agregado con éxito");
-        setMostrarExito(true);
+        setMostrarExito(true); // Muestra modal de éxito
       } else {
         alert(result.mensaje || "Error guardando cliente");
       }
@@ -180,22 +184,24 @@ function Clientes() {
     }
   };
 
-  /* Eliminar cliente */
+  /* Elimina un cliente por su ID */
   const eliminarCliente = async (id) => {
     if (!window.confirm("¿Desea eliminar este cliente?")) return;
     try {
       const params = new URLSearchParams();
       params.append("accion", "eliminar");
       params.append("id", id);
+
       const res = await fetch(URL_SERVLET, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: params.toString(),
         credentials: "include"
       });
+
       const result = await res.json();
       if (result.status === "success") {
-        await fetchClientes();
+        await fetchClientes(); // Refresca lista después de eliminar
         setMensajeExito("Cliente eliminado con éxito");
         setMostrarExito(true);
       } else alert(result.mensaje || "Error eliminando cliente");
@@ -205,13 +211,13 @@ function Clientes() {
     }
   };
 
-  /* Buscar clientes */
+  /* Maneja la búsqueda de clientes */
   const handleBuscar = async (e) => {
     if (e) e.preventDefault();
     await fetchClientes(busqueda);
   };
 
-  /* Render */
+  /* Render del componente */
   return (
     <div className="container mt-4">
       {/* Header con barra de búsqueda */}
@@ -251,7 +257,7 @@ function Clientes() {
 
       <hr />
 
-      {/* Main: lista y botón agregar */}
+      {/* Main: tabla de clientes y botón agregar */}
       <main className="container my-4">
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h4>Lista Clientes</h4>
@@ -292,6 +298,7 @@ function Clientes() {
                     <td>{c.responsabilidad_iva}</td>
                     <td>{c.estado}</td>
                     <td>
+                      {/* Botones de editar y eliminar */}
                       <button 
                         className="btn btn-sm btn-outline-primary me-1" 
                         onClick={() => abrirModalEditar(c)}
@@ -313,7 +320,7 @@ function Clientes() {
         </div>
       </main>
 
-      {/* Botones inferiores */}
+      {/* Botones inferiores de navegación */}
       <div className="container mb-1 d-flex justify-content-start gap-1">
         <button className="btn btn-outline-secondary" onClick={() => (window.location.href = "/index.jsp")}>Inicio</button>
         <button className="btn btn-outline-success" onClick={() => (window.location.href = "/Vender.jsp")}>Continuar Venta</button>
@@ -328,7 +335,7 @@ function Clientes() {
         </div>
       </footer>
 
-      {/* Modal de Cliente */}
+      {/* Modal para agregar/editar cliente */}
       {mostrarModal && (
         <div className="modal fade show d-block" tabIndex="-1" role="dialog" aria-labelledby="modalClienteLabel" aria-modal="true">
           <div className="modal-dialog modal-lg">
@@ -340,6 +347,7 @@ function Clientes() {
 
               <div className="modal-body">
                 <form>
+                  {/* Ítem y Razón Social */}
                   <div className="row mb-3">
                     <div className="col-12 col-md-3">
                       <label htmlFor="item" className="form-label">Ítem</label>
@@ -351,6 +359,7 @@ function Clientes() {
                     </div>
                   </div>
 
+                  {/* Documento/NIT y Teléfono */}
                   <div className="row mb-3">
                     <div className="col-12 col-md-6">
                       <label htmlFor="documentoNit" className="form-label">Documento/NIT</label>
@@ -362,6 +371,7 @@ function Clientes() {
                     </div>
                   </div>
 
+                  {/* Dirección y Correo Electrónico */}
                   <div className="row mb-3">
                     <div className="col-12 col-md-6">
                       <label htmlFor="direccion" className="form-label">Dirección</label>
@@ -373,6 +383,7 @@ function Clientes() {
                     </div>
                   </div>
 
+                  {/* Actividad Económica y Responsabilidad IVA */}
                   <div className="row mb-3">
                     <div className="col-12 col-md-6">
                       <label htmlFor="actividadEconomica" className="form-label">Actividad Económica</label>
@@ -392,6 +403,7 @@ function Clientes() {
                     </div>
                   </div>
 
+                  {/* Estado */}
                   <div className="row mb-3">
                     <div className="col-12 col-md-6">
                       <label className="form-label">Estado</label>
@@ -409,6 +421,7 @@ function Clientes() {
                 </form>
               </div>
 
+              {/* Footer del modal con botones Cancelar y Guardar */}
               <div className="modal-footer">
                 <button type="button" className="btn btn-outline-secondary" onClick={cerrarModal}>Cancelar</button>
                 <button type="button" className="btn btn-outline-primary" onClick={guardarCliente}>Guardar</button>
