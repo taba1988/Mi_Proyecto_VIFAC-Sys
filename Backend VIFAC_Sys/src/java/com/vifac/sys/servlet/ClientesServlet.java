@@ -30,6 +30,12 @@ public class ClientesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // ✅ Cabeceras CORS para permitir conexión desde React
+        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
@@ -53,6 +59,12 @@ public class ClientesServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        // ✅ Cabeceras CORS también aquí
+        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
 
         String accion = request.getParameter("accion");
         response.setContentType("application/json");
@@ -86,8 +98,6 @@ public class ClientesServlet extends HttpServlet {
                             }
                         }
                         break;
-
-
 
                     case "editar":
                         Clientes clienteEditado = new Clientes();

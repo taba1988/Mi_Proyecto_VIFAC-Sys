@@ -1,4 +1,4 @@
-/* global fetch, bootstrap */
+/* global fetch, bootstrap, estado, nombre, sku */
 
 let metodoLectura = 'teclado'; // valor por defecto
 
