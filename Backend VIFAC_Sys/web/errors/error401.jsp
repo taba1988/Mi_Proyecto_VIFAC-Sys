@@ -12,9 +12,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Error de Acceso - MAXI-LIMPIEZA</title>
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../css/401.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/401.css">
 </head>
 <body>
     <%-- Contenedor principal de la página de error 401 --%>
@@ -22,9 +22,18 @@
         <h1 class="error-code">401</h1>
         <p class="error-message">Acceso No Autorizado</p>
         <p class="mb-3">Lo sentimos, no tiene los permisos necesarios para acceder a este recurso.</p>
-        <a href="../indexServlet" class="return-button">
-            <i class="bi bi-arrow-left me-1"></i> Volver al Inicio
-        </a>
+        <c:choose>
+            <c:when test="${not empty sessionScope.usuario}">
+                <a href="${pageContext.request.contextPath}/indexServlet" class="return-button">
+                    <i class="bi bi-arrow-left me-1"></i> Atras
+                </a>
+            </c:when>
+            <c:otherwise>
+                <a href="${pageContext.request.contextPath}/loginServlet" class="return-button">
+                    <i class="bi bi-arrow-left me-1"></i> Atras
+                </a>
+            </c:otherwise>
+        </c:choose>
     </div>
 
     <%-- Footer de la página de error 401 --%>
@@ -37,6 +46,6 @@
         </footer>
     </div>
 
-    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

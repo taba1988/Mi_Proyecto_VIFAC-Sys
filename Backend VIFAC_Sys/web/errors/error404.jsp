@@ -12,9 +12,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Error 404 - MAXI-LIMPIEZA</title>
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../css/404.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/404.css">
 </head>
 <body>
     
@@ -24,11 +24,26 @@
             <main>
                 <div class="row justify-content-center">
                     <div class="col-12 col-lg-12 text-center mt-4 px-2">
-                        <img class="mb-4 img-error img-fluid" src="../img/error-404.png" alt="Error 404" style="max-width: 400px; margin-bottom: 20px;"/>
+                        <img class="mb-4 img-error img-fluid" 
+                             src="${pageContext.request.contextPath}/img/error-404.png" 
+                             alt="Error 404" 
+                             style="max-width: 400px; margin-bottom: 20px;" />
+
                         <p class="lead text-wrap">La URL solicitada no se encontró en este servidor.</p>
-                        <a href="../indexServlet" class="return-link d-inline-block mt-2">
-                            <i class="bi bi-arrow-left me-1"></i> Volver al Inicio
-                        </a>
+
+                        <c:choose>
+                            <c:when test="${not empty sessionScope.usuario}">
+                                <a href="${pageContext.request.contextPath}/indexServlet" class="return-button">
+                                    <i class="bi bi-arrow-left me-1"></i> Atras
+                                </a>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="${pageContext.request.contextPath}/loginServlet" class="return-button">
+                                    <i class="bi bi-arrow-left me-1"></i> Atras
+                                </a>
+                            </c:otherwise>
+                        </c:choose>
+
                     </div>
                 </div>
             </main>
@@ -45,6 +60,6 @@
         </footer>
     </div>
 
-    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
