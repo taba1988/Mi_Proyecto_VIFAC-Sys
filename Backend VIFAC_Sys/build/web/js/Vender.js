@@ -254,7 +254,6 @@ function actualizarTotalItem(cantidadInput) {
     if (isNaN(cantidad) || cantidad < 1) cantidad = 1;
     cantidadInput.value = cantidad;
     const precio_unitario = parseFloat(cantidadInput.getAttribute('data-precio_venta') || '0');
-s
     let productoPrevio = window.productosVenta.find(p => p.idProducto === idProducto);
     let descuento_porcentaje = productoPrevio ? productoPrevio.descuento_porcentaje : 0;
     const subtotal = parseFloat((cantidad * precio_unitario * (1 - descuento_porcentaje / 100)).toFixed(2));

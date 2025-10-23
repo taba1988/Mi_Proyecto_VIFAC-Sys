@@ -83,8 +83,8 @@
     </main>
 
     <div class="container mb-1 d-flex justify-content-start gap-1">
-        <button class="btn btn-outline-secondary" onclick="location.href='index.jsp'">Inicio</button>
-        <button class="btn btn-outline-success justify-content-start" onclick="location.href='Vender.jsp'">Continuar Venta</button>
+        <button class="btn btn-outline-secondary" onclick="location.href='indexServlet'">Inicio</button>
+        <button class="btn btn-outline-success justify-content-start" onclick="location.href='VenderServlet'">Continuar Venta</button>
         <button class="btn btn-outline-danger ms-auto" onclick="location.href='logoutServlet'">Cerrar sesión</button>
     </div>
 
@@ -260,7 +260,8 @@
             </div>
         </div>
     </div>
-
+    <%@ include file="temporizador.jsp" %>
+    
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/clientes.js"></script>
 </body>

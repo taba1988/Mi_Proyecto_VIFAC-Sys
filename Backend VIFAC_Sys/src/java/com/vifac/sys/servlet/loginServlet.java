@@ -98,7 +98,7 @@ public class loginServlet extends HttpServlet {
             }
 
             // Redirigir a página principal
-            response.sendRedirect(request.getContextPath() + "/index.jsp?mensajeBienvenida=true");
+response.sendRedirect(request.getContextPath() + "/indexServlet?mensajeBienvenida=true");
 
         } else {
             // Credenciales incorrectas

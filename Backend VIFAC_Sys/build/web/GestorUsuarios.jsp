@@ -91,7 +91,7 @@
 
   <!-- BOTONES INFERIORES -->
   <div class="container mb-1 d-flex justify-content-between gap-1">
-    <button class="btn btn-outline-secondary" onclick="location.href='index.jsp'">Inicio</button>
+    <button class="btn btn-outline-secondary" onclick="location.href='indexServlet'">Inicio</button>
     <button class="btn btn-outline-danger" onclick="location.href='logoutServlet'">Cerrar sesión</button>
   </div>
 
@@ -203,7 +203,7 @@
                 
                             <div class="col-12 col-md-3">
                                   <label for="rol" class="form-label">Rol</label>
-                                <div class="dropdown w-">
+                                <div class="dropdown w-100">
                                     <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button" id="dropdownRol" data-bs-toggle="dropdown" aria-expanded="false">
                                       Seleccionar Rol
                                     </button>
@@ -260,7 +260,40 @@
             </div>
         </div>
     </div>
-  <!-- Scripts de Bootstrap y archivo JS propio -->
+<!-- Modal de notificación -->
+<div class="modal fade" id="modalNotificacion" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        <p id="mensajeNotificacion"></p>
+        <button type="button" class="btn btn-primary mt-2" data-bs-dismiss="modal">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de confirmación para acciones de usuarios (guardar o eliminar) -->
+<div class="modal fade" id="modalConfirmacion" tabindex="-1" aria-labelledby="modalConfirmacionLabel" aria-hidden="true" 
+     data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalConfirmacionLabel">Confirmación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body" id="textoConfirmacion"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="btnConfirmar">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+  <%@ include file="temporizador.jsp" %>
+  
   <script src="js/bootstrap.bundle.min.js"></script>
   <script src="js/usuarios.js"></script>
 </body>

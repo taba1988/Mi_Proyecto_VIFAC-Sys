@@ -37,7 +37,7 @@ public class UsuariosServlet extends HttpServlet {
                 List<Usuario> usuarios = usuarioDAO.listarUsuarios();
                 String json = gson.toJson(usuarios);
                 response.getWriter().write(json);
-            } catch (Exception e) {
+            } catch (IOException e) {
                 // Maneja cualquier excepción para enviar una respuesta de error válida
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 RespuestaJson respuesta = new RespuestaJson("error", "Error interno del servidor: " + e.getMessage());
@@ -49,7 +49,7 @@ public class UsuariosServlet extends HttpServlet {
                 List<Usuario> usuarios = usuarioDAO.buscarUsuarios(busqueda);
                 String json = gson.toJson(usuarios);
                 response.getWriter().write(json);
-            } catch (Exception e) {
+            } catch (IOException e) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 RespuestaJson respuesta = new RespuestaJson("error", "Error en la búsqueda: " + e.getMessage());
                 response.getWriter().write(gson.toJson(respuesta));
@@ -112,8 +112,17 @@ public class UsuariosServlet extends HttpServlet {
                     } catch (NumberFormatException e) {
                         usuarioEditado.setIntentosFallidos(0);
                     }
-                    usuarioDAO.actualizarUsuario(usuarioEditado);
-                    respuesta = new RespuestaJson("success", "Usuario actualizado con éxito.");
+
+                    boolean exito = usuarioDAO.actualizarUsuario(usuarioEditado);
+                    if (exito) {
+                        respuesta = new RespuestaJson(
+                        "success",
+                        "Los datos del usuario se han guardado correctamente."
+                    );
+
+                    } else {
+                        respuesta = new RespuestaJson("error", "No se pudo actualizar el usuario. Verifica el ID.");
+                    }
                     break;
 
                 case "eliminar":

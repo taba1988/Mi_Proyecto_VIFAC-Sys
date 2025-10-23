@@ -1,8 +1,14 @@
-/* Estilos personalizados*/
+/* * ESTILOS PERSONALIZADOS DEL SISTEMA VIFAC 
+ * Autor: ORLANDUVALIE TABARES GUTIERREZ
+ * Fecha: 10/09/2025 (Consolidado)
+ */
+
 @import url('https://fonts.googleapis.com/css2?family=Bad+Script&display=swap');
 
+/* --- Estilos Base y Tipografía --- */
+
 body {
-    background-image: none;
+    background-image: none; /* Mantener la configuración del usuario */
     background-size: 900px;
     background-repeat: no-repeat;
     background-position: calc(20% + 100px) center;
@@ -13,9 +19,10 @@ body {
     font-family: 'Inter', sans-serif;
 }
 
-/* Estilos del Encabezado */
+/* --- Estilos del Encabezado (Header) --- */
+
 .header-container {
-    background-color: #0093DD;
+    background-color: #0093DD; /* Azul claro */
     padding: 15px 30px;
     border-radius: 10px;
     border: 1px solid #ccc;
@@ -30,7 +37,7 @@ body {
 .header-container .left-text {
     font-size: 20px;
     font-weight: bold;
-    color: #333652;
+    color: #333652; /* Color oscuro */
 }
 
 .header-container .right-text {
@@ -64,6 +71,22 @@ body {
     background-color: #f7f7f2;
 }
 
+/* Estilos para el offcanvas */
+.offcanvas {
+    width: auto;
+    min-width: 250px;
+    max-width: 80vw;
+}
+
+/* Oculta el botón del offcanvas en desktop */
+@media (min-width: 768px) {
+    .offcanvas-button {
+        display: none;
+    }
+}
+
+/* --- Estilos de Acordeón y Listas --- */
+
 .accordion-item {
     border: none;
 }
@@ -84,22 +107,28 @@ body {
     color: #3772ff;
 }
 
+/* --- Estilos para Elementos Fijos / Íconos Laterales (fixed-icons) --- */
+
+.fixed-icons {
+    transform: translateY(50px) !important;
+}
+
+/* Ajustes de posición en mobile para fixed-icons */
+@media (min-width: 768px) {
+    .fixed-icons {
+        margin-top: 130px !important;
+    }
+}
+.offcanvas .fixed-icons {
+    margin-bottom: 30px; 
+}
+
 .fixed-icons .menu-link {
     text-decoration: none;
     color: #333652;
 }
 
-/* Solo para pantallas grandes (desktop) */
-@media (min-width: 768px) {
-    .fixed-icons {
-        margin-top: 130px !important;
-    }
-
-    /* Oculta el offcanvas button en pantallas de escritorio */
-    .offcanvas-button {
-        display: none;
-    }
-}
+/* --- Estilos de Logotipo y Tarjetas (Cards) --- */
 
 .logo-right-col img {
     border: 2px solid #3772ff;
@@ -122,39 +151,42 @@ body {
     border-top-right-radius: 10px;
 }
 
-/* Estilos para el offcanvas */
-.offcanvas {
-    width: auto;
-    min-width: 250px;
-    max-width: 80vw;
-}
-
-.carousel-indicators [data-bs-target] {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: #333652;
-}
-
-.carousel-indicators .active {
-    background-color: #0093DD;
-}
-
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
-    width: 3rem;
-    height: 3rem;
-    background-size: 100% 100%;
-}
+/* --- Estilos Específicos del Carrusel --- */
 
 .carousel-inner img {
     border-radius: 10px;
 }
 
-.fixed-icons {
-  transform: translateY(50px) !important;
+/* 1. Flechas de navegación*/
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    width: 5rem !important;   /* tamaño del botón intacto */
+    height: 5rem !important;
+    background-size: 100% 100% !important; /* <--- ajusta este valor para hacer la flecha más delgada */
 }
-/* Ajusta la posición de los íconos en el offcanvas móvil */
-.offcanvas .fixed-icons {
-  margin-bottom: 30px; /* súbelos */
+
+/* Indicadores del carrusel personalizados */
+#dynamicCarousel .carousel-indicators button {
+width: 12px;
+height: 12px;
+border-radius: 50%;
+margin: 0 5px;
+background-color: #212529; /* Negro por defecto */
+border: 2px solid transparent; /* Sin borde visible normalmente */
+transition: all 0.3s ease;
+opacity: 1;
+}
+
+/* Activo: Azul con centro blanco */
+#dynamicCarousel .carousel-indicators .active {
+background-color: #0093DD; /* Azul */
+border: 3px solid #ffffff; /* Centro blanco */
+box-shadow: 0 0 4px #0093DD;
+}
+
+/* Hover: Naranja con centro blanco */
+#dynamicCarousel .carousel-indicators button:hover {
+background-color: #ff9800; /* Naranja */
+border: 3px solid #ffffff; /* Centro blanco */
+box-shadow: 0 0 4px #ff9800;
 }

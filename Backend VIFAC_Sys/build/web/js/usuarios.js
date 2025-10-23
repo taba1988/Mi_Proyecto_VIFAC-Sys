@@ -1,7 +1,30 @@
-/* global usuarios, bootstrap, fetch */
+/* global usuarios, bootstrap, fetch, text */
 
 let usuarios = []; // Arreglo para almacenar usuarios
 let usuarioEditandoId = null;
+
+// Validación de login: impedir iniciar sesión si el usuario no está activo
+const formLogin = document.getElementById("formLogin");
+if (formLogin) {
+    formLogin.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const usuario = document.getElementById("usuario").value.trim();
+        const contrasena = document.getElementById("contrasena").value.trim();
+        const encontrado = usuarios.find(u => u.nombreUsuario === usuario && u.contrasena === contrasena);
+
+        if (!encontrado) {
+            alert("Usuario o contraseña incorrectos");
+            return;
+        }
+
+        if (encontrado.estado !== "Activo") {
+            alert("Usuario inhabilitado, no puede iniciar sesión");
+            return;
+        }
+
+        formLogin.submit();
+    });
+}
 
 const modalUsuarios = new bootstrap.Modal(
   document.getElementById("modalUsuarios")
@@ -23,7 +46,6 @@ function validarCorreo(input) {
 function abrirModalUsuario() {
   usuarioEditandoId = null;
   document.getElementById("formUsuario").reset();
-  // El item se llenará cuando la tabla se actualice desde el servidor
   document.getElementById("item").value = "";
   document.getElementById("usuarioId").value = "";
   document.getElementById("dropdownRol").textContent = "Seleccionar rol";
@@ -42,7 +64,7 @@ function limpiarValidaciones() {
   inputs.forEach((input) => {
     input.classList.remove("is-invalid", "is-valid");
   });
-
+  
   document.querySelectorAll(".invalid-feedback").forEach(el => el.textContent = "");
 }
 
@@ -105,7 +127,7 @@ function validarFormulario() {
     valido = false;
   } else {
     const usuarioDuplicado = usuarios.some(
-      (u) => u.nombreUsuario && u.nombreUsuario.toLowerCase() === nombreUsuarioInput.toLowerCase() && u.idUsuario != usuarioEditandoId
+      (u) => u.nombreUsuario && u.nombreUsuario.toLowerCase() === nombreUsuarioInput.toLowerCase() && u.idUsuario !== usuarioEditandoId
     );
     if (usuarioDuplicado) {
       document.getElementById("nombreUsuario").classList.add("is-invalid");
@@ -145,49 +167,76 @@ function validarFormulario() {
   return valido;
 }
 
+// Modal de confirmación
+function mostrarConfirmacion(mensaje) {
+  return new Promise((resolve) => {
+    const modal = new bootstrap.Modal(document.getElementById("modalConfirmacion"));
+    document.getElementById("textoConfirmacion").textContent = mensaje;
+
+    const btnConfirmar = document.getElementById("btnConfirmar");
+    btnConfirmar.replaceWith(btnConfirmar.cloneNode(true));
+    const nuevoBtn = document.getElementById("btnConfirmar");
+
+    nuevoBtn.addEventListener("click", () => {
+      modal.hide();
+      resolve(true);
+    });
+
+    document.getElementById("modalConfirmacion").addEventListener("hidden.bs.modal", () => {
+      resolve(false);
+    }, { once: true });
+
+    modal.show();
+  });
+}
+
 // Guardar usuario
-function guardarUsuario() {
+async function guardarUsuario() {
   if (!validarFormulario()) return;
 
-  const confirmacion = confirm("¿Está seguro de guardar los datos del usuario?");
-  if (!confirmacion) return;
+  const confirmado = await mostrarConfirmacion
+  ("¿Está seguro de guardar los datos del usuario? Recuerde que esta acción no puede deshacerse.");
+  if (!confirmado) return;
+
+  const accionInput = document.getElementById("accionInput");
+  if (usuarioEditandoId !== null) {
+    accionInput.value = "editar";
+    document.getElementById("usuarioId").value = usuarioEditandoId;
+  } else {
+    accionInput.value = "agregar";
+    document.getElementById("usuarioId").value = "";
+  }
 
   const form = document.getElementById("formUsuario");
   const formData = new FormData(form);
 
-  let accion = "agregar";
-  if (usuarioEditandoId !== null) {
-    accion = "editar";
-    formData.append("usuarioId", usuarioEditandoId);
-  }
-  formData.append("accion", accion);
-
   fetch("UsuariosServlet", {
     method: "POST",
-    body: new URLSearchParams(formData),
+    body: new URLSearchParams(formData)
   })
     .then((response) => {
-      if (!response.ok) {
-        throw new Error('La respuesta de la red no fue exitosa. Código: ' + response.status);
-      }
+      if (!response.ok) throw new Error('La respuesta de la red no fue exitosa. Código: ' + response.status);
       return response.json();
     })
     .then((data) => {
       if (data.status === "success") {
-        alert(data.message);
+        document.getElementById("mensajeNotificacion").textContent = data.message;
+        new bootstrap.Modal(document.getElementById("modalNotificacion")).show();
         modalUsuarios.hide();
-        cargarUsuariosDelServidor(); // Recargar la tabla
+        cargarUsuariosDelServidor();
       } else {
-        alert("Error: " + data.message);
+        document.getElementById("mensajeNotificacion").textContent = "Error: " + data.message;
+        new bootstrap.Modal(document.getElementById("modalNotificacion")).show();
       }
     })
     .catch((error) => {
       console.error("Error al guardar el usuario:", error);
-      alert("Ocurrió un error al conectar con el servidor. Revise la consola para más detalles.");
+      document.getElementById("mensajeNotificacion").textContent = "Ocurrió un error al conectar con el servidor. Revise la consola para más detalles.";
+      new bootstrap.Modal(document.getElementById("modalNotificacion")).show();
     });
 }
 
-// Actualizar tabla (se mantiene igual, ya que es la que se encarga de pintar los datos del arreglo local 'usuarios')
+// Actualizar tabla
 function actualizarTablaUsuarios(filtro = "") {
   const tbody = document.getElementById("tablaUsuarios");
   tbody.innerHTML = "";
@@ -198,16 +247,10 @@ function actualizarTablaUsuarios(filtro = "") {
     u.nombreUsuario.toLowerCase().includes(filtro.toLowerCase())
   );
 
-  // Mapeo de IDs de rol a nombres para la visualización
-  const rolesMap = {
-    1: "Administrador",
-    2: "Ventas",
-    3: "Logística (Bodega)",
-    4: "Contabilidad"
-  };
+  const rolesMap = { 1: "Administrador", 2: "Ventas", 3: "Logística (Bodega)", 4: "Contabilidad" };
 
   usuariosFiltrados.forEach((usuario, index) => {
-    const rolNombre = rolesMap[usuario.idRol] || "Desconocido"; // Obtener el nombre del rol
+    const rolNombre = rolesMap[usuario.idRol] || "Desconocido";
     const fila = document.createElement("tr");
     fila.innerHTML = `
       <td>${index + 1}</td>
@@ -232,33 +275,27 @@ function actualizarTablaUsuarios(filtro = "") {
   });
 }
 
-// Editar usuario (se unificó con una sola función)
+// Editar usuario
 function editarUsuario(idUsuario) {
-  const usuario = usuarios.find((u) => u.idUsuario == idUsuario);
+  const usuario = usuarios.find((u) => u.idUsuario === idUsuario);
   if (!usuario) {
-    alert("Usuario no encontrado.");
+    document.getElementById("mensajeNotificacion").textContent = "Usuario no encontrado.";
+    new bootstrap.Modal(document.getElementById("modalNotificacion")).show();
     return;
   }
 
   usuarioEditandoId = usuario.idUsuario;
-  document.getElementById("item").value = usuarios.findIndex(u => u.idUsuario == idUsuario) + 1;
+  document.getElementById("item").value = usuarios.findIndex(u => u.idUsuario === idUsuario) + 1;
   document.getElementById("nombre").value = usuario.nombre;
   document.getElementById("documento").value = usuario.documento;
   document.getElementById("telefono").value = usuario.telefono;
   document.getElementById("email").value = usuario.email;
   document.getElementById("nombreUsuario").value = usuario.nombreUsuario;
-  document.getElementById("contrasena").value = ""; // No se carga la contraseña por seguridad
+  document.getElementById("contrasena").value = "";
 
-  // Mapeo de IDs de rol a nombres para la visualización
-  const rolesMapInvertido = {
-    1: "Administrador",
-    2: "Ventas",
-    3: "Logística (Bodega)",
-    4: "Contabilidad"
-  };
-
+  const rolesMapInvertido = {1:"Administrador",2:"Ventas",3:"Logística (Bodega)",4:"Contabilidad"};
   const rolNombre = rolesMapInvertido[usuario.idRol] || "Seleccionar rol";
-  document.getElementById("rolInput").value = usuario.idRol; // Se guarda el ID del rol en el input
+  document.getElementById("rolInput").value = usuario.idRol;
   document.getElementById("dropdownRol").textContent = rolNombre;
 
   document.getElementById("cargoInput").value = usuario.cargo;
@@ -273,29 +310,27 @@ function editarUsuario(idUsuario) {
 }
 
 // Eliminar usuario
-function eliminarUsuario(idUsuario) {
-  if (!confirm("¿Está seguro de eliminar este usuario?")) return;
+async function eliminarUsuario(idUsuario) {
+  const confirmado = await mostrarConfirmacion("¿Está seguro de eliminar este usuario?");
+  if (!confirmado) return;
 
   const formData = new FormData();
   formData.append("accion", "eliminar");
   formData.append("id", idUsuario);
 
-  fetch("UsuariosServlet", {
-    method: "POST",
-    body: new URLSearchParams(formData)
-  })
+  fetch("UsuariosServlet", { method: "POST", body: new URLSearchParams(formData) })
     .then(response => response.json())
     .then(data => {
       if (data.status === "success") {
-        alert(data.message);
-        cargarUsuariosDelServidor(); // Recargar la tabla
+        document.getElementById("mensajeNotificacion").textContent = data.message;
+        new bootstrap.Modal(document.getElementById("modalNotificacion")).show();
+        cargarUsuariosDelServidor();
       } else {
-        alert("Error: " + data.message);
+        document.getElementById("mensajeNotificacion").textContent = "Error: " + data.message;
+        new bootstrap.Modal(document.getElementById("modalNotificacion")).show();
       }
     })
-    .catch(error => {
-      console.error("Error al eliminar el usuario:", error);
-    });
+    .catch(error => console.error("Error al eliminar el usuario:", error));
 }
 
 // Buscar usuario
@@ -310,17 +345,16 @@ function buscarUsuario(event) {
     .then(data => {
       usuarios = data;
       actualizarTablaUsuarios();
-
-      // Limpiar y enfocar la barra después de buscar
       filtroInput.value = "";
       filtroInput.focus();
     })
     .catch(error => {
-      console.error("Error en la búsqueda:", error);
+      document.getElementById("mensajeNotificacion").textContent = "Error en la búsqueda. Revise la consola para más detalles.";
+      new bootstrap.Modal(document.getElementById("modalNotificacion")).show();
     });
 }
 
-// Función genérica para conectar dropdown con input hidden
+// Conectar dropdown con input hidden
 function setupDropdown(dropdownButtonId, hiddenInputId) {
   const button = document.getElementById(dropdownButtonId);
   const hiddenInput = document.getElementById(hiddenInputId);
@@ -330,21 +364,18 @@ function setupDropdown(dropdownButtonId, hiddenInputId) {
     item.addEventListener("click", function (e) {
       e.preventDefault();
       const value = this.getAttribute("data-value");
-      button.textContent = this.textContent; // Usar el texto del item para el botón
+      button.textContent = this.textContent;
       hiddenInput.value = value;
     });
   });
 }
 
-// Función para obtener y cargar los usuarios del servidor
+// Cargar usuarios del servidor
 function cargarUsuariosDelServidor() {
   return new Promise((resolve, reject) => {
     fetch("UsuariosServlet")
       .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const clonedResponse = response.clone();
+        if (!response.ok) throw new Error('Network response was not ok');
         return response.json();
       })
       .then((data) => {
@@ -353,13 +384,7 @@ function cargarUsuariosDelServidor() {
         resolve();
       })
       .catch((error) => {
-        error.response&&text().then(text => {
-          console.error("Error al cargar usuarios:", error);
-          console.error("Contenido de la respuesta de error:", text);
-        }).catch(() => {
-          console.error("Error al cargar usuarios:", error);
-        });
-
+        console.error("Error al cargar usuarios:", error);
         document.getElementById("tablaUsuarios").innerHTML = '<tr><td colspan="9" class="text-center text-danger">Error al cargar usuarios del servidor.</td></tr>';
         reject(error);
       });

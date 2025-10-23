@@ -1,4 +1,6 @@
- document.addEventListener('DOMContentLoaded', function() {
+ /* global bootstrap */
+
+document.addEventListener('DOMContentLoaded', function() {
             // Selecciona el botón y el offcanvas
             const offcanvasButton = document.querySelector('.offcanvas-button');
             const myOffcanvas = document.getElementById('offcanvas');

@@ -32,4 +32,8 @@ public static Connection getConexion() {
         return null;
     }
 }
+
+    public static Connection getConnection() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

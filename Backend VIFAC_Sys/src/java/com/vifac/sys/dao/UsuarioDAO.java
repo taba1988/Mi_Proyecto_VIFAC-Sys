@@ -183,10 +183,5 @@ public List<Usuario> listarUsuarios() {
     System.out.println("Cantidad de usuarios recuperados: " + lista.size());
 
     return lista;
-}
-
-
-    public void editarUsuario(Usuario usuarioEditado) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+  }
 }

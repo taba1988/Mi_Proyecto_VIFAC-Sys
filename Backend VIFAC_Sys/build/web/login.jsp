@@ -52,7 +52,7 @@
                                     <div class="alert alert-danger" role="alert"><%= loginError %></div>
                                 <% } %>
 
-                                <form id="login-form" action="loginServlet" method="post">
+                                <form id="login-form" action="${pageContext.request.contextPath}/loginServlet" method="post">
                                     <div class="form-floating mb-3">
                                         <input class="form-control" id="inputusuario" name="nombreUsuario" type="text" placeholder="Usuario Empresarial" value="<%= rememberedUsername %>" required />
                                         <label for="inputusuario">Usuario Empresarial</label>
@@ -69,7 +69,7 @@
                                             <label class="form-check-label mb-0" for="inputRememberPassword">¿Recordarme?</label>
                                         </div>
                                         <div class="d-flex align-items-center">
-                                            <a class="small" href="restablecercontrasena.jsp">¿Olvidó su clave?</a>
+                                            <a class="small" href="restablecercontrasenaServlet">¿Olvidó su clave?</a>
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-center mt-5">
@@ -110,7 +110,7 @@
             </div>
         </footer>
     </div>
-</div>
+</div>                                     
 <script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/login.js"></script>
 </body>

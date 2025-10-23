@@ -198,7 +198,6 @@ async function listarClientes() {
     }
 }
 
-
 // Rellena el modal con los datos de un cliente para su edición.
 async function editarCliente(id) {
     try {

@@ -13,7 +13,10 @@
 
 package com.vifac.sys.servlet;
 
+import com.vifac.sys.dao.ImagenDestacadaDAO;
+import com.vifac.sys.modelo.ImagenDestacada;
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,21 +26,24 @@ import javax.servlet.http.HttpSession;
 
 @WebServlet("/indexServlet")
 public class indexServlet extends HttpServlet {
-    
+
+    private final ImagenDestacadaDAO imagenDAO = new ImagenDestacadaDAO();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        // Recupera la sesión actual sin crear una nueva.
+
         HttpSession session = request.getSession(false);
-        
-        // Si la sesión es nula o el ID de usuario no existe en ella, redirige al login.
+
         if (session == null || session.getAttribute("idUsuario") == null) {
             response.sendRedirect("login.jsp");
             return;
         }
-        
-        // El usuario está autenticado. Reenvía la solicitud a la página principal.
+
+        // Cargar imágenes destacadas
+        List<ImagenDestacada> lista = imagenDAO.listarTodas();
+        request.setAttribute("imagenesDestacadas", lista);
+
         request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 }
