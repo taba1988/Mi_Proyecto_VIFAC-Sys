@@ -1,7 +1,34 @@
-document.getElementById('password-reset-form').addEventListener('submit', function(e) {
-    e.preventDefault(); // Evita la recarga de la página
-    // Aquí deberías agregar la lógica para enviar el correo de restablecimiento de contraseña
-    alert('Se ha enviado un enlace de restablecimiento a su correo electrónico (funcionalidad no implementada).');
-    // O podrías redirigir a una página de confirmación:
-    // window.location.href = 'password-reset-sent.html';
+document.addEventListener('DOMContentLoaded', function() {
+
+    // ---- FORMULARIO RESTABLECER CONTRASEÑA ----
+    const resetForm = document.getElementById('change-password-form');
+    if (resetForm) {
+        resetForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const token = document.querySelector('input[name="token"]').value;
+            const nueva = document.getElementById('inputNewPassword').value.trim();
+            const confirmar = document.getElementById('inputConfirmNewPassword').value.trim();
+
+            if (!nueva || !confirmar) { alert('Complete ambos campos'); return; }
+            if (nueva !== confirmar) { alert('Las contraseñas no coinciden'); return; }
+
+            try {
+                const response = await fetch('RestablecerContrasenaServlet', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `token=${encodeURIComponent(token)}&nuevaContrasena=${encodeURIComponent(nueva)}&confirmarContrasena=${encodeURIComponent(confirmar)}`
+                });
+                const data = await response.json();
+                alert(data.message);
+
+                if (data.status === 'success') {
+                    window.location.href = 'login.jsp'; // redirige al login
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Error al procesar la solicitud.');
+            }
+        });
+    }
+  
 });

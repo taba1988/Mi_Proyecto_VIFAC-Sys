@@ -30,10 +30,11 @@
     }
 %>
 
-<div class="header-container">
-    <div class="left-text">login</div>
-    <div class="center-text">MAXI-LIMPIEZA</div>
-    <div class="right-text">Calidad que se siente</div>
+  <!-- Encabezado -->
+<div class="header-container d-flex justify-content-between align-items-center py-3 px-3 border-bottom">
+    <div class="left-text fs-5 fw-semibold">Login</div>
+    <div class="center-text fs-3 fw-bold">MAXI-LIMPIEZA</div>
+    <div class="right-text fs-5 fw-medium">Calidad que se siente</div>
 </div>
 
 <div id="layoutAuthentication">
@@ -69,7 +70,7 @@
                                             <label class="form-check-label mb-0" for="inputRememberPassword">¿Recordarme?</label>
                                         </div>
                                         <div class="d-flex align-items-center">
-                                            <a class="small" href="restablecercontrasenaServlet">¿Olvidó su clave?</a>
+                                            <a class="small" href="EnviarTokenRecuperacion.jsp">¿Olvidó su clave?</a>
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-center mt-5">

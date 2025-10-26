@@ -12,6 +12,7 @@ package com.vifac.sys.servlet;
 
 import com.vifac.sys.dao.UsuarioDAO;
 import com.vifac.sys.modelo.Usuario;
+import com.vifac.sys.util.MailSender;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -97,8 +98,15 @@ public class loginServlet extends HttpServlet {
                 response.addCookie(userCookie);
             }
 
+            // --- ENVÍO DE CORREO AL INICIAR SESIÓN ---
+            try {
+                MailSender.enviarCorreoLogin(usuario.getEmail(), usuario.getNombre(), request);
+            } catch (Exception ignored) {
+                // no interrumpe la sesión si falla
+            }
+
             // Redirigir a página principal
-response.sendRedirect(request.getContextPath() + "/indexServlet?mensajeBienvenida=true");
+            response.sendRedirect(request.getContextPath() + "/indexServlet?mensajeBienvenida=true");
 
         } else {
             // Credenciales incorrectas

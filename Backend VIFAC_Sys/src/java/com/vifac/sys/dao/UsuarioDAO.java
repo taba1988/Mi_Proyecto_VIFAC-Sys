@@ -23,13 +23,12 @@ public class UsuarioDAO extends ConexionBD {
 
     private static final Logger LOGGER = Logger.getLogger(UsuarioDAO.class.getName());
 
-    // Validar usuario (login)
     public Usuario validarUsuario(String nombreUsuario, String contrasena) {
         Usuario usuario = null;
         String sql = "SELECT * FROM usuario WHERE nombreUsuario = ?";
         try (Connection conexion = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conexion.prepareStatement(sql)) {
-            
+
             stmt.setString(1, nombreUsuario);
             ResultSet rs = stmt.executeQuery();
 
@@ -43,13 +42,14 @@ public class UsuarioDAO extends ConexionBD {
                         rs.getString("telefono"),
                         rs.getString("email"),
                         rs.getString("nombreUsuario"),
-                        // No devolver la contraseña, ya validada
                         null, 
                         rs.getString("cargo"),
                         rs.getInt("idRol"),
                         rs.getString("estado"),
                         rs.getInt("intentosFallidos")
                     );
+                    usuario.setTokenRecuperacion(rs.getString("token_recuperacion"));
+                    usuario.setTokenExpira(rs.getTimestamp("token_expira"));
                 }
             }
         } catch (SQLException e) {
@@ -58,10 +58,10 @@ public class UsuarioDAO extends ConexionBD {
         return usuario;
     }
 
-    // Agregar usuario
+     // Agregar usuario
     public boolean agregarUsuario(Usuario u) {
-        String sql = "INSERT INTO usuario(nombre, documento, telefono, email, nombreUsuario, contrasena, cargo, idRol, estado, intentosFallidos) "
-                   + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO usuario(nombre, documento, telefono, email, nombreUsuario, contrasena, cargo, idRol, estado, intentosFallidos, token_recuperacion, token_expira) "
+                   + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conexion = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setString(1, u.getNombre());
@@ -69,24 +69,22 @@ public class UsuarioDAO extends ConexionBD {
             stmt.setString(3, u.getTelefono());
             stmt.setString(4, u.getEmail());
             stmt.setString(5, u.getNombreUsuario());
-
-            String hashed = BCrypt.hashpw(u.getContrasena(), BCrypt.gensalt());
-            stmt.setString(6, hashed);
-
+            stmt.setString(6, BCrypt.hashpw(u.getContrasena(), BCrypt.gensalt()));
             stmt.setString(7, u.getCargo());
             stmt.setInt(8, u.getIdRol());
             stmt.setString(9, u.getEstado());
             stmt.setInt(10, u.getIntentosFallidos());
+            stmt.setString(11, u.getTokenRecuperacion());
+            stmt.setTimestamp(12, u.getTokenExpira());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error de SQL al agregar un usuario.", e);
+            LOGGER.log(Level.SEVERE, "Error al agregar usuario.", e);
+            return false;
         }
-        return false;
     }
-
     // Actualizar usuario
     public boolean actualizarUsuario(Usuario u) {
-        String sql = "UPDATE usuario SET nombre=?, documento=?, telefono=?, email=?, nombreUsuario=?, cargo=?, idRol=?, estado=? WHERE idUsuario=?";
+        String sql = "UPDATE usuario SET nombre=?, documento=?, telefono=?, email=?, nombreUsuario=?, cargo=?, idRol=?, estado=?, token_recuperacion=?, token_expira=? WHERE idUsuario=?";
         try (Connection conexion = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setString(1, u.getNombre());
@@ -97,15 +95,16 @@ public class UsuarioDAO extends ConexionBD {
             stmt.setString(6, u.getCargo());
             stmt.setInt(7, u.getIdRol());
             stmt.setString(8, u.getEstado());
-            stmt.setInt(9, u.getIdUsuario());
+            stmt.setString(9, u.getTokenRecuperacion());
+            stmt.setTimestamp(10, u.getTokenExpira());
+            stmt.setInt(11, u.getIdUsuario());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error de SQL al actualizar el usuario con ID: " + u.getIdUsuario(), e);
+            return false;
         }
-        return false;
     }
-
-    // Eliminar usuario
+       // Eliminar usuario
     public boolean eliminarUsuario(int idUsuario) {
         String sql = "DELETE FROM usuario WHERE idUsuario=?";
         try (Connection conexion = ConexionBD.obtenerConexion();
@@ -113,12 +112,11 @@ public class UsuarioDAO extends ConexionBD {
             stmt.setInt(1, idUsuario);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error de SQL al eliminar el usuario con ID: " + idUsuario, e);
+            LOGGER.log(Level.SEVERE, "Error al eliminar usuario ID: " + idUsuario, e);
+            return false;
         }
-        return false;
     }
 
-    // Buscar usuarios (por nombre, usuario o documento)
     public List<Usuario> buscarUsuarios(String criterio) {
         List<Usuario> lista = new ArrayList<>();
         String sql = "SELECT * FROM usuario WHERE nombre LIKE ? OR nombreUsuario LIKE ? OR documento LIKE ?";
@@ -137,13 +135,14 @@ public class UsuarioDAO extends ConexionBD {
                     rs.getString("telefono"),
                     rs.getString("email"),
                     rs.getString("nombreUsuario"),
-                    // Omitir la contraseña
                     null,
                     rs.getString("cargo"),
                     rs.getInt("idRol"),
                     rs.getString("estado"),
                     rs.getInt("intentosFallidos")
                 );
+                u.setTokenRecuperacion(rs.getString("token_recuperacion"));
+                u.setTokenExpira(rs.getTimestamp("token_expira"));
                 lista.add(u);
             }
         } catch (SQLException e) {
@@ -151,37 +150,119 @@ public class UsuarioDAO extends ConexionBD {
         }
         return lista;
     }
-    
-public List<Usuario> listarUsuarios() {
-    List<Usuario> lista = new ArrayList<>();
-    String sql = "SELECT * FROM usuario";
 
-    try (Connection conexion = ConexionBD.obtenerConexion();
-         PreparedStatement stmt = conexion.prepareStatement(sql);
-         ResultSet rs = stmt.executeQuery()) {
-
-        while (rs.next()) {
-            Usuario u = new Usuario();
-            u.setIdUsuario(rs.getInt("idUsuario"));
-            u.setNombre(rs.getString("nombre"));
-            u.setDocumento(rs.getString("documento"));
-            u.setTelefono(rs.getString("telefono"));
-            u.setEmail(rs.getString("email"));
-            u.setNombreUsuario(rs.getString("nombreUsuario"));
-            u.setCargo(rs.getString("cargo"));
-            u.setIdRol(rs.getInt("idRol"));
-            u.setEstado(rs.getString("estado"));
-            u.setIntentosFallidos(rs.getInt("intentosFallidos"));
-
-            lista.add(u);
+    public List<Usuario> listarUsuarios() {
+        List<Usuario> lista = new ArrayList<>();
+        String sql = "SELECT * FROM usuario";
+        try (Connection conexion = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conexion.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Usuario u = new Usuario();
+                u.setIdUsuario(rs.getInt("idUsuario"));
+                u.setNombre(rs.getString("nombre"));
+                u.setDocumento(rs.getString("documento"));
+                u.setTelefono(rs.getString("telefono"));
+                u.setEmail(rs.getString("email"));
+                u.setNombreUsuario(rs.getString("nombreUsuario"));
+                u.setCargo(rs.getString("cargo"));
+                u.setIdRol(rs.getInt("idRol"));
+                u.setEstado(rs.getString("estado"));
+                u.setIntentosFallidos(rs.getInt("intentosFallidos"));
+                u.setTokenRecuperacion(rs.getString("token_recuperacion"));
+                u.setTokenExpira(rs.getTimestamp("token_expira"));
+                lista.add(u);
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al listar usuarios.", e);
         }
-    } catch (SQLException e) {
-        LOGGER.log(Level.SEVERE, "Error de SQL al listar usuarios.", e);
+        return lista;
     }
 
-    // Debug: mostrar cuantos usuarios se recuperaron
-    System.out.println("Cantidad de usuarios recuperados: " + lista.size());
+    // ================= RECUPERACIÓN DE CONTRASEÑA =================
 
-    return lista;
-  }
+    public Usuario buscarPorEmail(String email) {
+        String sql = "SELECT * FROM usuario WHERE email = ?";
+        try (Connection conexion = obtenerConexion();
+             PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Usuario u = new Usuario();
+                    u.setIdUsuario(rs.getInt("idUsuario"));
+                    u.setNombre(rs.getString("nombre"));
+                    u.setDocumento(rs.getString("documento"));
+                    u.setTelefono(rs.getString("telefono"));
+                    u.setEmail(rs.getString("email"));
+                    u.setNombreUsuario(rs.getString("nombreUsuario"));
+                    u.setCargo(rs.getString("cargo"));
+                    u.setIdRol(rs.getInt("idRol"));
+                    u.setEstado(rs.getString("estado"));
+                    u.setIntentosFallidos(rs.getInt("intentosFallidos"));
+                    u.setTokenRecuperacion(rs.getString("token_recuperacion"));
+                    u.setTokenExpira(rs.getTimestamp("token_expira"));
+                    return u;
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al buscar usuario por email: " + email, e);
+        }
+        return null;
+    }
+
+    public boolean guardarTokenRecuperacion(String email, String token) {
+        String sql = "UPDATE usuario SET token_recuperacion = ?, token_expira = DATE_ADD(NOW(), INTERVAL 1 HOUR) WHERE email = ?";
+        try (Connection conexion = obtenerConexion();
+             PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setString(1, token);
+            stmt.setString(2, email);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al guardar token recuperación para email: " + email, e);
+            return false;
+        }
+    }
+
+    // ==== NUEVO MÉTODO: guardar token por idUsuario ====
+    public boolean guardarTokenRecuperacion(int idUsuario, String token) {
+        String sql = "UPDATE usuario SET token_recuperacion = ?, token_expira = DATE_ADD(NOW(), INTERVAL 1 HOUR) WHERE idUsuario = ?";
+        try (Connection conexion = obtenerConexion();
+             PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setString(1, token);
+            stmt.setInt(2, idUsuario);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al guardar token recuperación para idUsuario: " + idUsuario, e);
+            return false;
+        }
+    }
+
+    public boolean existeUsuarioPorEmail(String email) {
+        String sql = "SELECT 1 FROM usuario WHERE email = ?";
+        try (Connection conexion = obtenerConexion();
+             PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al verificar existencia de usuario por email: " + email, e);
+            return false;
+        }
+    }
+
+public boolean actualizarContrasenaPorToken(String token, String nuevaContrasena) {
+    String sql = "UPDATE usuario SET contrasena = ?, token_recuperacion = NULL, token_expira = NULL WHERE token_recuperacion = ? AND token_expira > NOW()";
+    try (Connection conexion = obtenerConexion();
+         PreparedStatement stmt = conexion.prepareStatement(sql)) {
+        String hash = BCrypt.hashpw(nuevaContrasena, BCrypt.gensalt());
+        stmt.setString(1, hash);
+        stmt.setString(2, token);
+        return stmt.executeUpdate() > 0;
+    } catch (SQLException e) {
+        LOGGER.log(Level.SEVERE, "Error al actualizar contraseña por token: " + token, e);
+        return false;
+    }
+}
+
 }

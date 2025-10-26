@@ -1,13 +1,16 @@
 /*
  * Clase modelo Usuario que representa la estructura de la tabla 'usuario' en la base de datos.
  * Esta clase contiene todos los atributos que reflejan las columnas de la tabla, incluyendo:
- * idUsuario, nombre, documento, telefono, email, nombreUsuario, cargo, idRol, contrasena, estado, intentosFallidos.
+ * idUsuario, nombre, documento, telefono, email, nombreUsuario, cargo, idRol, contrasena, estado, intentosFallidos,
+ * tokenRecuperacion, tokenExpira.
  * Se utiliza para mapear los datos desde la base de datos hacia objetos Java y viceversa.
  * Autor: ORLANDUVALIE TABARES GUTIERREZ
  * Fecha: 10/09/2025
  */
 
 package com.vifac.sys.modelo;
+
+import java.sql.Timestamp;
 
 public class Usuario {
     private int idUsuario;
@@ -21,6 +24,8 @@ public class Usuario {
     private int idRol;
     private String estado;
     private int intentosFallidos;
+    private String tokenRecuperacion;
+    private Timestamp tokenExpira;
 
     public Usuario() {}
 
@@ -105,5 +110,18 @@ public class Usuario {
     }
     public void setIntentosFallidos(int intentosFallidos) {
         this.intentosFallidos = intentosFallidos;
+    }
+
+    public String getTokenRecuperacion() {
+        return tokenRecuperacion;
+    }
+    public void setTokenRecuperacion(String tokenRecuperacion) {
+        this.tokenRecuperacion = tokenRecuperacion;
+    }
+    public Timestamp getTokenExpira() {
+        return tokenExpira;
+    }
+    public void setTokenExpira(Timestamp tokenExpira) {
+        this.tokenExpira = tokenExpira;
     }
 }
