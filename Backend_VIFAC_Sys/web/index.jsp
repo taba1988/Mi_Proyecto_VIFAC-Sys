@@ -53,9 +53,9 @@
                  />
                 </div>
                 <div class="ms-3">
-                    <p class="mb-0"><strong>Usuario:</strong> ${nombre}</p>
-                    <p class="mb-1"><strong>Cargo:</strong> ${cargo}</p>
-                    <p class="mb-1"><strong>ID:</strong>${documento}</p>
+                   <p class="mb-0"><strong>Usuario:</strong> <span class="text-uppercase">${nombre}</span></p>
+                   <p class="mb-1"><strong>Cargo:</strong> <span class="text-uppercase">${cargo}</span></p>
+                   <p class="mb-1"><strong>ID:</strong> <span class="text-uppercase">${documento}</span></p>
                 </div>
             </div>
         </div>

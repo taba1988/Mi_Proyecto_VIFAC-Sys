@@ -307,37 +307,7 @@
             </div>
         </div>
     </div>
-    
-    <!--MODAL PARA CAMBIAR FOTO DE PERFIL-->
-<div class="modal fade" id="modalFotoPerfil" tabindex="-1" aria-labelledby="modalFotoPerfilLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-info text-white">
-        <h5 class="modal-title" id="modalFotoPerfilLabel">Cambiar Foto de Perfil</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-
-      <div class="modal-body text-center">
-        <img id="fotoPreview" src="ImagenPerfilServlet?nombreArchivo=avatarperfil.png" 
-     class="rounded-circle mb-3" width="120" height="120" 
-     alt="Vista previa de la foto">
-        <div class="mb-3">
-          <input type="file" id="archivoFotoInput" accept="image/*" class="form-control">
-          <small id="nombreArchivoLabel" class="text-muted d-block mt-2">Ningún archivo seleccionado.</small>
-          <div id="fotoError" class="text-danger mt-1"></div>
-        </div>
-        <input type="hidden" id="idUsuarioFoto">
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" id="btnSubirFoto" class="btn btn-primary" disabled>Subir Foto</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
+                       
     <%@ include file="temporizador.jsp" %>
   
     <script src="js/bootstrap.bundle.min.js"></script>

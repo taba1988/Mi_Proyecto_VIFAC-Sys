@@ -10,9 +10,9 @@
 package com.vifac.sys.servlet;
 
 import com.vifac.sys.dao.UsuarioDAO;
-import com.vifac.sys.modelo.Usuario;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -30,55 +30,51 @@ import javax.servlet.http.Part;
 public class SubirImgPerfilServlet extends HttpServlet {
 
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();
+    private static final String RUTA_PERFILES = "D:\\Mi_Proyecto_VIFAC-SysGIT\\Backend_VIFAC_Sys\\web\\uploads\\perfiles";
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Ruta fija donde se guardan las fotos
-        String uploadPath = "D:\\Mi_Proyecto_VIFAC-SysGIT\\Backend_VIFAC_Sys\\web\\uploads\\perfiles";
-        File uploadDir = new File(uploadPath);
+        File uploadDir = new File(RUTA_PERFILES);
         if (!uploadDir.exists()) uploadDir.mkdirs();
 
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+
         try {
-            // Recibir el archivo enviado desde el formulario
-            Part filePart = request.getPart("fotoPerfil"); // <<=== debe coincidir con el fetch JS
+            Part filePart = request.getPart("fotoPerfil"); // debe coincidir con el input del modal
+            String idParam = request.getParameter("idUsuario");
 
-            if (filePart != null && filePart.getSize() > 0) {
-                // Generar nombre único para evitar conflictos
-                String nombreArchivo = System.currentTimeMillis() + "_" +
-                        new File(filePart.getSubmittedFileName()).getName().trim().replace(" ", "_");
+            if (filePart == null || filePart.getSize() == 0 || idParam == null || idParam.isEmpty()) {
+                out.write("{\"status\":\"error\",\"message\":\"Archivo o parámetro idUsuario faltante.\"}");
+                return;
+            }
 
-                // Guardar físicamente el archivo
-                String filePath = uploadPath + File.separator + nombreArchivo;
-                filePart.write(filePath);
+            int idUsuario = Integer.parseInt(idParam);
 
-                // Obtener ID del usuario
-                String idParam = request.getParameter("idUsuario");
-                if (idParam == null || idParam.isEmpty()) {
-                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Falta parámetro idUsuario.");
-                    return;
-                }
+            // Generar nombre fijo para evitar conflictos
+            String nombreArchivo = "perfil_" + idUsuario + filePart.getSubmittedFileName()
+                    .substring(filePart.getSubmittedFileName().lastIndexOf('.'));
 
-                int idUsuario = Integer.parseInt(idParam);
 
-                // Actualizar solo el nombre de archivo en la BD
-                Usuario usuario = usuarioDAO.obtenerUsuarioPorId(idUsuario);
-                if (usuario != null) {
-                    usuario.setFotoPerfil(nombreArchivo);
-                    usuarioDAO.actualizarUsuario(usuario);
-                }
+            // Guardar archivo físicamente
+            File archivoDestino = new File(RUTA_PERFILES, nombreArchivo);
+            filePart.write(archivoDestino.getAbsolutePath());
 
-                response.setContentType("application/json");
-                response.getWriter().write("{\"exito\": true}");
+            // Actualizar solo el nombre de archivo en la base de datos
+            boolean actualizado = usuarioDAO.actualizarFotoPerfil(idUsuario, nombreArchivo);
+
+            if (actualizado) {
+                out.write("success");
             } else {
-                response.setContentType("application/json");
-                response.getWriter().write("{\"exito\": false, \"mensaje\": \"No se seleccionó ninguna imagen.\"}");
+                out.write("{\"status\":\"error\",\"message\":\"Error al actualizar la foto en la base de datos.\"}");
             }
 
         } catch (IOException | NumberFormatException | ServletException e) {
-            response.setContentType("application/json");
-            response.getWriter().write("{\"exito\": false, \"mensaje\": \"Error: " + e.getMessage() + "\"}");
+            out.write("{\"status\":\"error\",\"message\":\"Error: " + e.getMessage() + "\"}");
+        } finally {
+            out.flush();
         }
     }
 }

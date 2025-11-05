@@ -19,28 +19,25 @@ import javax.servlet.http.*;
 @MultipartConfig
 public class ImagenPerfilServlet extends HttpServlet {
 
-    // Ruta física donde se almacenan las fotos
-    private static final String RUTA_PERFILES = "C:\\Mi_Proyecto_VIFAC-Sys\\uploads\\perfiles";
+    private static final String RUTA_PERFILES = "D:\\Mi_Proyecto_VIFAC-SysGIT\\Backend_VIFAC_Sys\\web\\uploads\\perfiles";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String nombreArchivo = request.getParameter("nombreArchivo");
-
         if (nombreArchivo == null || nombreArchivo.trim().isEmpty()) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Nombre de archivo no especificado.");
             return;
         }
-
+        
         // Construir ruta completa al archivo
         File archivo = new File(RUTA_PERFILES, nombreArchivo);
-
         if (!archivo.exists() || archivo.isDirectory()) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Archivo no encontrado: " + nombreArchivo);
             return;
         }
-
+        
         // Determinar tipo MIME según el archivo
         String tipoMime = getServletContext().getMimeType(archivo.getName());
         if (tipoMime == null) {
@@ -60,30 +57,32 @@ public class ImagenPerfilServlet extends HttpServlet {
             }
         }
     }
-   @Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+    
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-    int idUsuario = Integer.parseInt(request.getParameter("idUsuario"));
-    Part filePart = request.getPart("fotoPerfil"); 
-    String nombreArchivo = filePart.getSubmittedFileName();
+        int idUsuario = Integer.parseInt(request.getParameter("idUsuario"));
+        Part filePart = request.getPart("fotoPerfil");
+        String nombreArchivo = filePart.getSubmittedFileName();
 
-    // Guardar archivo físicamente
-    File archivoDestino = new File(RUTA_PERFILES, nombreArchivo);
-    filePart.write(archivoDestino.getAbsolutePath());
+        File carpeta = new File(RUTA_PERFILES);
+        if (!carpeta.exists()) carpeta.mkdirs();
 
-    // Actualizar la ruta en la base de datos
-    UsuarioDAO usuarioDAO = new UsuarioDAO();
-    boolean actualizado = usuarioDAO.actualizarFotoPerfil(idUsuario, nombreArchivo);
+        File archivoDestino = new File(carpeta, nombreArchivo);
+        filePart.write(archivoDestino.getAbsolutePath());
 
-    response.setContentType("application/json");
-    PrintWriter out = response.getWriter();
-    if(actualizado){
-        out.print("{\"status\":\"success\",\"message\":\"Foto subida correctamente.\"}");
-    } else {
-        out.print("{\"status\":\"error\",\"message\":\"Error al actualizar la foto.\"}");
+        // Actualizar la ruta en la base de datos
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        boolean actualizado = usuarioDAO.actualizarFotoPerfil(idUsuario, nombreArchivo);
+
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+        if(actualizado){
+            out.print("{\"status\":\"success\",\"message\":\"Foto subida correctamente.\"}");
+        } else {
+            out.print("{\"status\":\"error\",\"message\":\"Error al actualizar la foto.\"}");
+        }
+        out.flush();
     }
-    out.flush();
-}
-   
 }

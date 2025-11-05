@@ -277,9 +277,44 @@ function actualizarTablaUsuarios(filtro = "") {
         <button class="btn btn-sm btn-outline-danger" onclick="eliminarUsuario(${usuario.idUsuario})">
           <i class="bi bi-trash"></i>
         </button>
+        <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalSubirFotoPerfil${usuario.idUsuario}"
+        title="Subir foto de perfil">
+        <i class="bi bi-camera"></i>
+        </button>
       </td>
     `;
     tbody.appendChild(fila);
+
+    // Crear modal dinámico para subir foto de perfil si no existe
+    if (!document.getElementById(`modalSubirFotoPerfil${usuario.idUsuario}`)) {
+      const modal = document.createElement("div");
+      modal.classList.add("modal", "fade");
+      modal.id = `modalSubirFotoPerfil${usuario.idUsuario}`;
+      modal.tabIndex = -1;
+      modal.setAttribute("aria-labelledby", `modalSubirFotoPerfilLabel${usuario.idUsuario}`);
+      modal.setAttribute("aria-hidden", "true");
+      modal.innerHTML = `
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+              <h5 class="modal-title" id="modalSubirFotoPerfilLabel${usuario.idUsuario}">Cambiar Foto de Perfil</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <form action="SubirImgPerfilServlet" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                  <label for="fotoPerfil${usuario.idUsuario}" class="form-label">Seleccionar Foto</label>
+                  <input type="file" id="fotoPerfil${usuario.idUsuario}" name="fotoPerfil" accept="image/*" class="form-control" required>
+                </div>
+                <input type="hidden" name="idUsuario" value="${usuario.idUsuario}">
+                <button type="submit" class="btn btn-outline-primary w-100">Subir Foto</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
   });
 }
 

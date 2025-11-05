@@ -1,7 +1,7 @@
 <%-- 
     Document   : Perfil
     Created on : 26/10/2025, 10:54:04 AM
-    Author     : duval
+    Author     : ORLANDUVALIE TABARES GUTIERREZ
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -18,8 +18,11 @@
     <link rel="stylesheet" href="css/perfil.css" />
 </head>
 <body>
+
 <header class="bg-light py-3">
     <div class="container d-flex flex-column gap-3">
+
+        <%-- Encabezado principal --%>
         <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center gap-2">
                 <i class="bi bi-person-vcard-fill fs-1 text-info"></i>
@@ -33,16 +36,15 @@
                 </button>
             </div>
         </div>
+
+        <%-- Bloque azul con info adicional --%>
         <div class="d-flex align-items-center justify-content-between">
             <div class="bloque-azul flex-grow-1 px-4 py-4 d-flex justify-content-between align-items-center">
-                <div class="bloque-azul-texto fw-bold">
-                    MAXI-LIMPIEZA
-                </div>
-                <div class="bloque-azul-slogan fst-italic">
-                    Calidad que se siente
-                </div>
+                <div class="bloque-azul-texto fw-bold">MAXI-LIMPIEZA</div>
+                <div class="bloque-azul-slogan fst-italic">Calidad que se siente</div>
             </div>
         </div>
+
     </div>
 </header>
 
@@ -50,50 +52,92 @@
 
 <main class="container profile-container">
     <div class="profile-card">
+
+        <%-- Imagen de perfil y datos básicos --%>
         <div class="profile-image-section d-none d-lg-flex flex-column align-items-center">
-            <div class="profile-image-container rounded-circle overflow-hidden mt-5 avatar-grande">
-              <img 
-                  src="${pageContext.request.contextPath}/ImagenPerfilServlet?nombreArchivo=${usuarioLogeado.fotoPerfil != null && !usuarioLogeado.fotoPerfil.isEmpty() ? usuarioLogeado.fotoPerfil : 'avatarperfil.png'}" 
-                  alt="Foto de usuario ${usuarioLogeado.nombre}" 
-                  class="w-100 h-100 object-fit-cover"
-              />
+            <div class="rounded-circle border border-primary mb-2 overflow-hidden" style="width: 80px; height: 100px;">
+                <img 
+                    src="${pageContext.request.contextPath}/ImagenPerfilServlet?nombreArchivo=${usuarioLogeado.fotoPerfil != null && !usuarioLogeado.fotoPerfil.isEmpty() ? usuarioLogeado.fotoPerfil : 'avatarperfil.png'}" 
+                    alt="Foto de usuario ${usuarioLogeado.nombre}" 
+                    class="w-100 h-100 object-fit-cover"
+                />
             </div>
-            <div class="profile-name mt-3 text-center">${nombre}</div>
-            <div class="profile-role text-center">${cargo}</div>
+            <div class="profile-name mt-3 text-uppercase">${nombre}</div>
+            <div class="profile-role text-uppercase">${cargo}</div>
+            <div class="profile-ID">${documento}</div>
         </div>
 
+        <%-- Detalles del perfil --%>
         <div class="profile-details-section w-100 flex-grow-1">
             <div class="profile-details-header bg-light">DATOS DE PERFIL</div>
             
             <form id="perfilForm" method="POST" action="${pageContext.request.contextPath}/PerfilServlet">
                 <input type="hidden" name="accion" value="actualizarPerfil" />
                 
-<ul class="profile-details-list">
-    <li><strong>Nombres y Apellidos:</strong> ${nombre}</li>
-    <li><strong>Empresa:</strong> ${empresa}</li>
-    <li><strong>Dependencia:</strong> ${dependencia}</li>
-    <li><strong>Celular:</strong> 
-        <input type="tel" class="form-control form-control-sm" 
-               id="telefono" name="telefono" value="${telefono}">
-    </li>
-    <li><strong>Situación Laboral:</strong> ${situacionLaboral}</li>
-    <li><strong>Identificación:</strong> 
-        <input type="text" class="form-control form-control-sm" 
-               value="${documento}" name="documento" readonly>
-    </li>
-    <li><strong>Usuario:</strong> ${usuarioAutenticado}</li>
-    <li><strong>Nota:</strong> ${notaSistema}</li>
-    <li><strong>Cargo:</strong> ${cargo}</li>
-    <li><strong>Dirección:</strong> 
-        <textarea class="form-control form-control-sm" 
-                  id="direccion" name="direccion">${direccion}</textarea>
-    </li>
-    <li><strong>Correo Electrónico:</strong> 
-        <input type="email" class="form-control form-control-sm" 
-               value="${email}" name="email" readonly>
-    </li>
-</ul>
+                <ul class="profile-details-list list-unstyled">
 
+                    <%-- Nombres y Apellidos --%>
+                    <li class="d-flex justify-content-between align-items-center">
+                        <strong>Nombres y Apellidos:</strong> <span class="text-uppercase">${nombre}</span>
+                    </li>
+
+                    <%-- Empresa --%>
+                    <li class="d-flex justify-content-between align-items-center">
+                        <strong>Empresa:</strong> ${empresa}
+                    </li>
+
+                    <%-- Dependencia --%>
+                    <li class="d-flex justify-content-between align-items-center">
+                        <strong>Dependencia:</strong> <span class="text-uppercase">${dependencia}</span>
+                    </li>
+
+                    <%-- Celular editable --%>
+                    <li class="d-flex justify-content-between align-items-center">
+                        <strong>Celular:</strong> 
+                        <input type="tel" class="form-control form-control-sm w-50" id="telefono" name="telefono" value="${telefono}">
+                    </li>
+
+                    <%-- Situación Laboral --%>
+                    <li class="d-flex justify-content-between align-items-center">
+                        <strong>Situación Laboral:</strong> <span class="text-uppercase">${situacionLaboral}</span>
+                    </li>
+
+                    <%-- Identificación --%>
+                    <li class="d-flex justify-content-between align-items-center">
+                        <strong>Identificación:</strong> 
+                        <input type="text" class="form-control form-control-sm w-50" value="${documento}" name="documento" readonly>
+                    </li>
+
+                    <%-- Usuario --%>
+                    <li class="d-flex justify-content-between align-items-center">
+                        <strong>Usuario:</strong> ${usuarioAutenticado}
+                    </li>
+
+                    <%-- Nota --%>
+                    <li class="d-flex justify-content-between align-items-center">
+                        <strong>Nota:</strong> ${notaSistema}
+                    </li>
+
+                    <%-- Cargo --%>
+                    <li class="d-flex justify-content-between align-items-center">
+                        <strong>Cargo:</strong> <span class="text-uppercase">${cargo}</span>
+                    </li>
+
+                    <%-- Dirección editable --%>
+                    <li class="d-flex justify-content-between align-items-center">
+                        <strong>Dirección:</strong> 
+                        <textarea class="form-control form-control-sm w-50" id="direccion" name="direccion">${direccion}</textarea>
+                    </li>
+
+                    <%-- Correo Electrónico --%>
+                    <li class="d-flex justify-content-between align-items-center">
+                        <strong>Correo Electrónico:</strong> 
+                        <input type="email" class="form-control form-control-sm w-50" value="${email}" name="email" readonly>
+                    </li>
+
+                </ul>
+
+                <%-- Botones de acción --%>
                 <div class="d-flex justify-content-between align-items-center mt-3">          
                     <div class="d-flex gap-4">
                         <button class="btn btn-outline-secondary" type="button" onclick="location.href='${pageContext.request.contextPath}/indexServlet'">Inicio</button>
@@ -101,24 +145,33 @@
                     </div>
                     <button type="button" class="btn btn-outline-primary" onclick="confirmarGuardar()">Guardar Cambios</button>
                 </div>
+
             </form>
         </div>
+
     </div>
 </main>
 
+<%-- Offcanvas para móviles --%>
 <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="offcanvasProfile" aria-labelledby="offcanvasProfileLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="offcanvasProfileLabel">Perfil</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
     </div>
     <div class="offcanvas-body text-center">
-        <div class="profile-image-container rounded-circle overflow-hidden mx-auto avatar-grande">
-            <img src="${pageContext.request.contextPath}/img/avatarperfil.png" 
-                 alt="Foto de usuario ${nombre}" 
-                 class="w-100 h-100 object-fit-cover">
+        <div class="d-flex justify-content-center align-items-center">
+            <div class="rounded-circle border border-primary mb-2 overflow-hidden" style="width: 80px; height: 100px;">
+                <img 
+                    src="${pageContext.request.contextPath}/ImagenPerfilServlet?nombreArchivo=${usuarioLogeado.fotoPerfil != null && !usuarioLogeado.fotoPerfil.isEmpty() ? usuarioLogeado.fotoPerfil : 'avatarperfil.png'}" 
+                    alt="Foto de usuario ${usuarioLogeado.nombre}" 
+                    class="w-100 h-100 object-fit-cover"
+                />
+            </div>
         </div>
-        <div class="profile-name mt-3">${nombre}</div>
-        <div class="profile-role">${cargo}</div>
+
+        <div class="profile-name mt-3 text-uppercase">${nombre}</div>
+        <div class="profile-role text-uppercase">${cargo}</div>
+        <div class="profile-ID">${documento}</div>
     </div>
     <div class="d-flex justify-content-center align-items-center mb-5 gap-4"> 
         <button class="btn btn-outline-secondary" type="button" onclick="location.href='${pageContext.request.contextPath}/indexServlet'">Inicio</button>
@@ -133,6 +186,7 @@
     </div>
 </footer>
 
+<%-- Modal confirmar guardar cambios --%>
 <div class="modal fade" id="confirmarGuardarModal" tabindex="-1" aria-labelledby="confirmarGuardarModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -151,7 +205,8 @@
     </div>
 </div>
 
-<%@ include file="temporizador.jsp" %>
+    <!-- Include temporizador -->
+    <%@ include file="temporizador.jsp" %>
     
 <script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/perfil.js"></script>

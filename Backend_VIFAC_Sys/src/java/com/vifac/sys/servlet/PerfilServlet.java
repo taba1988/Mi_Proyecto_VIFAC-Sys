@@ -51,7 +51,7 @@ public class PerfilServlet extends HttpServlet {
                 try {
                     int idUsuario = Integer.parseInt(idStr);
                     usuario = usuarioDAO.obtenerUsuarioPorId(idUsuario);
-                    if (usuario != null) session.setAttribute("usuarioLogueado", usuario);
+                    if (usuario != null) session.setAttribute("usuarioLogeado", usuario);
                 } catch (NumberFormatException ignored) {}
             }
         }
@@ -70,7 +70,7 @@ public class PerfilServlet extends HttpServlet {
         );
 
         usuario.setNotaSistema(nota);
-        session.setAttribute("usuarioLogueado", usuario);
+        session.setAttribute("usuarioLogeado", usuario);
         request.setAttribute("usuario", usuario);
         request.getRequestDispatcher("Perfil.jsp").forward(request, response);
     }
@@ -79,12 +79,13 @@ public class PerfilServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setContentType("application/json;charset=UTF-8");
         HttpSession session = request.getSession(false);
-        Usuario usuario = (session != null) ? (Usuario) session.getAttribute("usuarioLogueado") : null;
+        Usuario usuario = (session != null) ? (Usuario) session.getAttribute("usuarioLogeado") : null;
         RespuestaJson r;
 
         if (usuario == null) {
             r = new RespuestaJson("error", "Sesión no iniciada o vencida.");
         } else if ("actualizarPerfil".equals(request.getParameter("accion"))) {
+            // Solo actualizar teléfono y dirección además de foto si se envía
             usuario.setTelefono(request.getParameter("telefono"));
             usuario.setDireccion(request.getParameter("direccion"));
 
@@ -100,7 +101,7 @@ public class PerfilServlet extends HttpServlet {
 
             boolean exito = usuarioDAO.actualizarDatosPerfil(usuario);
             if (exito) {
-                session.setAttribute("usuarioLogueado", usuario);
+                session.setAttribute("usuarioLogeado", usuario);
                 r = new RespuestaJson("success", "Perfil actualizado correctamente.");
             } else {
                 r = new RespuestaJson("error", "No se pudo actualizar el perfil.");
@@ -114,6 +115,6 @@ public class PerfilServlet extends HttpServlet {
 
     @Override
     public String getServletInfo() {
-        return "PerfilServlet activo";
+        return "PerfilServlet activo - permite editar teléfono y dirección";
     }
 }

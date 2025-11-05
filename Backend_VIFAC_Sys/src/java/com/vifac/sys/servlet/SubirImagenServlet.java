@@ -85,7 +85,7 @@ public class SubirImagenServlet extends HttpServlet {
             response.sendRedirect("indexServlet");
 
         } catch (IOException | ServletException e) {
-            e.printStackTrace();
+             e.printStackTrace();
             response.getWriter().println("Error al subir las imágenes: " + e.getMessage());
         }
     }
