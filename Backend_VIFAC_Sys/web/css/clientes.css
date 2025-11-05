@@ -1,0 +1,153 @@
+/* ================================
+   Reset y estilos generales
+   ================================ */
+html,
+body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    color: #000;
+    overflow-y: auto;
+}
+
+/* Permite que el contenido principal ocupe el espacio disponible */
+main.container {
+    flex: 1 0 auto;
+}
+
+/* ================================
+   Encabezado
+   ================================ */
+header {
+    padding: 1rem;
+    background-color: #f8f9fa;
+}
+
+/* Ícono del header */
+header .bi-person-lines-fill {
+    font-size: 2.5rem; /* fs-1 */
+    color: #17a2b8; /* text-info */
+}
+
+/* Nombre de la empresa */
+.nombre-empresa {
+    border-radius: 5px;
+    background-color: #0093DD;
+    padding: 0.5rem 1rem;
+    text-align: center;
+}
+
+.nombre-empresa .titulo {
+    font-weight: bold;
+    font-size: calc(1rem + 0.5vw);
+    color: #333652;
+}
+
+.nombre-empresa .subtitulo {
+    font-style: italic;
+    font-size: 16px;
+    color: #333652;
+}
+
+/* ================================
+   Barra de búsqueda
+   ================================ */
+.barra-busqueda {
+    display: flex;
+    width: 100%;
+    max-width: 400px; /* ajusta ancho máximo si quieres */
+}
+
+.barra-busqueda input {
+    flex: 1;
+}
+
+.barra-busqueda button {
+    flex: 0 0 auto;
+}
+
+/* ================================
+   Tablas
+   ================================ */
+.table th,
+.table td {
+    vertical-align: middle;
+}
+
+.table td:last-child,
+.table th:last-child {
+    width: 80px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* ================================
+   Modales
+   ================================ */
+.modal-header {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.modal-footer .btn-primary {
+    background-color: #0d6efd;
+}
+
+/* ================================
+   Pie de página
+   ================================ */
+footer {
+    flex-shrink: 0;
+    background-color: #f1f1f1;
+    padding: 1rem;
+    border-top: 1px solid #dee2e6;
+}
+
+/* ================================
+   Botones de método de pago
+   ================================ */
+.btn-metodo i {
+    color: #212529;
+    transition: color 0.2s;
+}
+
+.btn-metodo:hover,
+.btn-metodo.active {
+    background-color: transparent !important;
+}
+
+.btn-metodo:hover i,
+.btn-metodo.active i {
+    color: transparent !important;
+}
+
+.metodo-btn {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.metodo-btn:hover {
+    background-color: #e9ecef;
+}
+
+.icono-metodo {
+    font-size: 1.6rem;
+    color: black;
+    transition: color 0.2s;
+}
+
+.metodo-btn.active {
+    background-color: #e9ecef;
+}
+
+.metodo-btn.active .icono-metodo {
+    color: #333652;
+}
