@@ -285,7 +285,7 @@ function actualizarTablaUsuarios(filtro = "") {
     `;
     tbody.appendChild(fila);
 
-    // Crear modal dinámico para subir foto de perfil si no existe
+    // Crear modal dinámico para subir foto de perfil
     if (!document.getElementById(`modalSubirFotoPerfil${usuario.idUsuario}`)) {
       const modal = document.createElement("div");
       modal.classList.add("modal", "fade");
@@ -301,7 +301,7 @@ function actualizarTablaUsuarios(filtro = "") {
               <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-              <form action="SubirImgPerfilServlet" method="post" enctype="multipart/form-data">
+              <form id="formFotoPerfil${usuario.idUsuario}" enctype="multipart/form-data">
                 <div class="mb-3">
                   <label for="fotoPerfil${usuario.idUsuario}" class="form-label">Seleccionar Foto</label>
                   <input type="file" id="fotoPerfil${usuario.idUsuario}" name="fotoPerfil" accept="image/*" class="form-control" required>
@@ -314,6 +314,47 @@ function actualizarTablaUsuarios(filtro = "") {
         </div>
       `;
       document.body.appendChild(modal);
+
+      // Interceptar submit para mostrar modal de éxito
+      const formFoto = document.getElementById(`formFotoPerfil${usuario.idUsuario}`);
+      formFoto.addEventListener('submit', async function(e){
+        e.preventDefault();
+        const formData = new FormData(this);
+        try {
+          const response = await fetch('SubirImgPerfilServlet', { method: 'POST', body: formData });
+          const data = await response.json();
+          if (data.status === 'success') {
+            const modalHtml = `
+              <div class="modal fade show" id="modalExitoFoto${usuario.idUsuario}" tabindex="-1" style="display:block; background:rgba(0,0,0,0.5);">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                      <h5 class="modal-title">Éxito</h5>
+                    </div>
+                    <div class="modal-body text-center">
+                      <p>Foto de perfil guardada con éxito</p>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                      <button class="btn btn-outline-primary" id="btnAceptarFoto${usuario.idUsuario}">Aceptar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>`;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+            document.getElementById(`btnAceptarFoto${usuario.idUsuario}`).addEventListener('click', () => {
+              document.getElementById(`modalExitoFoto${usuario.idUsuario}`).remove();
+              // opcional: cerrar modal de subir foto
+              bootstrap.Modal.getInstance(document.getElementById(`modalSubirFotoPerfil${usuario.idUsuario}`)).hide();
+              window.location.reload(); // recarga para ver la foto actualizada
+            });
+          } else {
+            alert("Error al subir la foto: " + data.message);
+          }
+        } catch (error) {
+          console.error("Error al subir la foto:", error);
+          alert("Ocurrió un error al subir la foto");
+        }
+      });
     }
   });
 }

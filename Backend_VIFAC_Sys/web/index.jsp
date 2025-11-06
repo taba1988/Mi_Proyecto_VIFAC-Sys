@@ -324,7 +324,7 @@
                                     <a href="500.jsp" class="list-group-item list-group-item-action border-0">
                                         <i class="bi-sliders me-2 align-middle fs-5"></i><span class="fw-bold">Configuraciones</span>
                                     </a>
-                                    <a href="cambiar_contrasena.jsp" class="list-group-item list-group-item-action border-0">
+                                    <a href="CambiarContrasena.jsp" class="list-group-item list-group-item-action border-0">
                                         <i class="bi bi-key-fill me-2 align-middle fs-5"></i><span class="fw-bold">Cambiar contraseña</span>
                                     </a>
                                     <a href="ayuda.jsp" class="list-group-item list-group-item-action border-0">

@@ -606,4 +606,38 @@ public boolean agregarUsuario(Usuario u) {
             return false;
         }
     }
-}
+
+     //Valida la contraseña actual de un usuario logueado.
+
+    public boolean validarContrasena(int idUsuario, String contrasenaIngresada) {
+        String sql = "SELECT contrasena FROM usuario WHERE idUsuario = ?";
+        try (Connection conexion = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setInt(1, idUsuario);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                String hashAlmacenado = rs.getString("contrasena");
+                return BCrypt.checkpw(contrasenaIngresada, hashAlmacenado);
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al validar contraseña del usuario ID: " + idUsuario, e);
+        }
+        return false;
+    }
+
+    // Actualiza la contraseña de un usuario logueado.
+
+    public boolean actualizarContrasena(int idUsuario, String nuevaContrasena) {
+        String sql = "UPDATE usuario SET contrasena = ?, intentosFallidos = 0 WHERE idUsuario = ?";
+        try (Connection conexion = ConexionBD.obtenerConexion();
+             PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            String hash = BCrypt.hashpw(nuevaContrasena, BCrypt.gensalt());
+            stmt.setString(1, hash);
+            stmt.setInt(2, idUsuario);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al actualizar contraseña del usuario ID: " + idUsuario, e);
+            return false;
+      }
+    }
+}    

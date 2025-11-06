@@ -55,21 +55,21 @@ public class SubirImgPerfilServlet extends HttpServlet {
 
             // Generar nombre fijo para evitar conflictos
             String nombreArchivo = "perfil_" + idUsuario + filePart.getSubmittedFileName()
-                    .substring(filePart.getSubmittedFileName().lastIndexOf('.'));
+               .substring(filePart.getSubmittedFileName().lastIndexOf('.'));
 
 
             // Guardar archivo físicamente
             File archivoDestino = new File(RUTA_PERFILES, nombreArchivo);
-            filePart.write(archivoDestino.getAbsolutePath());
+               filePart.write(archivoDestino.getAbsolutePath());
 
             // Actualizar solo el nombre de archivo en la base de datos
             boolean actualizado = usuarioDAO.actualizarFotoPerfil(idUsuario, nombreArchivo);
 
-            if (actualizado) {
-                out.write("success");
-            } else {
-                out.write("{\"status\":\"error\",\"message\":\"Error al actualizar la foto en la base de datos.\"}");
-            }
+               if (actualizado) {
+                   out.write("{\"status\":\"success\",\"message\":\"Foto de perfil actualizada correctamente.\"}");
+               } else {
+                   out.write("{\"status\":\"error\",\"message\":\"Error al actualizar la foto en la base de datos.\"}");
+               }
 
         } catch (IOException | NumberFormatException | ServletException e) {
             out.write("{\"status\":\"error\",\"message\":\"Error: " + e.getMessage() + "\"}");

@@ -111,8 +111,30 @@
             </div>
         </footer>
     </div>
-</div>                                     
+</div>  
+                                            
+<div class="modal fade" id="modalNotificacion" tabindex="-1" aria-labelledby="modalNotificacionLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title" id="modalNotificacionLabel">Recuperación de contraseña</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        ${mensajeModal}
+      </div>
+      <div class="modal-footer">
+        <a href="login.jsp" class="btn btn-primary">Aceptar</a>
+      </div>
+    </div>
+  </div>
+</div>
 <script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/login.js"></script>
+<script>
+  if ("${mensajeModal}" && "${mensajeModal}".trim() !== '') {
+    new bootstrap.Modal(document.getElementById('modalNotificacion')).show();
+  }
+</script>
 </body>
 </html>

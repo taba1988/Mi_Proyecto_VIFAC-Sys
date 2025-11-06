@@ -29,7 +29,8 @@ public class EnviarTokenRecuperacionServlet extends HttpServlet {
             throws ServletException, IOException {
 
         response.setContentType("text/html;charset=UTF-8");
-        response.getWriter().println("<script>alert('Se envió un enlace de recuperación a tu correo. Revisa tu bandeja.'); window.location='login.jsp';</script>");
+        request.setAttribute("mensajeModal", "Se ha enviado un enlace de recuperación a su correo. Revisa tu bandeja.");
+        request.getRequestDispatcher("login.jsp").forward(request, response);
 
 
         String email = request.getParameter("email");
@@ -74,7 +75,7 @@ public class EnviarTokenRecuperacionServlet extends HttpServlet {
                 "Hola " + usuario.getNombre() + ",\n\n"
                     + "Haga clic en el siguiente enlace para restablecer su contraseña:\n"
                     + link + "\n\n"
-                    + "Este enlace expirará pronto por seguridad. Si no solicitó este cambio, ignore este correo.");
+                    + "Este enlace expirará dentro de 60 minutos, por seguridad no comparta este link con ninguna persona. Si no solicitó este cambio, ignore este correo y pongase en contacto con el administrador");
 
             if (enviado) {
                 respuesta = new RespuestaJson("success", "Se ha enviado el enlace de recuperación a su correo.");

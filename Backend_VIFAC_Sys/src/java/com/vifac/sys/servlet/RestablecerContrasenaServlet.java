@@ -44,12 +44,10 @@ public class RestablecerContrasenaServlet extends HttpServlet {
             return;
         }
 
-        // Validar contraseñas
-        if (nuevaContrasena == null || confirmarContrasena == null || !nuevaContrasena.equals(confirmarContrasena)) {
-            respuesta = new RespuestaJson("error", "Las contraseñas no coinciden.");
-            response.getWriter().write(gson.toJson(respuesta));
-            return;
-        }
+        // Validar contraseñas if (nuevaContrasena == null || confirmarContrasena == null || !nuevaContrasena.equals(confirmarContrasena)) {
+        //respuesta = new RespuestaJson("error", "Las contraseñas no coinciden.");
+        //response.getWriter().write(gson.toJson(respuesta));
+        // return;}
 
         // Validar seguridad
         if (!PasswordUtil.esSegura(nuevaContrasena)) {
@@ -59,14 +57,16 @@ public class RestablecerContrasenaServlet extends HttpServlet {
         }
 
         // Actualizar contraseña en la base de datos
-        boolean actualizado = usuarioDAO.actualizarContrasenaPorToken(token, nuevaContrasena);
+         boolean actualizado = usuarioDAO.actualizarContrasenaPorToken(token, nuevaContrasena);
 
-        if (actualizado) {
-            respuesta = new RespuestaJson("success", "Contraseña recuperada correctamente.");
-        } else {
-            respuesta = new RespuestaJson("error", "Token inválido o expirado.");
-        }
+         if (actualizado) {
+             request.setAttribute("mensaje", "Contraseña recuperada correctamente.");
+         } else {
+             request.setAttribute("mensaje", "Token inválido o expirado.");
+         }
 
-        response.getWriter().write(gson.toJson(respuesta));
+         //          Redirigir al JSP que mostrará el modal con el mensaje
+         request.getRequestDispatcher("RestablecerContrasena.jsp").forward(request, response);
+
+       }
     }
-}
