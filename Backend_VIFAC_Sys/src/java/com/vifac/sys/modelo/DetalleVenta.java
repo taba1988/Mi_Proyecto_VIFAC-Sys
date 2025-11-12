@@ -19,7 +19,7 @@ public class DetalleVenta {
     private double descuento_porcentaje;
     private double descuento;
     private double total_con_descuento;
-
+    
     public DetalleVenta() {
     }
 
@@ -109,4 +109,35 @@ public class DetalleVenta {
     public void setTotal_con_descuento(double total_con_descuento) {
         this.total_con_descuento = total_con_descuento;
     }
+    
+     // --- Campos adicionales para mostrar en factura ---
+    private String nombreProducto;
+    
+    // --- SKU del producto (viene de la tabla inventario) ---
+    private String sku;
+
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
+     // --- Getters equivalentes para JSP ---
+    public String getNombreProducto() {
+    return nombreProducto;
+     }
+
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
+     }
+
+     // Alias de nombres para compatibilidad con JSP
+    public double getPrecioUnitario() {
+        return precio_unitario;
+    }
+
+    public double getTotalConDescuento() {
+         return total_con_descuento;
+   }
 }

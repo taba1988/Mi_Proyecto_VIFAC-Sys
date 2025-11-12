@@ -24,14 +24,15 @@ public class CajaDAO extends ConexionBD {
 
     // Abrir caja
     public boolean abrirCaja(Caja c) {
-        String sql = "INSERT INTO caja (fecha_apertura, monto_inicial, idUsuario, observaciones) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO caja (numero_caja, fecha_apertura, monto_inicial, idUsuario, observaciones) VALUES (?, ?, ?, ?, ?)";
         try (Connection conexion = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conexion.prepareStatement(sql)) {
 
-            stmt.setTimestamp(1, Timestamp.valueOf(c.getFechaApertura()));
-            stmt.setDouble(2, c.getMontoInicial());
-            stmt.setInt(3, c.getIdUsuario());
-            stmt.setString(4, c.getObservaciones());
+            stmt.setInt(1, c.getNumeroCaja());
+            stmt.setTimestamp(2, Timestamp.valueOf(c.getFechaApertura()));
+            stmt.setDouble(3, c.getMontoInicial());
+            stmt.setInt(4, c.getIdUsuario());
+            stmt.setString(5, c.getObservaciones());
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -79,7 +80,7 @@ public class CajaDAO extends ConexionBD {
     // Obtiene la caja actualmente abierta para un usuario específico
     
 public Caja obtenerCajaActivaPorUsuario(int idUsuario) {
-    String sql = "SELECT * FROM caja WHERE idUsuario = ? AND (fecha_cierre IS NULL OR fecha_cierre = '0000-00-00 00:00:00') ORDER BY fecha_apertura DESC LIMIT 1";
+    String sql = "SELECT * FROM caja WHERE idUsuario = ? AND fecha_cierre IS NULL ORDER BY idCaja DESC LIMIT 1";
     try (Connection conn = ConexionBD.obtenerConexion();
          PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -116,6 +117,7 @@ public Caja obtenerCajaActivaPorUsuario(int idUsuario) {
     private Caja mapCaja(ResultSet rs) throws SQLException {
         Caja c = new Caja();
         c.setIdCaja(rs.getInt("idCaja"));
+        c.setNumeroCaja(rs.getInt("numero_caja"));
         Timestamp apertura = rs.getTimestamp("fecha_apertura");
         c.setFechaApertura(apertura != null ? apertura.toLocalDateTime() : null);
         Timestamp cierre = rs.getTimestamp("fecha_cierre");
@@ -127,4 +129,22 @@ public Caja obtenerCajaActivaPorUsuario(int idUsuario) {
         c.setIdUsuario(rs.getInt("idUsuario"));
         return c;
     }
+        // Obtener el número de caja física por ID de caja
+    public Integer obtenerNumeroCajaPorId(int idCaja) {
+        String sql = "SELECT numero_caja FROM caja WHERE idCaja = ?";
+        try (Connection conn = ConexionBD.obtenerConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idCaja);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("numero_caja");
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al obtener número de caja por ID: " + idCaja, e);
+        }
+        return null; // Si no se encuentra
+    }
+
 }

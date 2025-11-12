@@ -12,6 +12,7 @@ package com.vifac.sys.dao;
 import com.vifac.sys.modelo.Venta;
 import com.vifac.sys.util.ConexionBD;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -23,18 +24,15 @@ public class VentaDAO extends ConexionBD {
 
     // Registrar venta y devolver ID generado
     public int registrarVenta(Venta venta) {
-        String sql = "INSERT INTO venta (nro_documento_factura, fecha_emision, fecha_validacion, fecha_vencimiento, qr_code_url, subtotal_venta, descuento_venta, total_venta, idUsuario, idCliente, idEmisor) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO venta (nro_documento_factura, fecha_emision, fecha_validacion, fecha_vencimiento, qr_code_url, subtotal_venta, descuento_venta, total_venta, idUsuario, idCliente, idEmisor, idCaja) " +
+             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection con = conectar();
              PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, venta.getNroDocumentoFactura());
-            ps.setDate(2, venta.getFechaEmision() != null ? new java.sql.Date(venta.getFechaEmision().getTime()) : null);
-            if (venta.getFechaValidacion() != null) ps.setDate(3, new java.sql.Date(venta.getFechaValidacion().getTime()));
-            else ps.setNull(3, Types.DATE);
-            if (venta.getFechaVencimiento() != null) ps.setDate(4, new java.sql.Date(venta.getFechaVencimiento().getTime()));
-            else ps.setNull(4, Types.DATE);
-
+            ps.setObject(2, venta.getFechaEmision());
+            ps.setObject(3, venta.getFechaValidacion());
+            ps.setObject(4, venta.getFechaVencimiento());
             ps.setString(5, venta.getQrCodeUrl());
             ps.setDouble(6, venta.getSubtotalVenta());
             ps.setDouble(7, venta.getDescuentoVenta());
@@ -43,6 +41,7 @@ public class VentaDAO extends ConexionBD {
             if (venta.getIdUsuario() != 0) ps.setInt(9, venta.getIdUsuario()); else ps.setNull(9, Types.INTEGER);
             if (venta.getIdCliente() != 0) ps.setInt(10, venta.getIdCliente()); else ps.setNull(10, Types.INTEGER);
             if (venta.getIdEmisor() != 0) ps.setInt(11, venta.getIdEmisor()); else ps.setNull(11, Types.INTEGER);
+            ps.setInt(12, venta.getIdCaja());
 
             ps.executeUpdate();
 
@@ -69,9 +68,14 @@ public class VentaDAO extends ConexionBD {
                 Venta v = new Venta();
                 v.setIdVenta(rs.getInt("idVenta"));
                 v.setNroDocumentoFactura(rs.getString("nro_documento_factura"));
-                v.setFechaEmision(rs.getDate("fecha_emision"));
-                v.setFechaValidacion(rs.getDate("fecha_validacion"));
-                v.setFechaVencimiento(rs.getDate("fecha_vencimiento"));
+
+                Timestamp ts = rs.getTimestamp("fecha_emision");
+                v.setFechaEmision(ts != null ? ts.toLocalDateTime() : null);
+                ts = rs.getTimestamp("fecha_validacion");
+                v.setFechaValidacion(ts != null ? ts.toLocalDateTime() : null);
+                ts = rs.getTimestamp("fecha_vencimiento");
+                v.setFechaVencimiento(ts != null ? ts.toLocalDateTime() : null);
+
                 v.setQrCodeUrl(rs.getString("qr_code_url"));
                 v.setSubtotalVenta(rs.getDouble("subtotal_venta"));
                 v.setDescuentoVenta(rs.getDouble("descuento_venta"));
@@ -79,6 +83,7 @@ public class VentaDAO extends ConexionBD {
                 v.setIdUsuario(rs.getInt("idUsuario"));
                 v.setIdCliente(rs.getInt("idCliente"));
                 v.setIdEmisor(rs.getInt("idEmisor"));
+                v.setIdCaja(rs.getInt("idCaja"));
                 lista.add(v);
             }
 
@@ -101,9 +106,11 @@ public class VentaDAO extends ConexionBD {
                     Venta v = new Venta();
                     v.setIdVenta(rs.getInt("idVenta"));
                     v.setNroDocumentoFactura(rs.getString("nro_documento_factura"));
-                    v.setFechaEmision(rs.getDate("fecha_emision"));
-                    v.setFechaValidacion(rs.getDate("fecha_validacion"));
-                    v.setFechaVencimiento(rs.getDate("fecha_vencimiento"));
+
+                    v.setFechaEmision(rs.getObject("fecha_emision", java.time.LocalDateTime.class));
+                    v.setFechaValidacion(rs.getObject("fecha_validacion", java.time.LocalDateTime.class));
+                    v.setFechaVencimiento(rs.getObject("fecha_vencimiento", java.time.LocalDateTime.class));
+
                     v.setQrCodeUrl(rs.getString("qr_code_url"));
                     v.setSubtotalVenta(rs.getDouble("subtotal_venta"));
                     v.setDescuentoVenta(rs.getDouble("descuento_venta"));
@@ -111,12 +118,51 @@ public class VentaDAO extends ConexionBD {
                     v.setIdUsuario(rs.getInt("idUsuario"));
                     v.setIdCliente(rs.getInt("idCliente"));
                     v.setIdEmisor(rs.getInt("idEmisor"));
+                    v.setIdCaja(rs.getInt("idCaja")); 
                     return v;
                 }
             }
 
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error obteniendo venta por ID", e);
+        }
+        return null;
+    }
+
+    // Obtener la última venta registrada
+    public Venta obtenerUltimaVenta() {
+        String sql = "SELECT * FROM venta ORDER BY idVenta DESC LIMIT 1";
+        try (Connection con = conectar();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                Venta v = new Venta();
+                v.setIdVenta(rs.getInt("idVenta"));
+                v.setNroDocumentoFactura(rs.getString("nro_documento_factura"));
+
+                Timestamp ts = rs.getTimestamp("fecha_emision");
+                v.setFechaEmision(ts != null ? ts.toLocalDateTime() : null);
+
+                ts = rs.getTimestamp("fecha_validacion");
+                v.setFechaValidacion(ts != null ? ts.toLocalDateTime() : null);
+
+                ts = rs.getTimestamp("fecha_vencimiento");
+                v.setFechaVencimiento(ts != null ? ts.toLocalDateTime() : null);
+
+                v.setQrCodeUrl(rs.getString("qr_code_url"));
+                v.setSubtotalVenta(rs.getDouble("subtotal_venta"));
+                v.setDescuentoVenta(rs.getDouble("descuento_venta"));
+                v.setTotalVenta(rs.getDouble("total_venta"));
+                v.setIdUsuario(rs.getInt("idUsuario"));
+                v.setIdCliente(rs.getInt("idCliente"));
+                v.setIdEmisor(rs.getInt("idEmisor"));
+                v.setIdCaja(rs.getInt("idCaja"));
+                return v;
+            }
+
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error obteniendo última venta", e);
         }
         return null;
     }

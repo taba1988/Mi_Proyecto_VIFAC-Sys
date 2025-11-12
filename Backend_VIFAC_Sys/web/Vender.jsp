@@ -188,6 +188,22 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="form-group">
+                      <label for="numero_caja">Número de Caja</label>
+                      <select id="numero_caja" name="numero_caja" class="form-control" required>
+                        <option value="">Seleccione una caja</option>
+                        <option value="1">Caja 1</option>
+                        <option value="2">Caja 2</option>
+                        <option value="3">Caja 3</option>
+                        <option value="4">Caja 4</option>
+                        <option value="5">Caja 5</option>
+                        <option value="6">Caja 6</option>
+                        <option value="7">Caja 7</option>
+                        <option value="8">Caja 8</option>
+                        <option value="9">Caja 9</option>
+                        <option value="10">Caja 10</option>
+                      </select>
+                    </div>
                     <div class="mb-3">
                         <label for="montoInicialCaja" class="form-label">Monto Inicial en Caja:</label>
                         <div class="input-group">

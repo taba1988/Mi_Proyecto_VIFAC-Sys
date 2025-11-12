@@ -1,10 +1,12 @@
-package com.vifac.sys.modelo;
-
-import java.sql.Timestamp;
 
 /**
  * Clase que representa una imagen destacada del sistema.
  */
+
+package com.vifac.sys.modelo;
+
+import java.sql.Timestamp;
+
 public class ImagenDestacada {
 
     private int id;                 // ID de la imagen

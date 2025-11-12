@@ -13,6 +13,9 @@ import com.vifac.sys.util.ConexionBD;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -101,5 +104,48 @@ public class DetalleVentaDAO extends ConexionBD {
             return false;
         }
     }
-}
 
+    /**
+     * Listar los detalles de una venta específica
+     * @param idVenta ID de la venta
+     * @return Lista de detalles de esa venta
+     */
+    public List<DetalleVenta> listarDetallesPorVenta(int idVenta) {
+    List<DetalleVenta> lista = new ArrayList<>();
+    String sql = "SELECT dv.*, i.nombre AS nombreProducto, i.sku AS sku "
+               + "FROM detalleventa dv "
+               + "INNER JOIN inventario i ON dv.idProducto = i.idProducto "
+               + "WHERE dv.idVenta = ?";
+
+    try (Connection conexion = ConexionBD.obtenerConexion();
+         PreparedStatement stmt = conexion.prepareStatement(sql)) {
+
+        stmt.setInt(1, idVenta);
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            DetalleVenta detalle = new DetalleVenta();
+            detalle.setIdDetalleVenta(rs.getInt("idDetalleVenta"));
+            detalle.setIdVenta(rs.getInt("idVenta"));
+            detalle.setIdProducto(rs.getInt("idProducto"));
+            detalle.setCantidad(rs.getInt("cantidad"));
+            detalle.setPrecio_unitario(rs.getDouble("precio_unitario"));
+            detalle.setImpuesto_porcentaje(rs.getDouble("impuesto_porcentaje"));
+            detalle.setDescuento_porcentaje(rs.getDouble("descuento_porcentaje"));
+            detalle.setDescuento(rs.getDouble("descuento"));
+            detalle.setTotal_con_descuento(rs.getDouble("total_con_descuento"));
+
+            // --- Nuevos campos desde la tabla inventario ---
+            detalle.setNombreProducto(rs.getString("nombreProducto"));
+            detalle.setSku(rs.getString("sku"));
+
+            lista.add(detalle);
+        }
+
+    } catch (SQLException e) {
+        LOGGER.log(Level.SEVERE, "Error al listar detalles por venta", e);
+    }
+
+    return lista;
+  }
+}

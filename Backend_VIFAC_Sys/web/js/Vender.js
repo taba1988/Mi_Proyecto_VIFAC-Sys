@@ -1,4 +1,4 @@
-/* global bootstrap, eval, cedula, nombreClienteParrafo, clientesRegistrados, resultadoDiv, btnAceptarCliente, cliente, productosVenta, encontrados */
+/* global bootstrap, eval, cedula, nombreClienteParrafo, clientesRegistrados, resultadoDiv, btnAceptarCliente, cliente, productosVenta, encontrados, cantidadInput */
 
 // --- Variables de Estado Global ---
 window.clienteSeleccionado = null;
@@ -684,23 +684,26 @@ function procesarPago(metodoPago) {
             abrirFactura(data.idVenta, imprimirTicket);
         }
 
-        limpiarCarrito();
-        window.location.reload(true);
+        // 🔹 Espera un poco antes de limpiar y recargar
+        setTimeout(() => {
+            limpiarCarrito();
+            window.location.reload();
+        }, 1000);
 
+                } else {
+                alert("Error al registrar la venta: " + (data.message || "desconocido"));
+              }
+           });
+        }
+
+    // --- Función para abrir la factura ---
+    function abrirFactura(idVenta, ticket) {
+        if (ticket) {
+            window.open(`FacturaPOSServlet?idVenta=${idVenta}`, '_blank');
         } else {
-        alert("Error al registrar la venta: " + (data.message || "desconocido"));
-      }
-   })
-}
-
-// --- Función para abrir la factura ---
-function abrirFactura(idVenta, ticket) {
-    if (ticket) {
-        window.open(`FacturaPOSServlet?idVenta=${idVenta}`, '_blank');
-    } else {
-        window.open(`FacturaElectronicaServlet?idVenta=${idVenta}`, '_blank');
+            window.open(`FacturaElectronicaServlet?idVenta=${idVenta}`, '_blank');
+        }
     }
-}
 
 //Establece el método de lectura de productos (ej. teclado, escáner).
 function seleccionarMetodoLectura(metodo) {
@@ -858,16 +861,27 @@ function cerrarCalculadora() {
 // --- Funciones de Caja ---
 function abrirCaja() {
     const monto = parseFloat(document.getElementById('montoInicialCaja').value);
+    const numeroCaja = document.getElementById('numero_caja') ? document.getElementById('numero_caja').value : null;
+
+    if (!numeroCaja) {
+        alert("Por favor, seleccione el número de caja.");
+        return;
+    }
+
     if (!isNaN(monto)) {
         fetch('VenderServlet', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ accion: 'abrirCaja', montoInicial: monto })
+            body: JSON.stringify({ 
+                accion: 'abrirCaja', 
+                montoInicial: monto,
+                numero_caja: numeroCaja
+            })
         })
         .then(res => res.json())
         .then(data => {
             if (data.status === "ok") {
-                alert(`Caja abierta con un monto inicial de $${formatNumberWithCommas(monto)}.`);
+                alert(`Caja N°${numeroCaja} abierta con un monto inicial de $${formatNumberWithCommas(monto)}.`);
                 const modal = bootstrap.Modal.getInstance(document.getElementById('modalAbrirCaja'));
                 modal.hide();
             } else {

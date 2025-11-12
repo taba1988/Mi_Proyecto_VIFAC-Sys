@@ -5,6 +5,8 @@ public class RespuestaJson {
     private String message;
     private Integer idVenta;      
     private double valorDescuento; 
+    private double recibido;
+    private double cambio;
 
     // Constructor vacío
     public RespuestaJson() {
@@ -48,4 +50,10 @@ public class RespuestaJson {
     public void setValorDescuento(double valorDescuento) {
         this.valorDescuento = valorDescuento;
     }
+    
+    public double getRecibido() { return recibido; }
+    public void setRecibido(double recibido) { this.recibido = recibido; }
+
+    public double getCambio() { return cambio; }
+    public void setCambio(double cambio) { this.cambio = cambio; }
 }

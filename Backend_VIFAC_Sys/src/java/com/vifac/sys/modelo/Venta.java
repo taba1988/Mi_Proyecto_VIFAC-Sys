@@ -1,16 +1,15 @@
 package com.vifac.sys.modelo;
 
-import java.sql.Timestamp;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class Venta {
 
     private int idVenta;
     private String nroDocumentoFactura;
-    private Date fechaEmision;
-    private Date fechaValidacion;
-    private Date fechaVencimiento;
+    private LocalDateTime fechaEmision;
+    private LocalDateTime fechaValidacion;
+    private LocalDateTime fechaVencimiento;
     private String qrCodeUrl;
     private double subtotalVenta;
     private double descuentoVenta;
@@ -18,14 +17,19 @@ public class Venta {
     private int idUsuario;
     private int idCliente;
     private int idEmisor;
+    private int idCaja;
     private String metodoPago;
     private List<DetalleVenta> detalles;
+    private int numeroCaja;
 
-    // Constructor con todos los atributos
-    public Venta(int idVenta, String nroDocumentoFactura, Date fechaEmision, Date fechaValidacion,
-                 Date fechaVencimiento, String qrCodeUrl, double subtotalVenta, double descuentoVenta,
-                 double totalVenta, int idUsuario, int idCliente, int idEmisor, String metodoPago,
-                 List<DetalleVenta> detalles) {
+    public Venta() {}
+
+    public Venta(int idVenta, String nroDocumentoFactura, LocalDateTime fechaEmision, 
+                 LocalDateTime fechaValidacion, LocalDateTime fechaVencimiento, 
+                 String qrCodeUrl, double subtotalVenta, double descuentoVenta, 
+                 double totalVenta, int idUsuario, int idCliente, int idEmisor, 
+                 String metodoPago, List<DetalleVenta> detalles) {
+
         this.idVenta = idVenta;
         this.nroDocumentoFactura = nroDocumentoFactura;
         this.fechaEmision = fechaEmision;
@@ -42,114 +46,117 @@ public class Venta {
         this.detalles = detalles;
     }
 
-    // Constructor vacío
-    public Venta() {
-    }
-
-    // Getters y Setters
     public int getIdVenta() {
-        return this.idVenta;
+        return idVenta;
     }
     public void setIdVenta(int idVenta) {
         this.idVenta = idVenta;
     }
 
     public String getNroDocumentoFactura() {
-        return this.nroDocumentoFactura;
+        return nroDocumentoFactura;
     }
     public void setNroDocumentoFactura(String nroDocumentoFactura) {
         this.nroDocumentoFactura = nroDocumentoFactura;
     }
 
-    public Date getFechaEmision() {
-        return this.fechaEmision;
+    public LocalDateTime getFechaEmision() {
+        return fechaEmision;
     }
-    public void setFechaEmision(Date fechaEmision) {
+    public void setFechaEmision(LocalDateTime fechaEmision) {
         this.fechaEmision = fechaEmision;
     }
 
-    public Date getFechaValidacion() {
-        return this.fechaValidacion;
+    public LocalDateTime getFechaValidacion() {
+        return fechaValidacion;
     }
-    public void setFechaValidacion(Date fechaValidacion) {
+    public void setFechaValidacion(LocalDateTime fechaValidacion) {
         this.fechaValidacion = fechaValidacion;
     }
 
-    public Date getFechaVencimiento() {
-        return this.fechaVencimiento;
+    public LocalDateTime getFechaVencimiento() {
+        return fechaVencimiento;
     }
-    public void setFechaVencimiento(Date fechaVencimiento) {
+    public void setFechaVencimiento(LocalDateTime fechaVencimiento) {
         this.fechaVencimiento = fechaVencimiento;
     }
 
     public String getQrCodeUrl() {
-        return this.qrCodeUrl;
+        return qrCodeUrl;
     }
     public void setQrCodeUrl(String qrCodeUrl) {
         this.qrCodeUrl = qrCodeUrl;
     }
 
     public double getSubtotalVenta() {
-        return this.subtotalVenta;
+        return subtotalVenta;
     }
     public void setSubtotalVenta(double subtotalVenta) {
         this.subtotalVenta = subtotalVenta;
     }
 
     public double getDescuentoVenta() {
-        return this.descuentoVenta;
+        return descuentoVenta;
     }
     public void setDescuentoVenta(double descuentoVenta) {
         this.descuentoVenta = descuentoVenta;
     }
 
     public double getTotalVenta() {
-        return this.totalVenta;
+        return totalVenta;
     }
     public void setTotalVenta(double totalVenta) {
         this.totalVenta = totalVenta;
     }
 
     public int getIdUsuario() {
-        return this.idUsuario;
+        return idUsuario;
     }
     public void setIdUsuario(int idUsuario) {
         this.idUsuario = idUsuario;
     }
 
     public int getIdCliente() {
-        return this.idCliente;
+        return idCliente;
     }
     public void setIdCliente(int idCliente) {
         this.idCliente = idCliente;
     }
 
     public int getIdEmisor() {
-        return this.idEmisor;
+        return idEmisor;
     }
     public void setIdEmisor(int idEmisor) {
         this.idEmisor = idEmisor;
     }
+    
+    public int getIdCaja() {
+    return idCaja;
+    }
+
+    public void setIdCaja(int idCaja) {
+        this.idCaja = idCaja;
+    }
+    
+    public int getNumeroCaja() {
+        return numeroCaja;
+    }
+
+    public void setNumeroCaja(int numeroCaja) {
+        this.numeroCaja = numeroCaja;
+    }
 
     public String getMetodoPago() {
-        return this.metodoPago;
+        return metodoPago;
     }
     public void setMetodoPago(String metodoPago) {
         this.metodoPago = metodoPago;
     }
 
     public List<DetalleVenta> getDetalles() {
-        return this.detalles;
+        return detalles;
     }
     public void setDetalles(List<DetalleVenta> detalles) {
         this.detalles = detalles;
-    }
-
-    public Timestamp getFecha() {
-        throw new UnsupportedOperationException("Not supported yet."); 
-    }
-
-    public double getTotal() {
-        throw new UnsupportedOperationException("Not supported yet."); 
     }
 }

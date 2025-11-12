@@ -4,14 +4,16 @@
  * Se utiliza para mapear los datos desde la base de datos hacia objetos Java y viceversa.
  * Autor: ORLANDUVALIE TABARES GUTIERREZ
  * Fecha: 10/09/2025
- */package com.vifac.sys.modelo;
- 
+ */
+
+package com.vifac.sys.modelo;
  
 
 import java.time.LocalDateTime;
 
 public class Caja {
     private int idCaja;
+    private int numeroCaja;
     private LocalDateTime fechaApertura;
     private double montoInicial;
     private LocalDateTime fechaCierre; // Puede ser null si la caja está abierta
@@ -22,9 +24,11 @@ public class Caja {
     public Caja() {
     }
 
-    public Caja(int idCaja, LocalDateTime fechaApertura, double montoInicial, LocalDateTime fechaCierre,
-                Double montoFinal, String observaciones, int idUsuario) {
+    public Caja(int idCaja, int numeroCaja, LocalDateTime fechaApertura, double montoInicial, 
+                LocalDateTime fechaCierre, Double montoFinal, String observaciones, int idUsuario) {
+        
         this.idCaja = idCaja;
+        this.numeroCaja = numeroCaja;
         this.fechaApertura = fechaApertura;
         this.montoInicial = montoInicial;
         this.fechaCierre = fechaCierre;
@@ -40,6 +44,14 @@ public class Caja {
 
     public void setIdCaja(int idCaja) {
         this.idCaja = idCaja;
+    }
+    
+        public int getNumeroCaja() {
+        return numeroCaja;
+    }
+
+    public void setNumeroCaja(int numeroCaja) {
+        this.numeroCaja = numeroCaja;
     }
 
     public LocalDateTime getFechaApertura() {

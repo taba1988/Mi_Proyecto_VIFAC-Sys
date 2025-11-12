@@ -200,5 +200,8 @@ public class ClientesDAO extends ConexionBD {
             LOGGER.log(Level.SEVERE, "Error al buscar cliente por documento: " + documento, e);
         }
         return null;
-    }    
+    } 
+    public Clientes obtenerClientePorId(int idCliente) {
+    return buscar(idCliente);
+  }
 }

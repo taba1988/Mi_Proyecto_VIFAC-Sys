@@ -33,7 +33,12 @@ public class VenderServlet extends HttpServlet {
     private final ClientesDAO clientesDAO = new ClientesDAO();
     private final DetalleVentaDAO detalleVentaDAO = new DetalleVentaDAO();
     private final VentaDAO ventaDAO = new VentaDAO();
-    private final Gson gson = new Gson();
+    private final Gson gson = new GsonBuilder()
+        .registerTypeAdapter(LocalDateTime.class, 
+            (JsonSerializer<LocalDateTime>) (src, typeOfSrc, context) ->
+                new JsonPrimitive(src.toString()))
+        .create();
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -129,7 +134,6 @@ public class VenderServlet extends HttpServlet {
             resp.getWriter().write(gson.toJson(r));
 
         } catch (JsonIOException | JsonSyntaxException | IOException e) {
-            e.printStackTrace();
             r.setStatus("error");
             r.setMessage("Error en el servidor: " + e.getMessage());
             resp.getWriter().write(gson.toJson(r));
@@ -151,12 +155,28 @@ public class VenderServlet extends HttpServlet {
             resp.getWriter().write(gson.toJson(r));
             return;
         }
+        
+       // 🟩 Nuevo: recibir número de caja física
+        int numeroCaja = datos.has("numero_caja") && !datos.get("numero_caja").isJsonNull()
+                ? datos.get("numero_caja").getAsInt()
+                : 0;
+    
+        if (numeroCaja <= 0) {
+            r.setStatus("error");
+            r.setMessage("Debe seleccionar un número de caja válido.");
+            resp.getWriter().write(gson.toJson(r));
+            return;
+        }
+    
         double montoInicial = datos.get("montoInicial").getAsDouble();
+        
         Caja nuevaCaja = new Caja();
+        nuevaCaja.setNumeroCaja(numeroCaja);
         nuevaCaja.setFechaApertura(LocalDateTime.now().minusHours(5));
         nuevaCaja.setMontoInicial(montoInicial);
         nuevaCaja.setIdUsuario(idUsuario);
-        nuevaCaja.setObservaciones("Apertura desde servlet");
+        nuevaCaja.setObservaciones("Apertura de caja exitosa");
+        
         boolean abierta = cajaDAO.abrirCaja(nuevaCaja);
         r.setStatus(abierta ? "ok" : "error");
         r.setMessage(abierta ? "Caja abierta exitosamente" : "Error al abrir la caja");
@@ -281,18 +301,26 @@ public class VenderServlet extends HttpServlet {
         }
         ventaForm.setIdUsuario((Integer) session.getAttribute("idUsuario"));
         ventaForm.setDetalles(detalles);
-        ventaForm.setFechaEmision(new java.util.Date());
+        ventaForm.setFechaEmision(LocalDateTime.now());
         ventaForm.setNroDocumentoFactura(ventaDAO.generarNroFactura());
-        ventaForm.setFechaValidacion(new java.util.Date());
-
-        java.util.Calendar cal = java.util.Calendar.getInstance();
-        cal.setTime(new java.util.Date());
-        cal.add(java.util.Calendar.DAY_OF_MONTH, 30);
-        ventaForm.setFechaVencimiento(cal.getTime());
+        ventaForm.setFechaValidacion(LocalDateTime.now());
+        ventaForm.setFechaVencimiento(LocalDateTime.now().plusDays(30));
         ventaForm.setQrCodeUrl("http://qrcode.com/factura-" + ventaForm.getNroDocumentoFactura());
         ventaForm.setIdEmisor(1);
 
+        Caja cajaActiva = cajaDAO.obtenerCajaActivaPorUsuario((Integer) session.getAttribute("idUsuario"));
+        if (cajaActiva != null) {
+            ventaForm.setIdCaja(cajaActiva.getIdCaja());
+        }
+
         int idVentaGenerada = ventaDAO.registrarVenta(ventaForm);
+        
+        double recibido = datos.has("efectivoRecibido") ? datos.get("efectivoRecibido").getAsDouble() : totalVenta;
+        double cambio = recibido - totalVenta;
+
+        req.setAttribute("recibido", recibido);
+        req.setAttribute("cambio", cambio);
+        req.setAttribute("venta", ventaForm);
 
         boolean exitoDetalles = true;
         for (DetalleVenta d : detalles) {
@@ -308,6 +336,8 @@ public class VenderServlet extends HttpServlet {
             r.setMessage("Venta registrada correctamente.");
             r.setIdVenta(idVentaGenerada);
             r.setValorDescuento(valorDescuento);
+            r.setRecibido(recibido); 
+            r.setCambio(cambio); 
         } else {
             r.setStatus("false");
             r.setMessage("Error al registrar los detalles de la venta.");
@@ -315,7 +345,6 @@ public class VenderServlet extends HttpServlet {
         resp.getWriter().write(gson.toJson(r));
 
     } catch (IOException e) {
-        e.printStackTrace();
         r.setStatus("error");
         r.setMessage("Error inesperado en el servidor durante la venta");
         resp.getWriter().write(gson.toJson(r));
