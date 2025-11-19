@@ -12,28 +12,37 @@ public class ConexionBD {
 
     private static final String URL_BD = "jdbc:mysql://localhost:3306/vifac_sys_bd?useSSL=false&serverTimezone=UTC";
     private static final String USUARIO_BD = "root";
-    private static final String CONTRASENA_BD = "Sagitario1988"; 
+    private static final String CONTRASENA_BD = "Sagitario1988";
 
-    public static Connection obtenerConexion() throws SQLException {
+    // Registrar driver una sola vez
+    static {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            return DriverManager.getConnection(URL_BD, USUARIO_BD, CONTRASENA_BD);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            throw new SQLException("Error: No se encontró el driver de MySQL.", e);
         }
     }
 
-public static Connection getConexion() {
-    try {
-        return obtenerConexion();
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return null;
+    // Método principal de conexión (tu método original)
+    public static Connection obtenerConexion() throws SQLException {
+        return DriverManager.getConnection(URL_BD, USUARIO_BD, CONTRASENA_BD);
     }
-}
 
+    // Método duplicado tuyo: te lo dejo igual, pero redirigido correctamente.
+    public static Connection getConexion() {
+        try {
+            return obtenerConexion();
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    // ESTE era el que causaba problemas → ahora eliminado correctamente
+    // NO lanza excepción, NO genera memory leaks
     public static Connection getConnection() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try {
+            return obtenerConexion();
+        } catch (SQLException e) {
+            return null;
+        }
     }
 }

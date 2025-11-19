@@ -1,5 +1,3 @@
-
-
 /* La variable `myModal` para acceder al modal de Bootstrap debe ser global global bootstrap*/
 
 /* global bootstrap */
@@ -60,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function clearValidations() {
     const campos = [
         "razonSocial", "documentoNit", "telefono", "email",
-        "direccion", "actividadEconomica", "responsableIva" // CAMBIADO: 'responsabilidadIva' a 'responsableIva'
+        "direccion", "actividadEconomica", "responsableIva"
     ];
     campos.forEach(id => {
         const elemento = document.getElementById(id);
@@ -103,7 +101,6 @@ async function guardarCliente() {
     const idCliente = document.getElementById("clienteId").value;
     const direccion = document.getElementById("direccion").value.trim();
     const actividadEconomica = document.getElementById("actividadEconomica").value.trim();
-    // CAMBIADO: 'responsabilidadIva' a 'responsableIva' para obtener el valor del input correcto
     const responsabilidadIva = document.getElementById("responsableIva").value.trim(); 
 
     let valido = true;
@@ -214,7 +211,6 @@ async function editarCliente(id) {
             document.getElementById("direccion").value = cliente.direccion;
             document.getElementById("email").value = cliente.email;
             document.getElementById("actividadEconomica").value = cliente.actividad_economica;
-            // CAMBIADO: 'responsabilidadIva' a 'responsableIva' para rellenar el input correcto
             document.getElementById("responsableIva").value = cliente.responsabilidad_iva; 
             document.getElementById("estado").value = cliente.estado;
             document.getElementById("dropdownEstado").textContent = cliente.estado;
@@ -222,7 +218,6 @@ async function editarCliente(id) {
             clearValidations();
             myModal.show();
         } else {
-            // AGREGADO: Mensaje de error para cuando el cliente no se encuentra
             alert("No se pudo encontrar el valor del cliente para editar.");
         }
     } catch (error) {
@@ -231,7 +226,7 @@ async function editarCliente(id) {
     }
 }
 
-// Elimina un cliente de la base de datos.
+// Elimina un cliente de la base de datos (POST original tuyo)
 async function eliminarCliente(id) {
     if (!confirm("¿Está seguro que desea eliminar este cliente? Esta acción no se puede deshacer.")) {
         return;
@@ -309,5 +304,47 @@ async function buscarCliente(event) {
         
     } catch (error) {
         console.error("Error al buscar cliente:", error);
+    }
+}
+
+
+/* ============================================================
+   🔥 AGREGADO REAL: PUT Y DELETE PARA API REST
+   ============================================================ */
+
+// PUT para actualizar cliente desde API REST
+async function actualizarClientePUT(id, datos) {
+    try {
+        const response = await fetch("ClientesServlet", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                idCliente: id,
+                ...datos
+            })
+        });
+
+        return await response.json();
+
+    } catch (error) {
+        console.error("Error PUT:", error);
+        return { status: "error", message: "Error en PUT" };
+    }
+}
+
+// DELETE para eliminar cliente desde API REST
+async function eliminarClienteDELETE(id) {
+    try {
+        const response = await fetch(`ClientesServlet?id=${id}`, {
+            method: "DELETE"
+        });
+
+        return await response.json();
+
+    } catch (error) {
+        console.error("Error DELETE:", error);
+        return { status: "error", message: "Error en DELETE" };
     }
 }
