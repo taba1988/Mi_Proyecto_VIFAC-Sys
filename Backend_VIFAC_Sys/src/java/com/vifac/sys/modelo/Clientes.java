@@ -12,12 +12,12 @@ import com.google.gson.annotations.SerializedName;
 
 public class Clientes {
     
+     /* Atributos */
     private int idClientes;
     private String razon_social;
     
     @SerializedName("documento_NIT")
     private String documento_NIT;
-    
     private String telefono;
     private String direccion;
     private String email;

@@ -1,7 +1,7 @@
 /*
  * Este DAO (Objeto de Acceso a Datos) se encarga de la comunicación
  * directa con la base de datos para la gestión de clientes.
- * Su función principal es validar la información registrada.
+ * Se encarga de operaciones CRUD, cambios de estado y validaciones.
  *
  * Autor: ORLANDUVALIE TABARES GUTIERREZ
  * Fecha: 6/09/2024
@@ -20,6 +20,8 @@ import java.util.logging.Logger;
 public class ClientesDAO extends ConexionBD {
 
     private static final Logger LOGGER = Logger.getLogger(ClientesDAO.class.getName());
+
+    /* Métodos CRUD y validaciones */
 
     // Agregar cliente
     public boolean agregarCliente(Clientes c) {
@@ -154,7 +156,7 @@ public class ClientesDAO extends ConexionBD {
         return false;
     }
 
-    // Método auxiliar para mapear ResultSet a objeto Clientes
+    // Mapear ResultSet → Clientes
     private Clientes mapCliente(ResultSet rs) throws SQLException {
         Clientes c = new Clientes();
         c.setIdClientes(rs.getInt("idCliente"));
@@ -170,20 +172,20 @@ public class ClientesDAO extends ConexionBD {
     }
 
     public Clientes buscar(Integer idCliente) {
-    String sql = "SELECT * FROM cliente WHERE idCliente = ?";
-    try (Connection conexion = obtenerConexion();
-         PreparedStatement stmt = conexion.prepareStatement(sql)) {
-        stmt.setInt(1, idCliente);
-        try (ResultSet rs = stmt.executeQuery()) {
-            if (rs.next()) {
-                return mapCliente(rs);
+        String sql = "SELECT * FROM cliente WHERE idCliente = ?";
+        try (Connection conexion = obtenerConexion();
+             PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setInt(1, idCliente);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapCliente(rs);
+                }
             }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al buscar cliente con ID: " + idCliente, e);
         }
-    } catch (SQLException e) {
-        LOGGER.log(Level.SEVERE, "Error al buscar cliente con ID: " + idCliente, e);
+        return null;
     }
-    return null;
-}
 
     // Buscar cliente por documento_NIT
     public Clientes buscarPorDocumento(String documento) {
@@ -200,8 +202,9 @@ public class ClientesDAO extends ConexionBD {
             LOGGER.log(Level.SEVERE, "Error al buscar cliente por documento: " + documento, e);
         }
         return null;
-    } 
+    }
+
     public Clientes obtenerClientePorId(int idCliente) {
-    return buscar(idCliente);
-  }
+        return buscar(idCliente);
+    }
 }

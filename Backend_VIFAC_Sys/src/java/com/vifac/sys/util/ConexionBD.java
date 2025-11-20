@@ -10,11 +10,12 @@ import java.sql.SQLException;
 
 public class ConexionBD {
 
+    // Datos de configuración para la conexión a la base de datos
     private static final String URL_BD = "jdbc:mysql://localhost:3306/vifac_sys_bd?useSSL=false&serverTimezone=UTC";
     private static final String USUARIO_BD = "root";
     private static final String CONTRASENA_BD = "Sagitario1988";
 
-    // Registrar driver una sola vez
+    // Carga del driver JDBC requerido para la conexión
     static {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -22,12 +23,12 @@ public class ConexionBD {
         }
     }
 
-    // Método principal de conexión (tu método original)
+    // Método principal para establecer conexión con la base de datos
     public static Connection obtenerConexion() throws SQLException {
         return DriverManager.getConnection(URL_BD, USUARIO_BD, CONTRASENA_BD);
     }
 
-    // Método duplicado tuyo: te lo dejo igual, pero redirigido correctamente.
+    // Método alterno para obtener la conexión utilizando el método principal
     public static Connection getConexion() {
         try {
             return obtenerConexion();
@@ -36,8 +37,7 @@ public class ConexionBD {
         }
     }
 
-    // ESTE era el que causaba problemas → ahora eliminado correctamente
-    // NO lanza excepción, NO genera memory leaks
+    // Método adicional de conexión; retorna null si ocurre algún error
     public static Connection getConnection() {
         try {
             return obtenerConexion();
