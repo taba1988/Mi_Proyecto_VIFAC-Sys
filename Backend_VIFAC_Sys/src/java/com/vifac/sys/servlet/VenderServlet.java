@@ -15,7 +15,9 @@ package com.vifac.sys.servlet;
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import com.vifac.sys.dao.*;
+import com.vifac.sys.dao.TransaccionDAO;
 import com.vifac.sys.modelo.*;
+import com.vifac.sys.modelo.Transaccion;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -33,6 +35,7 @@ public class VenderServlet extends HttpServlet {
     private final ClientesDAO clientesDAO = new ClientesDAO();
     private final DetalleVentaDAO detalleVentaDAO = new DetalleVentaDAO();
     private final VentaDAO ventaDAO = new VentaDAO();
+    private final TransaccionDAO transaccionDAO = new TransaccionDAO();
     private final Gson gson = new GsonBuilder()
         .registerTypeAdapter(LocalDateTime.class, 
             (JsonSerializer<LocalDateTime>) (src, typeOfSrc, context) ->
@@ -287,7 +290,7 @@ public class VenderServlet extends HttpServlet {
         // Crear objeto venta con valores numéricos correctos
         Venta ventaForm = new Venta();
         ventaForm.setIdCliente(clienteId);
-        ventaForm.setMetodoPago(metodoPago);
+        //ventaForm.setMetodoPago(metodoPago);//
         ventaForm.setSubtotalVenta(subtotalVenta);
         ventaForm.setTotalVenta(totalVenta);
         ventaForm.setDescuentoVenta(valorDescuento);
@@ -305,7 +308,6 @@ public class VenderServlet extends HttpServlet {
         ventaForm.setNroDocumentoFactura(ventaDAO.generarNroFactura());
         ventaForm.setFechaValidacion(LocalDateTime.now());
         ventaForm.setFechaVencimiento(LocalDateTime.now().plusDays(30));
-        ventaForm.setQrCodeUrl("http://qrcode.com/factura-" + ventaForm.getNroDocumentoFactura());
         ventaForm.setIdEmisor(1);
 
         Caja cajaActiva = cajaDAO.obtenerCajaActivaPorUsuario((Integer) session.getAttribute("idUsuario"));
@@ -315,8 +317,40 @@ public class VenderServlet extends HttpServlet {
 
         int idVentaGenerada = ventaDAO.registrarVenta(ventaForm);
         
-        double recibido = datos.has("efectivoRecibido") ? datos.get("efectivoRecibido").getAsDouble() : totalVenta;
+        // Generar URL del QR usando el id de la venta recién creada
+        String baseUrl = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + req.getContextPath();
+        String urlFactura = baseUrl + "/FacturaPOSServlet?idVenta=" + idVentaGenerada;
+        ventaForm.setQrCodeUrl(urlFactura);
+
+        // Actualizar QR en la BD
+        ventaDAO.actualizarQrCode(idVentaGenerada, urlFactura);
+
+        double recibido = datos.has("efectivoRecibido") && !datos.get("efectivoRecibido").isJsonNull()
+        ? datos.get("efectivoRecibido").getAsDouble()
+        : 0.0;
+
         double cambio = recibido - totalVenta;
+        int idUsuarioDeSesion = (Integer) session.getAttribute("idUsuario");
+        
+        Transaccion transaccion = new Transaccion();
+        transaccion.setIdUsuario(idUsuarioDeSesion);
+        transaccion.setNroDocumentoFactura(ventaForm.getNroDocumentoFactura());
+        transaccion.setMonto(totalVenta);
+        transaccion.setRecibido(recibido);
+        transaccion.setCambio(cambio);
+        transaccion.setMetodoPago(metodoPago);
+        transaccion.setDescripcion("Pago de la venta #" + ventaForm.getNroDocumentoFactura());
+        
+        // prints para debug
+        System.out.println("---- TRANSACCIÓN ----");
+        System.out.println("Factura: " + transaccion.getNroDocumentoFactura());
+        System.out.println("Monto: " + transaccion.getMonto());
+        System.out.println("Recibido: " + transaccion.getRecibido());
+        System.out.println("Cambio: " + transaccion.getCambio());
+        System.out.println("Método de pago: " + transaccion.getMetodoPago());
+        System.out.println("--------------------");
+
+        transaccionDAO.agregarTransaccion(transaccion);
 
         req.setAttribute("recibido", recibido);
         req.setAttribute("cambio", cambio);

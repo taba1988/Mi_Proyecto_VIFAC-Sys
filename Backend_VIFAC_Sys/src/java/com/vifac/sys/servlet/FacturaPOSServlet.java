@@ -26,6 +26,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import com.vifac.sys.dao.TransaccionDAO;
+import com.vifac.sys.modelo.Transaccion;
 
 @WebServlet("/FacturaPOSServlet")
 public class FacturaPOSServlet extends HttpServlet {
@@ -36,6 +38,7 @@ public class FacturaPOSServlet extends HttpServlet {
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();
     private final EmpresaDAO empresaDAO = new EmpresaDAO();
     private final CajaDAO cajaDAO = new CajaDAO();
+    private final TransaccionDAO transaccionDAO = new TransaccionDAO();
     private final DateTimeFormatter fechaFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private final DateTimeFormatter horaFormat = DateTimeFormatter.ofPattern("HH:mm");
     
@@ -59,6 +62,10 @@ public class FacturaPOSServlet extends HttpServlet {
         }
         
         int idVenta = venta.getIdVenta();
+       Transaccion transaccion = transaccionDAO.buscarPorFactura(venta.getNroDocumentoFactura());
+        if (transaccion != null) {
+        request.setAttribute("transaccion", transaccion);
+        }
         
         Integer numeroCaja = cajaDAO.obtenerNumeroCajaPorId(venta.getIdCaja());
         venta.setNumeroCaja(numeroCaja != null ? numeroCaja : 0);
@@ -93,6 +100,7 @@ String fechaValidacion  = venta.getFechaValidacion() != null ? venta.getFechaVal
         request.setAttribute("fechaVencimiento", fechaVencimiento);
         request.setAttribute("horaVencimiento", horaVencimiento);
         request.setAttribute("fechaValidacion", fechaValidacion);
+        venta.setQrCodeUrl("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + venta.getQrCodeUrl());
         request.getRequestDispatcher("FacturaPOS.jsp").forward(request, response);
     }
 }

@@ -1,3 +1,12 @@
+/*
+ * Clase modelo Venta que representa la estructura de la tabla 'Venta' en la base de datos.
+ * Esta clase contiene todos los atributos que reflejan las columnas de la tabla,
+ * y se utiliza para mapear los datos desde la base de datos hacia objetos Java y viceversa.
+ * 
+ * Autor: ORLANDUVALIE TABARES GUTIERREZ
+ * Fecha: 10/09/2025
+ */
+
 package com.vifac.sys.modelo;
 
 import java.time.LocalDateTime;

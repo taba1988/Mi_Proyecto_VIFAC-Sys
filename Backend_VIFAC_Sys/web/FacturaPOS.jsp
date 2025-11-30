@@ -94,9 +94,9 @@
             ---------------------- [ Detalle forma de pago ] --------------------
         </div>
         <div style="line-height: 1.1; margin: 0;">
-            <p style="margin: 0;"><strong>Metodo Pago:</strong> ${venta.metodoPago}</p>
-            <p style="margin: 0;"><strong>Recibido:</strong> $${recibido}</p>
-            <p style="margin: 0;"><strong>Cambio:</strong> $${cambio}</p>
+            <p style="margin: 0;"><strong>Metodo Pago:</strong> ${transaccion.metodoPago}</p>
+            <p style="margin: 0;"><strong>Recibido:</strong> $${transaccion.recibido}</p>
+            <p style="margin: 0;"><strong>Cambio:</strong> $${transaccion.cambio}</p>
         </div>
         
         <!-- Detalle de impuestos -->
@@ -121,16 +121,15 @@ No somos responsables de IVA – empresa bajo régimen simplificado, según Art�
         <p><strong>Total Und:</strong> ${totalUnidades} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Total Ref:</strong> ${totalReferencias}</p>
         <hr class="mt-1 mb-1" style="border-top: 1px dashed black;">
 
-        <!-- QR y CUDE -->
+           <!-- QR y CUDE -->
         <div style="text-align: center; margin-top: 8px;">
-            <div style="width: 100px; height: 100px; border: 1px solid #ccc; margin: 0 auto 3px auto; display: flex; justify-content: center; align-items: center; font-size: 0.7em; color: #777;">
-                QR
-            </div>
+              <img src="${venta.qrCodeUrl}"
+                alt="QR"
+                style="width: 100px; height: 100px;" />       
             <p style="font-size: 0.8em; overflow-wrap: break-word;">
-                <strong>CUDE:</strong> N/A
+               <strong>CUDE:</strong> N/A
             </p>
         </div>
-
          <!-- Información de validez del comprobante -->
          <hr class="mt-2 mb-1" style="border-top: 1px dashed black;">
          <div style="text-align: center; font-size: 0.8em; color: #777;">

@@ -190,4 +190,18 @@ public class VentaDAO extends ConexionBD {
 
         return String.format("%04d", ultimoId + 1);
     }
+    
+    // Actualizar URL del QR de una venta
+    public boolean actualizarQrCode(int idVenta, String qrCodeUrl) {
+        String sql = "UPDATE venta SET qr_code_url = ? WHERE idVenta = ?";
+        try (Connection con = conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, qrCodeUrl);
+            ps.setInt(2, idVenta);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error actualizando QR code", e);
+            return false;
+        }
+    }
 }

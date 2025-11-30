@@ -642,7 +642,8 @@ function procesarPago(metodoPago) {
             descuento_porcentaje: p.descuento_porcentaje || 0
         })),
         metodoPago: metodoPago,
-        valorDescuento: valorDescuentoTotal
+        valorDescuento: valorDescuentoTotal,
+        efectivoRecibido: document.getElementById('efectivoRecibido').value
     };
 
     console.log("Array productosVenta:", window.productosVenta);
