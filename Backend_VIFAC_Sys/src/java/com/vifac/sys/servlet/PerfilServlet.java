@@ -1,32 +1,24 @@
-/*
- * PerfilServlet para mostrar y actualizar los datos del usuario logueado en perfil.jsp
- * Fecha: 26/10/2025
+/**
+ * Servlet que maneja la visualización y actualización del perfil del usuario.
+ * Solo permite actualizar teléfono y dirección.
  * Autor: ORLANDUVALIE TABARES GUTIERREZ
- * Nota: Incluye soporte para actualización de foto de perfil.
+ * Fecha: 26/10/2025
  */
-
 package com.vifac.sys.servlet;
 
 import com.google.gson.Gson;
 import com.vifac.sys.dao.UsuarioDAO;
-import com.vifac.sys.modelo.RespuestaJson;
+import com.vifac.sys.modelo.RespuestaJsonPerfil;
 import com.vifac.sys.modelo.Usuario;
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
 @WebServlet("/PerfilServlet")
-@MultipartConfig(
-    fileSizeThreshold = 1024 * 1024,
-    maxFileSize = 5 * 1024 * 1024,
-    maxRequestSize = 10 * 1024 * 1024
-)
 public class PerfilServlet extends HttpServlet {
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();
     private final Gson gson = new Gson();
@@ -62,52 +54,50 @@ public class PerfilServlet extends HttpServlet {
             return;
         }
 
-        usuario = usuarioDAO.obtenerUsuarioPorId(usuario.getIdUsuario());
+        Usuario actualizado = usuarioDAO.obtenerUsuarioPorId(usuario.getIdUsuario());
+
         String nota = String.format(
             "Rol: %s | Última actualización: %s<br>Inconsistencias con tus datos? Contacta al administrador.",
-            usuario.getCargo(),
+            actualizado.getCargo(),
             LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))
         );
+        actualizado.setNotaSistema(nota);
 
-        usuario.setNotaSistema(nota);
-        session.setAttribute("usuarioLogeado", usuario);
-        request.setAttribute("usuario", usuario);
+        session.setAttribute("usuarioLogeado", actualizado);
+        request.setAttribute("usuario", actualizado);
         request.getRequestDispatcher("Perfil.jsp").forward(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
         HttpSession session = request.getSession(false);
-        Usuario usuario = (session != null) ? (Usuario) session.getAttribute("usuarioLogeado") : null;
-        RespuestaJson r;
+        Usuario usuario = null;
+        if (session != null) {
+            Usuario uSession = (Usuario) session.getAttribute("usuarioLogeado");
+            if (uSession != null) {
+                usuario = usuarioDAO.obtenerUsuarioPorId(uSession.getIdUsuario());
+            }
+        }
+        RespuestaJsonPerfil r;
 
         if (usuario == null) {
-            r = new RespuestaJson("error", "Sesión no iniciada o vencida.");
+            r = new RespuestaJsonPerfil("error", "Sesión no iniciada o vencida.");
         } else if ("actualizarPerfil".equals(request.getParameter("accion"))) {
-            // Solo actualizar teléfono y dirección además de foto si se envía
-            usuario.setTelefono(request.getParameter("telefono"));
-            usuario.setDireccion(request.getParameter("direccion"));
-
-            Part filePart = request.getPart("fotoPerfil");
-            if (filePart != null && filePart.getSize() > 0) {
-                String nombreArchivo = System.currentTimeMillis() + "_" + filePart.getSubmittedFileName().replace(" ", "_");
-                String rutaGuardado = getServletContext().getRealPath("/uploads/fotosPerfil/");
-                File dir = new File(rutaGuardado);
-                if (!dir.exists()) dir.mkdirs();
-                filePart.write(rutaGuardado + File.separator + nombreArchivo);
-                usuario.setFotoPerfil("uploads/fotosPerfil/" + nombreArchivo);
-            }
+        Usuario usuarioLogeado = (Usuario) session.getAttribute("usuarioLogeado");
+        usuario.setIdUsuario(usuarioLogeado.getIdUsuario());
+        usuario.setTelefono(request.getParameter("telefono"));
+        usuario.setDireccion(request.getParameter("direccion"));
 
             boolean exito = usuarioDAO.actualizarDatosPerfil(usuario);
             if (exito) {
                 session.setAttribute("usuarioLogeado", usuario);
-                r = new RespuestaJson("success", "Perfil actualizado correctamente.");
+                r = new RespuestaJsonPerfil("success", "Perfil actualizado correctamente.");
             } else {
-                r = new RespuestaJson("error", "No se pudo actualizar el perfil.");
+                r = new RespuestaJsonPerfil("error", "No se pudo actualizar el perfil.");
             }
         } else {
-            r = new RespuestaJson("error", "Acción no reconocida.");
+            r = new RespuestaJsonPerfil("error", "Acción no reconocida.");
         }
 
         response.getWriter().write(gson.toJson(r));

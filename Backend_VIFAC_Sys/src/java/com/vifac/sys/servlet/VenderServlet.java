@@ -317,12 +317,14 @@ public class VenderServlet extends HttpServlet {
 
         int idVentaGenerada = ventaDAO.registrarVenta(ventaForm);
         
-        // Generar URL del QR usando el id de la venta recién creada
+        // Determina si es POS o Electrónica según el checkbox
+        boolean esPOS = "on".equals(req.getParameter("toggleTicket"));
         String baseUrl = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + req.getContextPath();
-        String urlFactura = baseUrl + "/FacturaPOSServlet?idVenta=" + idVentaGenerada;
-        ventaForm.setQrCodeUrl(urlFactura);
+        String urlFactura = esPOS
+            ? baseUrl + "/FacturaPOSServlet?idVenta=" + idVentaGenerada
+            : baseUrl + "/FacturaElectronicaServlet?idVenta=" + idVentaGenerada;
 
-        // Actualizar QR en la BD
+        ventaForm.setQrCodeUrl(urlFactura);
         ventaDAO.actualizarQrCode(idVentaGenerada, urlFactura);
 
         double recibido = datos.has("efectivoRecibido") && !datos.get("efectivoRecibido").isJsonNull()
@@ -340,6 +342,13 @@ public class VenderServlet extends HttpServlet {
         transaccion.setCambio(cambio);
         transaccion.setMetodoPago(metodoPago);
         transaccion.setDescripcion("Pago de la venta #" + ventaForm.getNroDocumentoFactura());
+        // Asignar referencia según método de pago
+        if (metodoPago.equalsIgnoreCase("Efectivo")) {
+            transaccion.setReferencia("N/A");
+        } else {
+            String referencia = "VTA-" + ventaForm.getNroDocumentoFactura() + "-" + System.currentTimeMillis();
+            transaccion.setReferencia(referencia);
+        }
         
         // prints para debug
         System.out.println("---- TRANSACCIÓN ----");
@@ -348,6 +357,7 @@ public class VenderServlet extends HttpServlet {
         System.out.println("Recibido: " + transaccion.getRecibido());
         System.out.println("Cambio: " + transaccion.getCambio());
         System.out.println("Método de pago: " + transaccion.getMetodoPago());
+        System.out.println("Referencia generada: " + transaccion.getReferencia());
         System.out.println("--------------------");
 
         transaccionDAO.agregarTransaccion(transaccion);

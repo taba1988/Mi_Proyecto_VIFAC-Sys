@@ -24,77 +24,60 @@ public class EnviarTokenRecuperacionServlet extends HttpServlet {
     private final Gson gson = new Gson();
     private static final Logger LOGGER = Logger.getLogger(EnviarTokenRecuperacionServlet.class.getName());
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+@Override
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
 
-        response.setContentType("text/html;charset=UTF-8");
-        request.setAttribute("mensajeModal", "Se ha enviado un enlace de recuperación a su correo. Revisa tu bandeja.");
-        request.getRequestDispatcher("login.jsp").forward(request, response);
+    String email = request.getParameter("email");
 
-
-        String email = request.getParameter("email");
-        RespuestaJson respuesta;
-
-        try {
-            if (email == null || email.isEmpty()) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                respuesta = new RespuestaJson("error", "Debe ingresar un correo válido.");
-                response.getWriter().write(gson.toJson(respuesta));
-                return;
-            }
-
-            Usuario usuario = usuarioDAO.buscarPorEmail(email);
-
-            // Importante: Lógica de seguridad para evitar enumeración de usuarios
-            if (usuario == null) {
-                // Damos un mensaje genérico, pero aún respondemos con éxito (status 200)
-                respuesta = new RespuestaJson("success", "Si el correo está registrado, se enviará el enlace de recuperación.");
-                response.getWriter().write(gson.toJson(respuesta));
-                return;
-            }
-
-            // --- Proceso de Generación y Guardado de Token ---
-            String token = generarTokenSeguro();
-            // Esta llamada debe ser segura y no fallar.
-            usuarioDAO.guardarTokenRecuperacion(usuario.getIdUsuario(), token); 
-
-            // Construir el link (ajustar a tu URL real de restablecimiento)
-            // Asegúrate que "/RestablecerContrasena.jsp" es la URL correcta para tu siguiente paso
-            String linkBase = request.getRequestURL().toString().replace(request.getServletPath(), "");
-            String link = linkBase + "/RestablecerContrasena.jsp?token=" + token;
-
-            // --- Envío de Correo ---
-            
-            System.out.println("Remitente SMTP_USER: " + System.getenv("SMTP_USER"));
-            System.out.println("Destinatario: " + usuario.getEmail());
-            
-            boolean enviado = MailSender.enviarCorreo(
-                usuario.getEmail(),
-                "Recuperación de contraseña VIFAC-Sys",
-                "Hola " + usuario.getNombre() + ",\n\n"
-                    + "Haga clic en el siguiente enlace para restablecer su contraseña:\n"
-                    + link + "\n\n"
-                    + "Este enlace expirará dentro de 60 minutos, por seguridad no comparta este link con ninguna persona. Si no solicitó este cambio, ignore este correo y pongase en contacto con el administrador");
-
-            if (enviado) {
-                respuesta = new RespuestaJson("success", "Se ha enviado el enlace de recuperación a su correo.");
-            } else {
-                // Falla en el envío del correo (ej. credenciales SMTP incorrectas)
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // Código 500 si falla el proceso crítico
-                respuesta = new RespuestaJson("error", "Error al enviar el correo. Por favor, contacte a soporte.");
-            }
-
-        } catch (IOException e) {
-            // Manejar cualquier excepción inesperada (ej. error de conexión a BD o Gson missing)
-            LOGGER.log(Level.SEVERE, "Error fatal en el Servlet de Recuperación: " + e.getMessage(), e);
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // Código 500
-            respuesta = new RespuestaJson("error", "Ocurrió un error inesperado en el servidor.");
-        }
-        
-        // Asegurarse de que la respuesta se escribe, incluso si es un error 500
-        response.getWriter().write(gson.toJson(respuesta));
+    // Validación: campo vacío
+    if (email == null || email.isEmpty()) {
+        request.setAttribute("tipoModal", "error");
+        request.setAttribute("mensajeModal", "Debe ingresar un correo válido.");
+        request.getRequestDispatcher("EnviarTokenRecuperacion.jsp").forward(request, response);
+        return;
     }
+
+    Usuario usuario = usuarioDAO.buscarPorEmail(email);
+
+    // Correo NO existe
+    if (usuario == null) {
+        request.setAttribute("tipoModal", "error");
+        request.setAttribute("mensajeModal", "No se encontró el correo electrónico proporcionado.");
+        request.getRequestDispatcher("EnviarTokenRecuperacion.jsp").forward(request, response);
+        return;
+    }
+
+    // Generar token
+    String token = generarTokenSeguro();
+    usuarioDAO.guardarTokenRecuperacion(usuario.getIdUsuario(), token);
+
+    // Crear link
+    String linkBase = request.getRequestURL().toString().replace(request.getServletPath(), "");
+    String link = linkBase + "/RestablecerContrasena.jsp?token=" + token;
+
+    boolean enviado = MailSender.enviarCorreo(
+            usuario.getEmail(),
+            "Recuperación de contraseña VIFAC-Sys",
+            "Hola " + usuario.getNombre() + ",\n\n"
+            + "Haga clic en el siguiente enlace para restablecer su contraseña:\n"
+            + link + "\n\n"
+            + "Este enlace expira en 60 minutos."
+    );
+
+    if (!enviado) {
+        request.setAttribute("tipoModal", "error");
+        request.setAttribute("mensajeModal", "Error al enviar el correo. Contacte a soporte.");
+        request.getRequestDispatcher("EnviarTokenRecuperacion.jsp").forward(request, response);
+        return;
+    }
+
+    // ÉXITO
+    request.setAttribute("tipoModal", "success");
+    request.setAttribute("mensajeModal", "Se ha enviado un enlace de recuperación a su correo.  Revisa tu bandeja");
+    request.getRequestDispatcher("login.jsp").forward(request, response);
+}
+
 
     /**
      * Genera un token aleatorio seguro (URL-safe Base64).

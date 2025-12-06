@@ -67,34 +67,44 @@ public class UsuariosServlet extends HttpServlet {
 
         if (accion != null) {
             switch (accion) {
-                case "agregar":
-                    Usuario nuevoUsuario = new Usuario();
-                    nuevoUsuario.setNombre(request.getParameter("nombre"));
-                    nuevoUsuario.setDocumento(request.getParameter("documento"));
-                    nuevoUsuario.setDireccion(request.getParameter("direccion"));
-                    nuevoUsuario.setTelefono(request.getParameter("telefono"));
-                    nuevoUsuario.setEmail(request.getParameter("email"));
-                    nuevoUsuario.setNombreUsuario(request.getParameter("nombreUsuario"));
-                    nuevoUsuario.setContrasena(request.getParameter("contrasena"));
-                    nuevoUsuario.setCargo(request.getParameter("cargo"));
-                    try {
-                        nuevoUsuario.setIdRol(Integer.parseInt(request.getParameter("idRol")));
-                    } catch (NumberFormatException e) {
-                        nuevoUsuario.setIdRol(0);
-                    }
-                    try {
-                        nuevoUsuario.setIdEmpresa(Integer.parseInt(request.getParameter("idEmpresa")));
-                    } catch (NumberFormatException e) {
-                        nuevoUsuario.setIdEmpresa(1);
-                    }
+       case "agregar":
+           Usuario nuevoUsuario = new Usuario();
+           nuevoUsuario.setNombre(request.getParameter("nombre"));
+           nuevoUsuario.setDocumento(request.getParameter("documento"));
+           nuevoUsuario.setDireccion(request.getParameter("direccion"));
+           nuevoUsuario.setTelefono(request.getParameter("telefono"));
+           nuevoUsuario.setEmail(request.getParameter("email"));
+           nuevoUsuario.setNombreUsuario(request.getParameter("nombreUsuario"));
+           nuevoUsuario.setContrasena(request.getParameter("contrasena"));
+           nuevoUsuario.setCargo(request.getParameter("cargo"));
+           try {
+               nuevoUsuario.setIdRol(Integer.parseInt(request.getParameter("idRol")));
+           } catch (NumberFormatException e) {
+               nuevoUsuario.setIdRol(0);
+           }
+           try {
+               nuevoUsuario.setIdEmpresa(Integer.parseInt(request.getParameter("idEmpresa")));
+           } 
+           
+           catch (NumberFormatException e) {
+                  nuevoUsuario.setIdEmpresa(1);
+        }
 
-                    nuevoUsuario.setEstado(request.getParameter("estado"));
-                    nuevoUsuario.setIntentosFallidos(0);
-
-                    usuarioDAO.agregarUsuario(nuevoUsuario);
-                    respuesta = new RespuestaJson("success", "Usuario agregado con éxito.");
-                    break;
-
+           nuevoUsuario.setEstado(request.getParameter("estado"));
+           nuevoUsuario.setIntentosFallidos(0);
+       
+           // Validar si el documento ya existe
+           if (usuarioDAO.existeDocumento(nuevoUsuario.getDocumento())) {
+               respuesta = new RespuestaJson("error", "El documento ya está registrado.");
+           } else if (usuarioDAO.existeUsuarioPorEmail(nuevoUsuario.getEmail())) {
+               respuesta = new RespuestaJson("error", "El email ya está registrado.");
+           } else {
+               // Si todo bien, agrega el usuario
+               usuarioDAO.agregarUsuario(nuevoUsuario);
+               respuesta = new RespuestaJson("success", "Usuario agregado con éxito.");
+           }
+           break;
+       
                 case "editar":
                     Usuario usuarioEditado = new Usuario();
                     try {

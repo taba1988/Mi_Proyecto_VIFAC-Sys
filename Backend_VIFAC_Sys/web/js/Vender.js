@@ -75,21 +75,32 @@ if (descuentoInput) descuentoInput.value = '';
 
 actualizarTotalesUI();
 
-function crearTarjetaProducto(p) {
+function crearTarjetaVideo(video) {
     const col = document.createElement('div');
     col.className = 'col-sm-6 col-md-4 col-lg-3 mb-3';
     col.innerHTML = `
-        <div class="card h-100 shadow-sm" style="font-size: 0.85rem; cursor: pointer;">
-            <div class="card-body">
-                <h6 class="card-title">${p.nombre}</h6>
-                <p class="card-text mb-1">
-                    <strong>Stock:</strong> ${p.stock}<br>
-                    <i class="bi bi-upc-scan"></i> ${p.sku}<br>
-                    <strong>Precio:</strong> $${formatNumberWithCommas(p.precio_venta)}
-                </p>
+        <div class="ayuda-card card h-100 shadow-sm">
+            <img src="${video.url_imagen ? 'uploads/ayuda/' + video.url_imagen : 'img/Empresa.png'}" class="card-img-top" alt="${video.titulo || 'Video'}">
+            <div class="card-body-ayuda">
+                <h5 class="card-title-ayuda">${video.titulo || ''}</h5>
+                <a href="${video.urlVideo || '#'}" class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-play-fill"></i>
+                </a>
+                ${idRol === 1 ? `
+                    <button class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalCargarVideo"
+                        onclick="
+                            document.getElementById('moduloSeleccionado').value='${video.modulo || ''}';
+                            document.getElementById('tituloVideo').value='${video.titulo || ''}';
+                        ">
+                        <i class="bi bi-upload"></i>
+                    </button>
+                ` : ''}
             </div>
         </div>
     `;
+    return col;
+}
+
     col.querySelector('.card').addEventListener('click', () => {
         agregarAlCarrito(p);
     });
@@ -798,9 +809,9 @@ async function buscarClientePorCedula() {
             resultadoDiv.style.display = 'block';
             btnAceptarCliente.disabled = false;
         } else {
-            console.log('No se encontró ningún cliente con esa cédula.');
+            console.log('No se encontró ningún cliente.');
             window.clienteSeleccionado = null;
-            nombreClienteParrafo.textContent = 'No se encontró ningún cliente con esa cédula.';
+            nombreClienteParrafo.textContent = 'No se encontró ningún cliente.';
             resultadoDiv.style.display = 'block';
             btnAceptarCliente.disabled = true;
         }

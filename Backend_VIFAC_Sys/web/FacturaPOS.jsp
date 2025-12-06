@@ -1,3 +1,9 @@
+<%-- 
+    Document   : FacturaPOS
+    Created on : 28/11/2025, 9:32:15 p. m.
+    Author     : ORLANDUVALIE TABARES GUTIERREZ
+--%>
+
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
@@ -97,6 +103,7 @@
             <p style="margin: 0;"><strong>Metodo Pago:</strong> ${transaccion.metodoPago}</p>
             <p style="margin: 0;"><strong>Recibido:</strong> $${transaccion.recibido}</p>
             <p style="margin: 0;"><strong>Cambio:</strong> $${transaccion.cambio}</p>
+            <p style="margin: 0;"><strong>Referencia:</strong> ${transaccion.referencia}</p>
         </div>
         
         <!-- Detalle de impuestos -->

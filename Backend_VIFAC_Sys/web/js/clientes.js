@@ -19,9 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Evento para el formulario de búsqueda
     document.getElementById("formBusqueda").addEventListener("submit", buscarCliente);
-    
-    // --- CÓDIGO DE DROPDOWNS MOVIDO AQUÍ DENTRO ---
-    
+        
     // Manejo del dropdown para el estado
     const dropdownButton = document.getElementById("dropdownEstado");
     const hiddenInput = document.getElementById("estado");
@@ -118,7 +116,7 @@ async function guardarCliente() {
     const formData = new URLSearchParams();
     formData.append("accion", idCliente ? "editar" : "agregar");
     if (idCliente) {
-        formData.append("idCliente", idCliente);
+        formData.append("idClientes", idCliente);
     }
     formData.append("razon_social", razonSocial);
     formData.append("documento_NIT", documentoNit);

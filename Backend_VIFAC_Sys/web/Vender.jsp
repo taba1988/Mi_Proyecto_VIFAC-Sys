@@ -359,7 +359,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="modalSeleccionarClienteLabel">Buscar Cliente por Cédula</h5>
+                    <h5 class="modal-title" id="modalSeleccionarClienteLabel">Buscar Cliente por Cédula o Nombre</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">

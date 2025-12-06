@@ -125,22 +125,30 @@ public class ClientesServlet extends HttpServlet {
                         }
                         break;
 
-                    // --- Acción editar cliente --- //
-                    case "editar":
-                        Clientes clienteEditado = new Clientes();
-                        clienteEditado.setIdClientes(Integer.parseInt(request.getParameter("idClientes")));
-                        clienteEditado.setRazon_social(request.getParameter("razon_social"));
-                        clienteEditado.setDocumento_NIT(request.getParameter("documento_NIT"));
-                        clienteEditado.setTelefono(request.getParameter("telefono"));
-                        clienteEditado.setDireccion(request.getParameter("direccion"));
-                        clienteEditado.setEmail(request.getParameter("email"));
-                        clienteEditado.setActividad_economica(request.getParameter("actividad_economica"));
-                        clienteEditado.setResponsabilidad_iva(request.getParameter("responsabilidad_iva"));
-                        clienteEditado.setEstado(request.getParameter("estado"));
-
-                        clienteDAO.actualizarCliente(clienteEditado);
-                        respuesta = new RespuestaJsonCliente("success", "Cliente actualizado con éxito.");
-                        break;
+                        // --- Acción editar cliente --- //
+                        case "editar":
+                            try {
+                                Clientes clienteEditado = new Clientes();
+                        
+                                clienteEditado.setIdClientes(Integer.parseInt(request.getParameter("idClientes")));
+                                clienteEditado.setRazon_social(request.getParameter("razon_social"));
+                                clienteEditado.setDocumento_NIT(request.getParameter("documento_NIT"));
+                                clienteEditado.setTelefono(request.getParameter("telefono"));
+                                clienteEditado.setDireccion(request.getParameter("direccion"));
+                                clienteEditado.setEmail(request.getParameter("email"));
+                                clienteEditado.setActividad_economica(request.getParameter("actividad_economica"));
+                                clienteEditado.setResponsabilidad_iva(request.getParameter("responsabilidad_iva"));
+                                clienteEditado.setEstado(request.getParameter("estado"));
+                        
+                                clienteDAO.actualizarCliente(clienteEditado);
+                        
+                                respuesta = new RespuestaJsonCliente("success", "Cliente actualizado con éxito.");
+                            } catch (NumberFormatException e) {
+                                respuesta = new RespuestaJsonCliente("error", "ID de cliente inválido.");
+                            } catch (Exception e) {
+                                respuesta = new RespuestaJsonCliente("error", "Ocurrió un error al actualizar el cliente.");
+                            }
+                            break;
 
                     // --- Acción eliminar cliente (POST) --- //
                     case "eliminar":

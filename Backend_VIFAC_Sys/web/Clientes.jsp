@@ -45,7 +45,7 @@
                             placeholder="Buscar por nombre o documento"
                         />
                         <input type="hidden" name="accion" value="buscar"/>
-                        <button type="submit" class="btn btn-outline-secondary">Buscar</button>
+                         <button type="submit" class="btn btn-outline-secondary"><i class="bi bi-search"></i></button>
                     </form>
                 </div> 
             </div>
@@ -249,7 +249,7 @@
                         </div>
 
                         <input type="hidden" name="accion" id="accionInput" value="agregar" />
-                        <input type="hidden" id="clienteId" name="idCliente" />
+                        <input type="hidden" id="clienteId" name="idClientes" />
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>

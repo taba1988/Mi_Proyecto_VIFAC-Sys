@@ -640,4 +640,17 @@ public boolean agregarUsuario(Usuario u) {
             return false;
       }
     }
+    public boolean existeDocumento(String documento) {
+    String sql = "SELECT 1 FROM usuario WHERE documento = ?";
+    try (Connection conexion = ConexionBD.obtenerConexion();
+         PreparedStatement stmt = conexion.prepareStatement(sql)) {
+        stmt.setString(1, documento);
+        try (ResultSet rs = stmt.executeQuery()) {
+            return rs.next();
+        }
+    } catch (SQLException e) {
+        LOGGER.log(Level.SEVERE, "Error al verificar existencia de documento: " + documento, e);
+        return false;
+    }
+  }
 }    

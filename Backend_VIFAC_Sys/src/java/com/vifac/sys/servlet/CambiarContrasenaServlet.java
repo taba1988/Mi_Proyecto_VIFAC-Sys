@@ -40,8 +40,12 @@ public class CambiarContrasenaServlet extends HttpServlet {
         Usuario usuario = session != null ? (Usuario) session.getAttribute("usuarioLogeado") : null;
 
         if (usuario == null) {
-            respuesta = new RespuestaJson("error", "Debe iniciar sesión para cambiar la contraseña.");
-            response.getWriter().write(gson.toJson(respuesta));
+            // 💡 Establecer un atributo de error ANTES de la redirección
+            // para que la página de login pueda mostrar un mensaje contextual.
+            request.setAttribute("error", "Su sesión ha expirado. Por favor, inicie sesión de nuevo.");
+            
+            // 🚨 ACCIÓN CLAVE: Redireccionar directamente a login.jsp 🚨
+            response.sendRedirect("login.jsp"); 
             return;
         }
 
@@ -61,22 +65,21 @@ public class CambiarContrasenaServlet extends HttpServlet {
         // Validar que la contraseña actual sea correcta
         boolean esValida = usuarioDAO.validarContrasena(usuario.getIdUsuario(), contrasenaActual);
         if (!esValida) {
-            respuesta = new RespuestaJson("error", "La contraseña actual es incorrecta.");
-            response.getWriter().write(gson.toJson(respuesta));
+            request.setAttribute("error", "La contraseña actual es incorrecta.");
+            request.getRequestDispatcher("CambiarContrasena.jsp").forward(request, response);
             return;
         }
 
         // Validar que las nuevas contraseñas coincidan
-        if (!nuevaContrasena.equals(confirmarContrasena)) {
-            respuesta = new RespuestaJson("error", "Las nuevas contraseñas no coinciden.");
-            response.getWriter().write(gson.toJson(respuesta));
-            return;
-        }
+        // if (!nuevaContrasena.equals(confirmarContrasena)) {
+        // request.setAttribute("error", "Las nuevas contraseñas no coinciden.");
+        // request.getRequestDispatcher("CambiarContrasena.jsp").forward(request, response);
+        //nreturn; }
 
         // Validar seguridad
         if (!PasswordUtil.esSegura(nuevaContrasena)) {
-            respuesta = new RespuestaJson("error", "La contraseña no cumple los requisitos de seguridad.");
-            response.getWriter().write(gson.toJson(respuesta));
+            request.setAttribute("error", "La contraseña no cumple los requisitos de seguridad.");
+            request.getRequestDispatcher("CambiarContrasena.jsp").forward(request, response);
             return;
         }
 
@@ -86,7 +89,7 @@ public class CambiarContrasenaServlet extends HttpServlet {
         if (actualizado) {
              request.setAttribute("mensaje", "Contraseña actualizada correctamente.");
          } else {
-             request.setAttribute("mensaje", "Ocurrió un error al actualizar la contraseña.");
+             request.setAttribute("error", "Ocurrió un error al actualizar la contraseña.");
          }
 
          //          Redirigir al JSP que mostrará el modal con el mensaje

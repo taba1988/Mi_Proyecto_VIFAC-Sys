@@ -36,8 +36,8 @@ public class TransaccionDAO extends ConexionBD {
 
     // Agregar transacción
     public boolean agregarTransaccion(Transaccion t) {
-        String sql = "INSERT INTO transaccion(monto, recibido, cambio, fecha, descripcion, idUsuario, nro_documento_factura, metodoPago) " +
-             "VALUES (?, ?, ?, NOW(), ?, ?, ?, ?)";
+    String sql = "INSERT INTO transaccion(monto, recibido, cambio, fecha, descripcion, idUsuario, nro_documento_factura, metodoPago, referencia) " +
+             "VALUES (?, ?, ?, NOW(), ?, ?, ?, ?, ?)";
 
         try (Connection conexion = ConexionBD.obtenerConexion();
             PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -49,6 +49,7 @@ public class TransaccionDAO extends ConexionBD {
             stmt.setInt(5, t.getIdUsuario());
             stmt.setString(6, t.getNroDocumentoFactura());
             stmt.setString(7, t.getMetodoPago());
+            stmt.setString(8, t.getReferencia());
 
             return stmt.executeUpdate() > 0;
 
@@ -110,6 +111,7 @@ public class TransaccionDAO extends ConexionBD {
         t.setIdUsuario(rs.getInt("idUsuario"));
         t.setNroDocumentoFactura(rs.getString("nro_documento_factura"));
         t.setMetodoPago(rs.getString("metodoPago"));
+        t.setReferencia(rs.getString("referencia"));
 
         return t;
     }

@@ -17,11 +17,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     body: `email=${encodeURIComponent(email)}`
                 });
                 const data = await response.json();
+                // ----- LEER "status" QUE VIENE DE TU SERVLET -----
+                if (data.status === "error") {
+                    alert(data.message);   // ejemplo: "correo no encontrado"
+                    return;
+                }
+                // status = success
                 alert(data.message);
             } catch (err) {
                 console.error(err);
                 alert('Error al enviar la solicitud');
             }
         });
-    }
-});
+     }
+  }
+);

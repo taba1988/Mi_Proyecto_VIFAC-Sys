@@ -2,6 +2,7 @@
     Document   : Perfil
     Created on : 26/10/2025, 10:54:04 AM
     Author     : ORLANDUVALIE TABARES GUTIERREZ
+    Nota      : Permite actualizar teléfono y dirección del usuario
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -71,7 +72,8 @@
         <div class="profile-details-section w-100 flex-grow-1">
             <div class="profile-details-header bg-light">DATOS DE PERFIL</div>
             
-            <form id="perfilForm" method="POST" action="${pageContext.request.contextPath}/PerfilServlet">
+            <form id="perfilForm" method="POST" action="${pageContext.request.contextPath}/PerfilServlet" onsubmit="return false;">
+
                 <input type="hidden" name="accion" value="actualizarPerfil" />
                 
                 <ul class="profile-details-list list-unstyled">
@@ -143,6 +145,7 @@
                         <button class="btn btn-outline-secondary" type="button" onclick="location.href='${pageContext.request.contextPath}/indexServlet'">Inicio</button>
                         <button class="btn btn-outline-danger" type="button" onclick="location.href='${pageContext.request.contextPath}/logoutServlet'">Cerrar</button>
                     </div>
+                    <%-- Botón abre el modal de confirmación --%>
                     <button type="button" class="btn btn-outline-primary" onclick="confirmarGuardar()">Guardar Cambios</button>
                 </div>
 
@@ -187,11 +190,12 @@
 </footer>
 
 <%-- Modal confirmar guardar cambios --%>
-<div class="modal fade" id="confirmarGuardarModal" tabindex="-1" aria-labelledby="confirmarGuardarModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirmarGuardarModal" tabindex="-1" aria-labelledby="confirmarGuardarModalLabel"
+     data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmarGuardarModalLabel">Confirmar Guardar Cambios</h5>
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title" id="confirmarGuardarModalLabel">Confirmar Guardar Cambios del Perfil</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body">
@@ -199,15 +203,33 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <%-- Botón llama a la función JS que hace fetch al servlet --%>
                 <button type="button" class="btn btn-outline-primary" onclick="guardarCambios()">Aceptar</button>
             </div>
         </div>
     </div>
 </div>
+                
+<div class="modal fade" id="modalMensaje" tabindex="-1" aria-labelledby="modalMensajeLabel" 
+      data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title" id="modalMensajeLabel">Mensaje</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body" id="modalMensajeTexto"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-    <!-- Include temporizador -->
-    <%@ include file="temporizador.jsp" %>
-    
+<%-- Include temporizador --%>
+<%@ include file="temporizador.jsp" %>
+
+<!-- Scripts -->
 <script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/perfil.js"></script>
 </body>

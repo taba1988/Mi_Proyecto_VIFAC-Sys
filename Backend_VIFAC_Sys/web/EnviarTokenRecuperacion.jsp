@@ -96,9 +96,39 @@
           </footer>
       </div>
   </div>
+  
+  <!-- MODAL DE RESPUESTA -->
+  <div class="modal fade" id="modalRespuesta" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header ${tipoModal == 'error' ? 'bg-info text-white' : 'bg-success text-white'}">
+                  <h5 class="modal-title">
+                      ${tipoModal == 'error' ? 'Ups, algo salió mal' : 'Correcto'}
+                  </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                  <b>${mensajeModal}</b>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Aceptar</button>
+              </div>
+          </div>
+      </div>
+  </div>
+            
+    <!-- Scripts de Bootstrap y archivo JS propio -->
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/EnviarToken.js"></script>
 
-  <!-- Scripts de Bootstrap y archivo JS propio -->
-  <script src="js/bootstrap.bundle.min.js"></script>
-  <script src="js/EnviarToken.js"></script>
+    <!-- AQUI VA, JUSTO AQUÍ -->
+    <c:if test="${not empty tipoModal}">
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+            new bootstrap.Modal(document.getElementById('modalRespuesta')).show();
+           }
+         );
+        </script>
+    </c:if>
 </body>
 </html>

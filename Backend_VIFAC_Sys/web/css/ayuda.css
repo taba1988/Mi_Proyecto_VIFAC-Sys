@@ -34,10 +34,9 @@ main.container {
 
 /* Estilos para la imagen superior de la tarjeta */
 .card-img-top {
-    /* Define una altura máxima para las imágenes */
-    max-height: 150px; 
-    /* Asegura que la imagen cubra el espacio sin deformarse */
-    object-fit: cover; 
+    height: 200px !important; 
+    width: auto !important;  
+    object-fit: cover;
 }
 
 /* Estilos para el cuerpo de la tarjeta */

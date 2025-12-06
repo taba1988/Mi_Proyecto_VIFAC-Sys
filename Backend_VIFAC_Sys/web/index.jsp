@@ -181,10 +181,10 @@
                                     <a href="indexServlet" class="list-group-item list-group-item-action border-0">
                                         <i class="bi bi-house-door-fill me-2 align-middle fs-5"></i><span class="fw-bold">Inicio</span>
                                     </a>
-                                    <a href="500.jsp" class="list-group-item list-group-item-action border-0">
+                                    <!--<a href="500.jsp" class="list-group-item list-group-item-action border-0">
                                         <i class="bi-sliders me-2 align-middle fs-5"></i><span class="fw-bold">Configuraciones</span>
-                                    </a>
-                                    <a href="cambiar_contrasena.jsp" class="list-group-item list-group-item-action border-0">
+                                    </a>-->
+                                    <a href="CambiarContrasena.jsp" class="list-group-item list-group-item-action border-0">
                                         <i class="bi bi-key-fill me-2 align-middle fs-5"></i><span class="fw-bold">Cambiar contraseña</span>
                                     </a>
                                     <a href="ayuda.jsp" class="list-group-item list-group-item-action border-0">
@@ -321,13 +321,13 @@
                                     <a href="indexServlet" class="list-group-item list-group-item-action border-0">
                                         <i class="bi bi-house-door-fill me-2 align-middle fs-5"></i><span class="fw-bold">Inicio</span>
                                     </a>
-                                    <a href="500.jsp" class="list-group-item list-group-item-action border-0">
+                                    <!-- <a href="500.jsp" class="list-group-item list-group-item-action border-0">
                                         <i class="bi-sliders me-2 align-middle fs-5"></i><span class="fw-bold">Configuraciones</span>
-                                    </a>
+                                    </a> -->
                                     <a href="CambiarContrasena.jsp" class="list-group-item list-group-item-action border-0">
                                         <i class="bi bi-key-fill me-2 align-middle fs-5"></i><span class="fw-bold">Cambiar contraseña</span>
                                     </a>
-                                    <a href="ayuda.jsp" class="list-group-item list-group-item-action border-0">
+                                    <a href="Ayuda.jsp" class="list-group-item list-group-item-action border-0">
                                         <i class="bi bi-question-circle-fill me-2 align-middle fs-5"></i><span class="fw-bold">Ayuda</span>
                                     </a>
                                 </ul>

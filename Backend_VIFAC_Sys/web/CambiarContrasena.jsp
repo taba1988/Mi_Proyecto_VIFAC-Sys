@@ -34,6 +34,14 @@
                                     <h3 class="text-center font-weight-secondary my-3">Actualizar Contraseña</h3>
                                 </div>
                                 <div class="card-body mx-2">
+                                    
+                                    <c:if test="${not empty error}">
+                                        <div class="alert alert-danger alert-dismissible fade show mx-3" role="alert">
+                                            <strong>Error:</strong> ${error}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    </c:if>
+                                    
                                     <!-- Formulario que mantiene el JS pero envia token al servlet -->
                                     <form action="CambiarContrasenaServlet" method="post">
                                                                               
@@ -134,6 +142,8 @@
      </div>
     </c:if>
 
+     <%@ include file="temporizador.jsp" %>
+     
     <!-- Scripts originales -->
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/recuperar.js"></script>

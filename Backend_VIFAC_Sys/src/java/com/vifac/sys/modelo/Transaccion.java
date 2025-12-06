@@ -18,6 +18,7 @@ public class Transaccion {
     private int idUsuario;
     private String nro_documento_factura;
     private String metodoPago;
+    private String referencia;
 
     // getters y setters
 
@@ -93,4 +94,11 @@ public class Transaccion {
         this.metodoPago = metodoPago;
     }
     
+    public String getReferencia() {
+    return referencia;
+    }
+
+    public void setReferencia(String referencia) {
+    this.referencia = referencia;
+    }  
 }
