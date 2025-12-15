@@ -99,6 +99,7 @@ function abrirModalProducto() {
     document.getElementById('formInventario').reset();
     document.getElementById('idProducto').value = '';
     document.getElementById('accionInput').value = 'agregar';
+    document.getElementById('sku').readOnly = false;
     document.getElementById('sku').disabled = false;
     document.getElementById('modalInventarioLabel').textContent = 'Agregar Producto';
     
@@ -121,7 +122,7 @@ function seleccionarMetodoLectura(metodo) {
 
     if (metodo === 'codigo') {
         skuInput.disabled = true;
-        skuInput.value = '';
+        // skuInput.value = '';
         skuInput.focus();
 
         btnCodigo.classList.add('metodo-selected');
@@ -131,7 +132,7 @@ function seleccionarMetodoLectura(metodo) {
         btnTeclado.classList.remove('metodo-selected');
     } else {
         skuInput.disabled = false;
-        skuInput.value = '';
+        // skuInput.value = '';
         skuInput.focus();
 
         btnTeclado.classList.add('metodo-selected');
@@ -242,9 +243,10 @@ function cargarProductos() {
 function editarProducto(id) {
     fetch(`InventarioServlet?accion=buscarId&idProducto=${id}`)
     .then(response => response.json())
-    .then(producto => {
+    .then(producto => {       
         document.getElementById('idProducto').value = producto.idProducto || '';
         document.getElementById('sku').value = producto.sku || '';
+        document.getElementById('sku').readOnly = true;
         document.getElementById('nombre').value = producto.nombre || '';
         document.getElementById('descripcion').value = producto.descripcion || '';
         document.getElementById('precio_compra').value = producto.precio_compra !== null ? producto.precio_compra : '';
@@ -262,7 +264,7 @@ function editarProducto(id) {
         modal.show();
 
         // Mantener método de lectura seleccionado
-        seleccionarMetodoLectura(metodoLectura);
+       seleccionarMetodoLectura(metodoLectura);
     })
     .catch(error => console.error('Error al buscar producto:', error));
 }

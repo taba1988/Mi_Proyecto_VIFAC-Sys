@@ -1,4 +1,4 @@
-/* global bootstrap, fetch */
+/* global bootstrap, fetch, nombreEmpresa */
 
 let proveedores = [];
 let proveedorEditandoId = null;
@@ -175,11 +175,11 @@ function editarProveedor(id) {
 // Eliminar proveedor
 async function eliminarProveedor(id) {
   if (!confirm("¿Eliminar este proveedor?")) return;
-
+  const proveedor = proveedores.find(p => p.idProveedor === id);
   const formData = new FormData();
   formData.append("accion", "eliminar");
   formData.append("id", id);
-
+   formData.append("nombreEmpresa", proveedor ? proveedor.nombreEmpresa : "");
   try {
     const res = await fetch("ProveedoresServlet", {
       method: "POST",
@@ -229,7 +229,7 @@ function actualizarTablaProveedores() {
   const tbody = document.getElementById("tablaProveedores");
   tbody.innerHTML = "";
 
-  proveedores.forEach((p) => {
+  proveedores.forEach((p, index) => {
     const fila = document.createElement("tr");
 
     const proxima = new Date(p.proximaVisita);
@@ -238,7 +238,7 @@ function actualizarTablaProveedores() {
     const alerta = proxima <= hoy ? '<span class="text-danger fw-bold">¡Próxima visita!</span><br>' : "";
 
     fila.innerHTML = `
-      <td>${p.idProveedor}</td>
+      <td>${index + 1}</td>
       <td>${p.nombreEmpresa}</td>
       <td>${p.documento_NIT}</td>
       <td>${p.asesor}</td>

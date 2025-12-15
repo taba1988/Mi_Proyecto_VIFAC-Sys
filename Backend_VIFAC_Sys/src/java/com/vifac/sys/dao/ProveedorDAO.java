@@ -200,4 +200,39 @@ public boolean marcarIncumplida(int idProveedor) {
         p.setEstado(rs.getString("estado"));
         return p;
     }
+    
+    // Buscar proveedor por documento/NIT
+public Proveedor buscarPorDocumento(String documentoNIT) {
+    String sql = "SELECT * FROM proveedor WHERE documento_NIT = ?";
+    try (Connection conexion = obtenerConexion();
+         PreparedStatement stmt = conexion.prepareStatement(sql)) {
+        stmt.setString(1, documentoNIT);
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return mapProveedor(rs);
+            }
+        }
+    } catch (SQLException e) {
+        LOGGER.log(Level.SEVERE, "Error al buscar proveedor por NIT: " + documentoNIT, e);
+    }
+    return null;
+}
+
+// Buscar proveedor por email
+public Proveedor buscarPorEmail(String email) {
+    String sql = "SELECT * FROM proveedor WHERE email = ?";
+    try (Connection conexion = obtenerConexion();
+         PreparedStatement stmt = conexion.prepareStatement(sql)) {
+        stmt.setString(1, email);
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return mapProveedor(rs);
+            }
+        }
+    } catch (SQLException e) {
+        LOGGER.log(Level.SEVERE, "Error al buscar proveedor por email: " + email, e);
+    }
+    return null;
+}
+
 }

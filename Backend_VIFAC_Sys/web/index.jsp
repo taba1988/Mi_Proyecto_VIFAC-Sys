@@ -34,7 +34,7 @@
                         </button>
                         <button type="button" class="btn btn-link p-0 text-white position-relative"  
                             data-bs-toggle="modal" data-bs-target="#modalMensajes" aria-label="Mensajes">
-                           <i class="bi bi-chat-dots-fill fs-4"></i>
+                           <i class="bi bi-inbox-fill fs-4"></i>
                             <span id="badgeMensajes" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">36</span>
                         </button>
                     </div>
@@ -409,10 +409,8 @@
                     </div>
                 </c:if>
 
-                <!-- Sección Carrusel dinámico -->
-                <!-- ================================== -->
                 <!-- Sección Carrousel: para mostrar imágenes destacadas -->
-                <!-- ================================== -->
+
                 <div id="dynamicCarousel" class="carousel slide mt-2" data-bs-ride="carousel" data-bs-touch="true">
                     <!-- Indicadores para el carrousel-->
                     <div class="carousel-indicators">
@@ -564,10 +562,16 @@
     <!-- ================== -->
     <!-- Notificaciones -->
     <!-- ================== -->
-    <div class="modal fade" id="modalNotificaciones" tabindex="-1" aria-labelledby="modalNotificacionesLabel" aria-hidden="true">
+    <div class="modal fade" 
+         id="modalNotificaciones" 
+         tabindex="-1" 
+         aria-labelledby="modalNotificacionesLabel" 
+         aria-hidden="true"
+         data-bs-backdrop="static"
+         data-bs-keyboard="false">>
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
+                <div class="modal-header bg-info text-white">
                     <h5 class="modal-title" id="modalNotificacionesLabel"><i class="bi bi-bell-fill me-2"></i> Notificaciones</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
@@ -577,7 +581,7 @@
                 </div>
                 <!-- Pie -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
@@ -586,11 +590,17 @@
     <!-- ================== -->
     <!-- Mensajes Sistema -->
     <!-- ================== -->
-    <div class="modal fade" id="modalMensajes" tabindex="-1" aria-labelledby="modalMensajesLabel" aria-hidden="true">
+    <div class="modal fade" 
+        id="modalMensajes"
+        tabindex="-1"
+        aria-labelledby="modalMensajesLabel"
+        aria-hidden="true"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <!-- Encabezado -->
-                <div class="modal-header bg-success text-white">
+                <div class="modal-header bg-info text-white">
                     <h5 class="modal-title" id="modalMensajesLabel"><i class="bi bi-chat-dots-fill me-2"></i> Mensajes del sistema</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
@@ -600,7 +610,7 @@
                 </div>
                 <!-- Pie -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
@@ -624,9 +634,9 @@
                     <p>🔑 Recuerda <strong>cambiar tu contraseña periódicamente</strong> para mantener tu cuenta segura.</p>
                 </div>
                 <!-- Botones -->
-                <div class="modal-footer">
-                    <a href="indexServlet?skipCarousel=true" class="btn btn-primary">Aceptar</a>
-                    <a href="logoutServlet" class="btn btn-secondary">Rechazar</a>
+               <div class="modal-footer d-flex justify-content-center">
+                    <a href="indexServlet?skipCarousel=true" class="btn btn-outline-primary">Aceptar</a>
+                    <!--<a href="logoutServlet" class="btn btn-outline-secondary">Rechazar</a>-->
                 </div>
             </div>
         </div>

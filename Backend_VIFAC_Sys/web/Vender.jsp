@@ -370,6 +370,9 @@
                     <div id="resultadoBusquedaCliente" style="display: none;">
                         <p class="mt-2 fw-bold">clientes:</p>
                         <p id="nombreClienteEncontrado"></p>
+                        <div id="alertClienteInactivo" class="alert alert-danger mt-2 p-2" style="display:none;">
+                           Cliente inactivo
+                        </div>
                     </div>
                     <div class="mt-3 d-flex justify-content-end gap-2">
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>

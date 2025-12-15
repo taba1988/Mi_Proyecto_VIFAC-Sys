@@ -14,7 +14,11 @@ package com.vifac.sys.servlet;
 import com.google.gson.Gson;
 import com.vifac.sys.dao.ClientesDAO;
 import com.vifac.sys.modelo.Clientes;
-import com.vifac.sys.modelo.RespuestaJsonCliente ;
+import com.vifac.sys.modelo.RespuestaJsonCliente;
+import com.vifac.sys.dao.UsuarioDAO;
+import com.vifac.sys.modelo.Usuario;
+import com.vifac.sys.dao.NotificacionDAO;
+import com.vifac.sys.modelo.Notificacion;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,12 +27,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
+import java.sql.Timestamp;
 
 @WebServlet("/ClientesServlet")
 public class ClientesServlet extends HttpServlet {
 
     // --- Acceso al DAO y herramienta JSON --- //
     private final ClientesDAO clienteDAO = new ClientesDAO();
+    private final NotificacionDAO notificacionDAO = new NotificacionDAO();
     private final Gson gson = new Gson();
 
     // --- Método GET: listar y buscar clientes --- //
@@ -84,7 +90,11 @@ public class ClientesServlet extends HttpServlet {
         response.setHeader("Access-Control-Allow-Credentials", "true");
 
         String accion = request.getParameter("accion");
-
+        int idUsuario = (Integer) request.getSession().getAttribute("idUsuario");
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        Usuario u = usuarioDAO.obtenerUsuarioPorId(idUsuario);
+        String nombreUsuario = u.getNombre();
+        String usuarioTxt = "El Usuario #" + idUsuario + " - " + nombreUsuario + " ";
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
@@ -107,54 +117,92 @@ public class ClientesServlet extends HttpServlet {
                         nuevoCliente.setResponsabilidad_iva(request.getParameter("responsabilidad_iva"));
                         nuevoCliente.setEstado(request.getParameter("estado"));
 
-                        Clientes existente = clienteDAO.buscarPorDocumento(nuevoCliente.getDocumento_NIT());
+                        Clientes existeDocumento = clienteDAO.buscarPorDocumento(nuevoCliente.getDocumento_NIT());
+                        Clientes existeEmail = clienteDAO.buscarPorEmail(nuevoCliente.getEmail());
 
-                        // --- Validación: documento/cédula duplicado --- //
-                        if (existente != null) {
-                            respuesta = new RespuestaJsonCliente("error", "Documento o cédula ya existe.");
+                        if (existeDocumento != null) {
+                               respuesta = new RespuestaJsonCliente("error", "Documento o cédula ya existe.");
+                        } else 
+                        
+                            if (existeEmail != null) {
+                               respuesta = new RespuestaJsonCliente("error", "Correo electrónico ya existe.");
                         } else {
-                            boolean agregado = clienteDAO.agregarCliente(nuevoCliente);
+                            int idClienteGenerado = clienteDAO.agregarCliente(nuevoCliente);
 
                             // --- Confirmación de registro --- //
-                            if (agregado) {
+                            if (idClienteGenerado > 0) {
                                 respuesta = new RespuestaJsonCliente("success", "Cliente agregado con éxito.");
+                                Notificacion n = new Notificacion();
+                                n.setIdUsuario((Integer) request.getSession().getAttribute("idUsuario"));
+                                n.setTipo("CLIENTES");
+                                n.setMensaje(usuarioTxt 
+                                    + "realizó el registro del cliente ID #" 
+                                    + idClienteGenerado
+                                    + " (" + nuevoCliente.getRazon_social() + ")");
+                                n.setLeido(false);                               
+                                n.setFechaCreacion(new Timestamp(System.currentTimeMillis() - (5 * 3600 * 1000)));
+                                notificacionDAO.registrar(n);
                             } else {
                                 respuesta = new RespuestaJsonCliente("error",
-                                        "No se pudo agregar el cliente. Verifique la información.");
+                                        "No se pudo agregar el cliente. Verifique la información y que esta sea la correcta.");
                             }
                         }
                         break;
 
-                        // --- Acción editar cliente --- //
-                        case "editar":
-                            try {
-                                Clientes clienteEditado = new Clientes();
-                        
-                                clienteEditado.setIdClientes(Integer.parseInt(request.getParameter("idClientes")));
-                                clienteEditado.setRazon_social(request.getParameter("razon_social"));
-                                clienteEditado.setDocumento_NIT(request.getParameter("documento_NIT"));
-                                clienteEditado.setTelefono(request.getParameter("telefono"));
-                                clienteEditado.setDireccion(request.getParameter("direccion"));
-                                clienteEditado.setEmail(request.getParameter("email"));
-                                clienteEditado.setActividad_economica(request.getParameter("actividad_economica"));
-                                clienteEditado.setResponsabilidad_iva(request.getParameter("responsabilidad_iva"));
-                                clienteEditado.setEstado(request.getParameter("estado"));
-                        
-                                clienteDAO.actualizarCliente(clienteEditado);
-                        
-                                respuesta = new RespuestaJsonCliente("success", "Cliente actualizado con éxito.");
-                            } catch (NumberFormatException e) {
-                                respuesta = new RespuestaJsonCliente("error", "ID de cliente inválido.");
-                            } catch (Exception e) {
-                                respuesta = new RespuestaJsonCliente("error", "Ocurrió un error al actualizar el cliente.");
-                            }
-                            break;
+                    // --- Acción editar cliente --- //
+                    case "editar":
+                        try {
+                            Clientes clienteEditado = new Clientes();
+
+                            clienteEditado.setIdClientes(Integer.parseInt(request.getParameter("idClientes")));
+                            clienteEditado.setRazon_social(request.getParameter("razon_social"));
+                            clienteEditado.setDocumento_NIT(request.getParameter("documento_NIT"));
+                            clienteEditado.setTelefono(request.getParameter("telefono"));
+                            clienteEditado.setDireccion(request.getParameter("direccion"));
+                            clienteEditado.setEmail(request.getParameter("email"));
+                            clienteEditado.setActividad_economica(request.getParameter("actividad_economica"));
+                            clienteEditado.setResponsabilidad_iva(request.getParameter("responsabilidad_iva"));
+                            clienteEditado.setEstado(request.getParameter("estado"));
+
+                            clienteDAO.actualizarCliente(clienteEditado);
+
+                            respuesta = new RespuestaJsonCliente("success", "Cliente actualizado con éxito.");
+                            Notificacion n = new Notificacion();
+                            n.setIdUsuario((Integer) request.getSession().getAttribute("idUsuario"));
+                            n.setTipo("CLIENTES");
+                            n.setMensaje(usuarioTxt 
+                               + "realizó la actualización del cliente ID #" 
+                               + clienteEditado.getIdClientes() 
+                               + " (" + clienteEditado.getRazon_social() + ")");
+                            n.setLeido(false);
+                            n.setFechaCreacion(new Timestamp(System.currentTimeMillis() - (5 * 3600 * 1000)));
+                            notificacionDAO.registrar(n);
+
+                        } catch (NumberFormatException e) {
+                            respuesta = new RespuestaJsonCliente("error", "ID de cliente inválido.");
+                        } catch (Exception e) {
+                            respuesta = new RespuestaJsonCliente("error", "Ocurrió un error al actualizar el cliente.");
+                        }
+                        break;
 
                     // --- Acción eliminar cliente (POST) --- //
                     case "eliminar":
                         int idClienteEliminar = Integer.parseInt(request.getParameter("id"));
+                        Clientes clienteEliminado = clienteDAO.obtenerClientePorId(idClienteEliminar);
                         clienteDAO.eliminarCliente(idClienteEliminar);
                         respuesta = new RespuestaJsonCliente("success", "Cliente eliminado con éxito.");
+                        Notificacion n = new Notificacion();
+                        n.setIdUsuario((Integer) request.getSession().getAttribute("idUsuario"));
+                        n.setTipo("CLIENTES");
+                        n.setMensaje(usuarioTxt
+                          + "eliminó el cliente ID #"
+                          + idClienteEliminar
+                          + (clienteEliminado != null
+                             ? " (" + clienteEliminado.getRazon_social() + ")"
+                             : ""));                    
+                        n.setLeido(false);
+                        n.setFechaCreacion(new Timestamp(System.currentTimeMillis() - (5 * 3600 * 1000)));
+                        notificacionDAO.registrar(n);
                         break;
                 }
             }

@@ -13,7 +13,7 @@ public class ConexionBD {
     // Datos de configuración para la conexión a la base de datos
     private static final String URL_BD = "jdbc:mysql://localhost:3306/vifac_sys_bd?useSSL=false&serverTimezone=UTC";
     private static final String USUARIO_BD = "root";
-    private static final String CONTRASENA_BD = "Sagitario1988";
+    private static final String CONTRASENA_BD = "Sagitario1988#";
 
     // Carga del driver JDBC requerido para la conexión
     static {

@@ -2,8 +2,6 @@
 
 /* global bootstrap */
 
-/* global bootstrap */
-
 let myModal = null;
 
 // Espera a que el DOM esté completamente cargado antes de ejecutar el código
@@ -90,6 +88,11 @@ function validarCorreo(input) {
 // Guarda un cliente nuevo o edita uno existente.
 async function guardarCliente() {
     clearValidations();
+    
+       
+    if (!confirm("¿Está seguro que desea actualizar este cliente?")) {
+        return;
+    }
 
     const razonSocial = document.getElementById("razonSocial").value.trim();
     const documentoNit = document.getElementById("documentoNit").value.trim();
@@ -194,7 +197,7 @@ async function listarClientes() {
 }
 
 // Rellena el modal con los datos de un cliente para su edición.
-async function editarCliente(id) {
+async function editarCliente(id) {  
     try {
         const response = await fetch("ClientesServlet?accion=listar");
         const clientes = await response.json();

@@ -9,8 +9,11 @@ package com.vifac.sys.servlet;
 import com.google.gson.Gson;
 import com.vifac.sys.dao.InventarioDAO;
 import com.vifac.sys.modelo.Inventario;
+import com.vifac.sys.dao.NotificacionDAO;
+import com.vifac.sys.modelo.Notificacion;
+import com.vifac.sys.dao.UsuarioDAO;
+import com.vifac.sys.modelo.Usuario;
 import com.vifac.sys.modelo.RespuestaJson;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,11 +21,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.sql.Timestamp;
+import javax.servlet.http.HttpSession;
 
 @WebServlet("/InventarioServlet")
 public class InventarioServlet extends HttpServlet {
 
     private final InventarioDAO inventarioDAO = new InventarioDAO();
+    private final NotificacionDAO notificacionDAO = new NotificacionDAO();
+    private final UsuarioDAO usuarioDAO = new UsuarioDAO();
     private final Gson gson = new Gson();
 
     private int parseIntSafe(String s) {
@@ -87,6 +94,13 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
     RespuestaJson respuesta;
 
     String accion = request.getParameter("accion");
+    HttpSession session = request.getSession(false);
+    int idUsuarioSesion = 0;
+    Usuario usuarioSesion = null;
+    if (session != null && session.getAttribute("idUsuario") != null) {
+    idUsuarioSesion = (Integer) session.getAttribute("idUsuario");
+    usuarioSesion = usuarioDAO.obtenerUsuarioPorId(idUsuarioSesion);
+}
 
     try {
         if (accion == null || accion.trim().isEmpty()) {
@@ -96,29 +110,82 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             if (producto.getIdCategoria() < 0) {
                 respuesta = new RespuestaJson("error", "ID de categoría no válido.");
             } else {
-                switch (accion) {
-                    case "agregar":
-                        boolean ok = inventarioDAO.agregarInventario(producto);
-                        respuesta = ok ? new RespuestaJson("success", "Producto agregado con éxito.")
-                                       : new RespuestaJson("error", "No se pudo agregar el producto.");
-                        break;
-                    case "editar":
-                        boolean ok2 = inventarioDAO.editarInventario(producto);
-                        respuesta = ok2 ? new RespuestaJson("success", "Producto actualizado con éxito.")
-                                        : new RespuestaJson("error", "No se pudo actualizar el producto.");
-                        break;
-                    case "eliminar":
-                        int idProductoEliminar = parseIntSafe(request.getParameter("idProducto"));
-                        String resultadoEliminacion = inventarioDAO.eliminarInventario(idProductoEliminar);
-                        if ("success".equals(resultadoEliminacion)) {
-                            respuesta = new RespuestaJson("success", "Producto eliminado con éxito.");
-                        } else {
-                            respuesta = new RespuestaJson("error", resultadoEliminacion);
-                        }
-                        break;
-                    default:
-                        respuesta = new RespuestaJson("error", "Acción POST no válida.");
-                }
+switch (accion) {
+    case "agregar":
+        
+        // Validar si el SKU ya existe
+        if (inventarioDAO.buscarInventario(producto.getSku()) != null &&
+            !inventarioDAO.buscarInventario(producto.getSku()).isEmpty()) {
+            respuesta = new RespuestaJson("error", "El SKU ya existe, no se puede agregar el producto.");
+            break;
+        }
+        boolean ok = inventarioDAO.agregarInventario(producto);
+        respuesta = ok ? new RespuestaJson("success", "Producto agregado con éxito.")
+                       : new RespuestaJson("error", "No se pudo agregar el producto.");
+
+        if (ok) {
+            Notificacion n = new Notificacion();
+            n.setIdUsuario(idUsuarioSesion);
+            n.setTipo("INVENTARIO");
+            n.setMensaje(
+                "El Usuario #" + idUsuarioSesion + " - " + usuarioSesion.getNombre() +
+                " agregó el producto ID #" + inventarioDAO.buscarInventario(producto.getSku())
+                .get(inventarioDAO.buscarInventario(producto.getSku()).size() - 1)
+                .getIdProducto() +
+                " (" + producto.getNombre() + ")"
+            );
+            n.setLeido(false);
+            n.setFechaCreacion(new Timestamp(System.currentTimeMillis() - (5 * 3600 * 1000)));
+            notificacionDAO.registrar(n);
+        }
+        break;
+
+    case "editar":
+        boolean ok2 = inventarioDAO.editarInventario(producto);
+        respuesta = ok2 ? new RespuestaJson("success", "Producto actualizado con éxito.")
+                        : new RespuestaJson("error", "No se pudo actualizar el producto.");
+
+        if (ok2) {
+            Notificacion n = new Notificacion();
+            n.setIdUsuario(idUsuarioSesion);
+            n.setTipo("INVENTARIO");
+            n.setMensaje(
+                "El Usuario #" + idUsuarioSesion + " - " + usuarioSesion.getNombre() +
+                " actualizó el producto ID #" + producto.getIdProducto() +
+                " (" + producto.getNombre() + ")"
+            );
+            n.setLeido(false);
+            n.setFechaCreacion(new Timestamp(System.currentTimeMillis() - (5 * 3600 * 1000)));
+            notificacionDAO.registrar(n);
+        }
+        break;
+
+    case "eliminar":
+        int idProductoEliminar = parseIntSafe(request.getParameter("idProducto"));
+        Inventario productoEliminado = inventarioDAO.buscarInventarioPorId(idProductoEliminar);
+        String resultadoEliminacion = inventarioDAO.eliminarInventario(idProductoEliminar);
+        respuesta = "success".equals(resultadoEliminacion) ? new RespuestaJson("success", "Producto eliminado con éxito.")
+                                                           : new RespuestaJson("error", resultadoEliminacion);
+
+        if ("success".equals(resultadoEliminacion) && productoEliminado != null) {
+            Notificacion n = new Notificacion();
+            n.setIdUsuario(idUsuarioSesion);
+            n.setTipo("INVENTARIO");
+            n.setMensaje(
+                "El Usuario #" + idUsuarioSesion + " - " + usuarioSesion.getNombre() +
+                " eliminó el producto ID #" + idProductoEliminar +
+                " (" + productoEliminado.getNombre() + ")"
+            );
+            n.setLeido(false);
+            n.setFechaCreacion(new Timestamp(System.currentTimeMillis() - (5 * 3600 * 1000)));
+            notificacionDAO.registrar(n);
+        }
+        break;
+
+    default:
+        respuesta = new RespuestaJson("error", "Acción POST no válida.");
+}
+
             }
         }
     } catch (Exception e) {

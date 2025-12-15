@@ -23,30 +23,35 @@ public class ClientesDAO extends ConexionBD {
 
     /* Métodos CRUD y validaciones */
 
-    // Agregar cliente
-    public boolean agregarCliente(Clientes c) {
-        String sql = "INSERT INTO cliente(razon_social, documento_NIT, telefono, direccion, email, actividad_economica, responsabilidad_iva, estado) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+public int agregarCliente(Clientes c) {
+    String sql = "INSERT INTO cliente(razon_social, documento_NIT, telefono, direccion, email, actividad_economica, responsabilidad_iva, estado) " +
+                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection conexion = ConexionBD.obtenerConexion();
-             PreparedStatement stmt = conexion.prepareStatement(sql)) {
+    try (Connection conexion = ConexionBD.obtenerConexion();
+         PreparedStatement stmt = conexion.prepareStatement(
+                 sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            stmt.setString(1, c.getRazon_social());
-            stmt.setString(2, c.getDocumento_NIT());
-            stmt.setString(3, c.getTelefono());
-            stmt.setString(4, c.getDireccion());
-            stmt.setString(5, c.getEmail());
-            stmt.setString(6, c.getActividad_economica());
-            stmt.setString(7, c.getResponsabilidad_iva());
-            stmt.setString(8, c.getEstado());
+        stmt.setString(1, c.getRazon_social());
+        stmt.setString(2, c.getDocumento_NIT());
+        stmt.setString(3, c.getTelefono());
+        stmt.setString(4, c.getDireccion());
+        stmt.setString(5, c.getEmail());
+        stmt.setString(6, c.getActividad_economica());
+        stmt.setString(7, c.getResponsabilidad_iva());
+        stmt.setString(8, c.getEstado());
 
-            return stmt.executeUpdate() > 0;
+        stmt.executeUpdate();
 
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error al agregar cliente", e);
+        ResultSet rs = stmt.getGeneratedKeys();
+        if (rs.next()) {
+            return rs.getInt(1); // ✅ ID REAL DEL CLIENTE
         }
-        return false;
+
+    } catch (SQLException e) {
+        LOGGER.log(Level.SEVERE, "Error al agregar cliente", e);
     }
+    return 0;
+}
 
     // Listar clientes
     public List<Clientes> listarClientes() {
@@ -203,7 +208,18 @@ public class ClientesDAO extends ConexionBD {
         }
         return null;
     }
-
+    
+    public Clientes buscarPorEmail(String email) {
+    String sql = "SELECT * FROM cliente WHERE email = ?";
+    try (Connection conexion = obtenerConexion();
+         PreparedStatement stmt = conexion.prepareStatement(sql)) {
+        stmt.setString(1, email);
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) return mapCliente(rs);
+        }
+    } catch (SQLException e) {}
+    return null;
+}
     public Clientes obtenerClientePorId(int idCliente) {
         return buscar(idCliente);
     }

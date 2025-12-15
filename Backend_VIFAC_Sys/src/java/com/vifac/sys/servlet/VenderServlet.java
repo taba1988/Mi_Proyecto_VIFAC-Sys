@@ -18,6 +18,10 @@ import com.vifac.sys.dao.*;
 import com.vifac.sys.dao.TransaccionDAO;
 import com.vifac.sys.modelo.*;
 import com.vifac.sys.modelo.Transaccion;
+import com.vifac.sys.dao.UsuarioDAO;
+import com.vifac.sys.modelo.Usuario;
+import com.vifac.sys.dao.NotificacionDAO;
+import com.vifac.sys.modelo.Notificacion;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -36,6 +40,8 @@ public class VenderServlet extends HttpServlet {
     private final DetalleVentaDAO detalleVentaDAO = new DetalleVentaDAO();
     private final VentaDAO ventaDAO = new VentaDAO();
     private final TransaccionDAO transaccionDAO = new TransaccionDAO();
+    private final NotificacionDAO notificacionDAO = new NotificacionDAO();
+    private final UsuarioDAO usuarioDAO = new UsuarioDAO();
     private final Gson gson = new GsonBuilder()
         .registerTypeAdapter(LocalDateTime.class, 
             (JsonSerializer<LocalDateTime>) (src, typeOfSrc, context) ->
@@ -46,6 +52,17 @@ public class VenderServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String accion = req.getParameter("accion");
+
+        HttpSession sessionNot = req.getSession(false);
+
+        Integer idUsuarioSesion = 0;
+
+        if (sessionNot != null) {
+            Object attr = sessionNot.getAttribute("idUsuario");
+            if (attr instanceof Integer) {
+                idUsuarioSesion = (Integer) attr;
+            }
+        }
         if (accion == null) accion = "listar";
 
         switch (accion) {
@@ -119,6 +136,20 @@ public class VenderServlet extends HttpServlet {
                 case "cerrarCaja":
                     manejarCerrarCaja(req, resp, datos, r);
                     break;
+                    
+                case "validarCliente":
+                int idCliente = datos.get("idCliente").getAsInt();
+                Clientes c = clientesDAO.obtenerClientePorId(idCliente);
+
+                if (c == null || !"Activo".equalsIgnoreCase(c.getEstado())) {
+                    r.setStatus("inactivo");
+                    r.setMessage("Cliente Inactivo");
+                } else {
+                    r.setStatus("ok");
+                }
+
+                resp.getWriter().write(gson.toJson(r));
+                break;
 
                 case "vender":
                     manejarVenta(req, resp, datos, r);
@@ -159,7 +190,7 @@ public class VenderServlet extends HttpServlet {
             return;
         }
         
-       // 🟩 Nuevo: recibir número de caja física
+       // 🟩 Recibir número de caja física
         int numeroCaja = datos.has("numero_caja") && !datos.get("numero_caja").isJsonNull()
                 ? datos.get("numero_caja").getAsInt()
                 : 0;
@@ -240,7 +271,23 @@ public class VenderServlet extends HttpServlet {
             return;
         }
 
-        int clienteId = datos.get("idCliente").getAsInt();
+        int clienteId = datos.get("idCliente").getAsInt();       
+        Clientes cliente = clientesDAO.obtenerClientePorId(clienteId);
+
+        if (cliente == null) {
+            r.setStatus("false");
+            r.setMessage("El cliente no existe.");
+            resp.getWriter().write(gson.toJson(r));
+            return;
+        }
+
+        if (!"Activo".equalsIgnoreCase(cliente.getEstado())) {
+            r.setStatus("false");
+            r.setMessage("No se puede realizar la venta. El cliente está Iactivo.");
+            resp.getWriter().write(gson.toJson(r));
+            return;
+        }
+        
         String metodoPago = datos.has("metodoPago") ? datos.get("metodoPago").getAsString() : "Efectivo";
 
         // Todos los valores numéricos en double
@@ -316,6 +363,44 @@ public class VenderServlet extends HttpServlet {
         }
 
         int idVentaGenerada = ventaDAO.registrarVenta(ventaForm);
+        
+        // --- Crear notificación de venta para el administrador/registro ---
+        HttpSession sessionNot = req.getSession(false);
+        Integer idUserObj = (sessionNot != null) ? (Integer) sessionNot.getAttribute("idUsuario") : null;
+        int idUsuarioSesion = (idUserObj != null) ? idUserObj : 0;
+
+        // Obtener nombre si quieres mostrar nombre (si no usas usuarioDAO, quita el bloque que usa usuarioDAO)
+        String nombreUsuarioNot = "Desconocido";
+        try {
+            if (idUsuarioSesion > 0) {
+                Usuario usuario = usuarioDAO.obtenerUsuarioPorId(idUsuarioSesion); // requiere UsuarioDAO import + campo
+                if (usuario != null && usuario.getNombre() != null && !usuario.getNombre().isEmpty()) {
+                    nombreUsuarioNot = usuario.getNombre();
+                }
+            }
+        } catch (Exception e) {
+            // no romper la venta por fallo al obtener nombre; se usará 'Desconocido'
+        }
+
+        String usuarioTxtNot = "El Usuario #" + idUsuarioSesion + " - " + nombreUsuarioNot + " ";
+
+        // Valores de la venta para incluir en la notificación
+        double totalVentaNot = ventaForm.getTotalVenta();
+        double recibidoNot = (datos.has("efectivoRecibido") && !datos.get("efectivoRecibido").isJsonNull())
+                ? datos.get("efectivoRecibido").getAsDouble()
+                : 0.0;
+        double cambioNot = recibidoNot - totalVentaNot;
+
+        Notificacion notifVenta = new Notificacion();
+        notifVenta.setIdUsuario(idUsuarioSesion);
+        notifVenta.setTipo("VENTAS");
+        notifVenta.setMensaje(usuarioTxtNot
+                + "realizó una venta ID #" + idVentaGenerada
+                + " por $" + totalVentaNot
+                + " (recibido: $" + recibidoNot + ", cambio: $" + cambioNot + ")");
+        notifVenta.setLeido(false);
+        notifVenta.setFechaCreacion(new java.sql.Timestamp(System.currentTimeMillis() - (5 * 3600 * 1000)));
+        notificacionDAO.registrar(notifVenta);
         
         // Determina si es POS o Electrónica según el checkbox
         boolean esPOS = "on".equals(req.getParameter("toggleTicket"));

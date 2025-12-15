@@ -75,35 +75,31 @@ if (descuentoInput) descuentoInput.value = '';
 
 actualizarTotalesUI();
 
-function crearTarjetaVideo(video) {
+function crearTarjetaProducto(p) {
     const col = document.createElement('div');
     col.className = 'col-sm-6 col-md-4 col-lg-3 mb-3';
+
+    // Si stock <= 5, agrega clase de alerta o estilo inline
+    const alertaStock = p.stock <= 5 ? 'background-color: #f8d7da; color: #842029;' : '';
+
     col.innerHTML = `
-        <div class="ayuda-card card h-100 shadow-sm">
-            <img src="${video.url_imagen ? 'uploads/ayuda/' + video.url_imagen : 'img/Empresa.png'}" class="card-img-top" alt="${video.titulo || 'Video'}">
-            <div class="card-body-ayuda">
-                <h5 class="card-title-ayuda">${video.titulo || ''}</h5>
-                <a href="${video.urlVideo || '#'}" class="btn btn-outline-primary btn-sm">
-                    <i class="bi bi-play-fill"></i>
-                </a>
-                ${idRol === 1 ? `
-                    <button class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalCargarVideo"
-                        onclick="
-                            document.getElementById('moduloSeleccionado').value='${video.modulo || ''}';
-                            document.getElementById('tituloVideo').value='${video.titulo || ''}';
-                        ">
-                        <i class="bi bi-upload"></i>
-                    </button>
-                ` : ''}
+        <div class="card h-100 shadow-sm" style="font-size: 0.85rem; cursor: pointer; ${alertaStock}">
+            <div class="card-body">
+                <h6 class="card-title">${p.nombre}</h6>
+                <p class="card-text mb-1">
+                    <strong>Stock:</strong> ${p.stock}<br>
+                    <i class="bi bi-upc-scan"></i> ${p.sku}<br>
+                    <strong>Precio:</strong> $${formatNumberWithCommas(p.precio_venta)}
+                </p>
             </div>
         </div>
     `;
-    return col;
-}
 
+    // Selecciona el card correcto (ahora solo hay uno)
     col.querySelector('.card').addEventListener('click', () => {
         agregarAlCarrito(p);
     });
+
     return col;
 }
 
@@ -130,7 +126,7 @@ function buscarProducto(event) {
     const input = document.getElementById('campoBuscarDesktop');
     const valor = (input && input.value || '').trim().toLowerCase();
     console.log(`Iniciando búsqueda de producto con el término: "${valor}"`);
-    
+
     const contenedorCards = document.getElementById('contenedorCards');
     contenedorCards.innerHTML = '';
 
@@ -172,12 +168,18 @@ function limpiarBusqueda() {
 // Agrega un producto al carrito de compras o incrementa su cantidad si ya existe.
 function agregarAlCarrito(producto) {
     console.log('Producto a agregar:', producto);
+    
+    // Verificar si el stock es 0
+    if (producto.stock <= 0) {
+        alert('Producto sin stock. No se puede vender.');
+        return;
+    }
     const carritoLista = document.getElementById('carritoLista');
 
     // Busca si el producto ya está en el carrito
     const productoExistente = carritoLista.querySelector(`li[data-id-producto="${producto.idProducto}"]`);
 
-    if (productoExistente) {
+    if (productoExistente) {       
         // Incrementa cantidad en input
         const cantidadInput = productoExistente.querySelector('.cantidad-input');
         cantidadInput.value = parseInt(cantidadInput.value) + 1;
@@ -314,7 +316,7 @@ function eliminarItemCarrito(botonEliminar) {
         productoPrevio.subtotal = subtotal;
     }
     li.querySelector('.total-item').textContent = `$${formatNumberWithCommas(subtotal)}`;
-    
+
     console.log(`Ítem actualizado. Cantidad: ${cantidad}, Precio: ${precioUnidad}, Total Ítem: ${subtotal}`);
         calcularTotalVentaFinal();
         actualizarCantidadProductos();
@@ -436,7 +438,7 @@ function actualizarMensajeDescuentoProducto() {
         const totalDescuento = window.productosVenta.reduce((acc, p) => {
             return acc + ((p.precio_unitario * p.cantidad) - p.subtotal);
         }, 0);
-        
+
         // mostrar porcentaje 
         //valorDescuentoPorcentajeElement.textContent = totalDescuento > 0 ? `${(totalDescuento / totalCompraOriginal)*100}%` : '';
 
@@ -541,11 +543,11 @@ function finalizarVenta() {
     if (window.metodoDePagoSeleccionado === 'Efectivo') {
         console.log('Mostrando panel de pago en Efectivo.');
         document.getElementById('pagoEfectivo').style.display = 'block';
-        
+
     } else if (window.metodoDePagoSeleccionado === 'Crédito' || window.metodoDePagoSeleccionado === 'Tarjeta') {
         console.log('Mostrando panel de pago con Tarjeta.');
         document.getElementById('pagoTarjeta').style.display = 'block';
-        
+
     } else if (window.metodoDePagoSeleccionado === 'QR') {
         console.log('Mostrando panel de pago con QR.');
         document.getElementById('pagoQR').style.display = 'block';
@@ -589,11 +591,16 @@ function procesarPago(metodoPago) {
         alert("No hay productos en el carrito para procesar el pago.");
         return;
     }
-    
+
     if (!window.clienteSeleccionado || !window.clienteSeleccionado.idClientes) {
         alert("Selecciona un cliente antes de vender.");
         console.error("No hay cliente seleccionado.");
         return;
+    }
+    
+    if (window.clienteSeleccionado.estado === "Inactivo") {
+       document.getElementById("alertClienteInactivo").style.display = "block";
+    return;
     }
 
     if (!window.idUsuarioSesion) {
@@ -623,8 +630,8 @@ function procesarPago(metodoPago) {
     // --- ✅ Validación del pago según método ---
     const totalAPagar = parseFloat(window.totalVentaFinal || 0);
 
-    if (metodoPago === "Efectivo") {
-        const efectivoRecibido = parseFloat(document.getElementById('efectivoRecibido').value);
+        if (metodoPago === "Efectivo") {
+            const efectivoRecibido = parseFloat(document.getElementById('efectivoRecibido').value);
         if (isNaN(efectivoRecibido)) {
             alert("Por favor, ingrese el efectivo recibido.");
             return;
@@ -724,7 +731,7 @@ function seleccionarMetodoLectura(metodo) {
         btn.classList.remove('active');
     });
     const boton = document.querySelector(`.lectura-btn[data-metodo-lectura="${metodo}"]`);
-    if (boton) boton.classList.add('active');
+        if (boton) boton.classList.add('active');
     console.log(`Modo de lectura cambiado a: ${metodo}`);
 }
 
@@ -775,7 +782,7 @@ function limpiarCarrito() {
     if (btnFinalizar) btnFinalizar.disabled = true;
     const btnCobrar = document.getElementById('btnCobrar');
     if (btnCobrar) btnCobrar.disabled = true;
-    
+
     // --- Cerrar modal de cobro si está abierto ---
     const modalCobrarEl = document.getElementById('modalCobrar');
     if (modalCobrarEl) {
@@ -802,12 +809,22 @@ async function buscarClientePorCedula() {
         const nombreClienteParrafo = document.getElementById('nombreClienteEncontrado');
         const btnAceptarCliente = document.getElementById('btnAceptarCliente');
 
-        if (clientes.length > 0) {
-            window.clienteSeleccionado = clientes[0]; 
-            console.log('Cliente encontrado:', clienteSeleccionado);
-            nombreClienteParrafo.textContent = clienteSeleccionado.razon_social;
-            resultadoDiv.style.display = 'block';
-            btnAceptarCliente.disabled = false;
+    if (clientes.length > 0) {
+        window.clienteSeleccionado = clientes[0];
+        console.log('Cliente encontrado:', clienteSeleccionado);
+
+    if (clienteSeleccionado.estado === "Inactivo") {
+        nombreClienteParrafo.innerHTML =
+        '<div class="alert alert-danger p-2 m-0"> El cliente seleccionado no esta activo</div>';
+        resultadoDiv.style.display = 'block';
+        btnAceptarCliente.disabled = true;
+        window.clienteSeleccionado = null;
+        return;
+    }
+
+    nombreClienteParrafo.textContent = clienteSeleccionado.razon_social;
+    resultadoDiv.style.display = 'block';
+    btnAceptarCliente.disabled = false;
         } else {
             console.log('No se encontró ningún cliente.');
             window.clienteSeleccionado = null;
@@ -824,11 +841,12 @@ async function buscarClientePorCedula() {
 
 //Confirma el cliente seleccionado y lo asocia con la venta.
 function aceptarCliente() {
-    if (!window.clienteSeleccionado) {
+    if (!window.clienteSeleccionado || window.clienteSeleccionado.estado === "INACTIVO") {
         console.warn('Intento de aceptar sin un cliente seleccionado.');
         alert("No hay cliente seleccionado");
         return;
     }
+    
 // Guarda el cliente seleccionado para usarlo al enviar la venta
 console.log(`Cliente aceptado: ${window.clienteSeleccionado.razon_social} (ID: ${window.clienteSeleccionado.idClientes})`);
 document.getElementById('clienteSeleccionado').value = window.clienteSeleccionado.idClientes;
@@ -1083,13 +1101,13 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault(); 
         finalizarVenta();
     });
-    
+
     // --- botón Limpiar Carrito ---
     document.getElementById('btnLimpiarCarrito').addEventListener('click', (e) => {
         e.preventDefault();
         limpiarCarrito();
     });
-    
+
     document.querySelectorAll('.metodo-pago-btn').forEach(btn => {
         btn.addEventListener('click', () => seleccionarMetodoPago(btn.dataset.metodo));
     });
@@ -1151,7 +1169,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Inicializar el estado de los botones de lectura
     seleccionarMetodoLectura('teclado');
-    
+
     // --- Botón de descuento por producto ---
     document.addEventListener('click', function(e) {
     if (e.target.closest('.aplicar-descuento-btn')) {
@@ -1180,12 +1198,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (li) {
         const badge = li.querySelector('.descuento-producto');
         if (badge) badge.style.display = 'none';
-        
+
         li.querySelector('.total-item').textContent = `$${formatNumberWithCommas(producto.subtotal)}`;
     }
     calcularTotalVentaFinal();
-   
+
     actualizarMensajeDescuentoProducto();
   });
 });
-
