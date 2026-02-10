@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Prueba unitaria para validar la correcta conexión a la base de datos
+ * mediante la clase ConexionBD.
  */
 package com.vifac.sys.test;
 

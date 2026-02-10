@@ -15,10 +15,12 @@ public class TestUsuarioDAO {
         usuarioPrueba.setDocumento("12345670");
         usuarioPrueba.setTelefono("555-1235");
         usuarioPrueba.setEmail("testuser2@example.com");
+        usuarioPrueba.setDireccion("Dirección prueba");
         usuarioPrueba.setNombreUsuario("tester2");
         usuarioPrueba.setContrasena("test123");
         usuarioPrueba.setCargo("Administrador");
-        usuarioPrueba.setIdRol(1);
+        usuarioPrueba.setIdRol(1);        // Rol existente
+        usuarioPrueba.setIdEmpresa(1);    // 👈 CLAVE: empresa existente
         usuarioPrueba.setEstado("Activo");
         usuarioPrueba.setIntentosFallidos(0);
 
@@ -26,11 +28,15 @@ public class TestUsuarioDAO {
         boolean agregado = usuarioDAO.agregarUsuario(usuarioPrueba);
         System.out.println("¿Usuario agregado? " + agregado);
 
-        // Listar usuarios y mostrarlos
+        // Listar usuarios
         List<Usuario> usuarios = usuarioDAO.listarUsuarios();
         System.out.println("Listado de usuarios en BD:");
         for (Usuario u : usuarios) {
-            System.out.println("ID: " + u.getIdUsuario() + ", Nombre: " + u.getNombre() + ", Usuario: " + u.getNombreUsuario());
+            System.out.println(
+                "ID: " + u.getIdUsuario() +
+                ", Nombre: " + u.getNombre() +
+                ", Usuario: " + u.getNombreUsuario()
+            );
         }
     }
 }
