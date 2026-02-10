@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"> <!-- Codificación de caracteres -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- Compatibilidad con IE -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Adaptabilidad responsive -->
+    <title>Cambiar Contraseña</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css"> <!-- Bootstrap -->
+    <link rel="stylesheet" href="css/cambiar_contrasena.css"> <!-- Estilos personalizados -->
+</head>
+<body class="bg-white">
+    <!-- Encabezado superior con tres textos -->
+    <div class="header-container">
+        <div class="left-text">Cambiar Contraseña</div>
+        <div class="center-text">MAXI-LIMPIEZA</div>
+        <div class="right-text">Calidad que se siente</div>
+    </div>
+
+    <div id="layoutAuthentication">
+        <div id="layoutAuthentication_content">
+            <main>
+                <div class="container">
+                    <div class="row justify-content-start mt-3">
+                        <div class="col-sm-10 col-md-7 col-lg-5">
+                            <!-- Tarjeta principal -->
+                            <div class="card shadow-lg border-7 rounded-lg mt-2">
+                                <div class="card-header">
+                                    <h3 class="text-center font-weight-secondary my-3">Actualizar Contraseña</h3>
+                                </div>
+                                <div class="card-body mx-2">
+                                    <!-- Formulario para cambiar la contraseña -->
+                                    <form id="change-password-form">
+                                        <!-- Contraseña antigua -->
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="inputOldPassword" type="password" placeholder="Contraseña Antigua" required />
+                                            <label for="inputOldPassword">Contraseña Antigua</label>
+                                        </div>
+                                        <!-- Nueva contraseña -->
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="inputNewPassword" type="password" placeholder="Nueva Contraseña" required />
+                                            <label for="inputNewPassword">Nueva Contraseña</label>
+                                        </div>
+                                        <!-- Confirmar nueva contraseña -->
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="inputConfirmNewPassword" type="password" placeholder="Repetir Nueva Contraseña" required />
+                                            <label for="inputConfirmNewPassword">Repetir Nueva Contraseña</label>
+                                            <!-- Mensajes de error -->
+                                            <div id="password-match-error" class="error-message d-none">Las contraseñas no coinciden.</div>
+                                            <div id="password-strength-error" class="error-message d-none">La contraseña debe tener mínimo 8 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales.</div>
+                                        </div>
+                                        <!-- Botones de acción -->
+                                        <div class="d-flex justify-content-between mt-4 mb-0">
+                                            <button type="button" class="btn btn-outline-secondary me-2" onclick="window.location.href='index.html'">Cancelar</button>
+                                            <button type="button" class="btn btn-outline-primary" onclick="validateAndSubmit()">Actualizar</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- Texto informativo en el pie de la tarjeta -->
+                                <div class="form-group mb-0">
+                                    <div class="card-footer text-auto py-3">
+                                        <div class="col-sm-12" style="font-size:12px;">
+                                            <figure class="text-center">
+                                                <p style="text-align: justify;">
+                                                    Este es el sistema <b>VIFAC-Sys</b>. Asegúrese de que su nueva contraseña cumpla con los requisitos de seguridad:
+                                                    mínimo 8 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales.
+                                                    Proteja su cuenta utilizando una contraseña segura y única.
+                                                </p>
+                                            </figure>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Fin tarjeta -->
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <!-- Pie de página -->
+        <div id="layoutAuthentication_footer" style="color: #D9D9D9;">
+            <footer class="py-3 bg-light mb-5">
+                <div class="container-fluid px-3">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="text-muted"> &copy; 2025</div>
+                        <div>
+                            <a href="#" class="link-dark text-muted">Política de privacidad</a>
+                            &middot;
+                            <a href="#" class="link-dark text-muted">Diseñado por O.T.G “VIFAC-Sys</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación -->
+    <div class="modal fade" id="confirmChangePasswordModal" tabindex="-1" aria-labelledby="confirmChangePasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Encabezado del modal -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmChangePasswordModalLabel">Confirmar Cambio de Contraseña</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <!-- Cuerpo del modal -->
+                <div class="modal-body">
+                    ¿Está seguro de que desea actualizar su contraseña?
+                </div>
+                <!-- Pie del modal con botones -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" onclick="submitNewPassword()">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts de Bootstrap y archivo JS propio -->
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/cambiar_contrasena.js"></script>
+</body>
+</html>
