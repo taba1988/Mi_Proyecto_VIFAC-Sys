@@ -1,0 +1,81 @@
+body {
+    /* Configura la imagen de fondo */
+    background-image: url('img/central.png');
+    background-size: 600px;
+    background-repeat: no-repeat;
+    background-position: calc(60% + 100px) center;
+    background-attachment: fixed;
+    background-color: #f0f8ff;
+    color: #000;
+}
+
+.header-container {
+    /* Contenedor Flexbox para el encabezado */
+    background-color: #0093DD;
+    padding: 5px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.header-container > div {
+    /* Controla el desbordamiento de texto en los elementos del encabezado */
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.header-container .left-text {
+    /* Estilos para el texto de la izquierda */
+    font-size: 16px;
+    text-align: left;
+}
+
+.header-container .center-text {
+    /* Estilos para el texto del centro */
+    font-size: 24px;
+    font-weight: bold;
+    color: #333652;
+    text-align: center;
+}
+
+.header-container .right-text {
+    /* Estilos para el texto de la derecha */
+    font-size: 16px;
+    text-align: right;
+    font-family: 'Bad Script', cursive;
+    font-style: italic;
+}
+
+.form-control, .form-select {
+    /* Estilos de borde para los campos de formulario */
+    border: 2px solid #7fbbf8 !important;
+    box-shadow: none;
+}
+
+.form-control:focus, .form-select:focus {
+    /* Estilos al enfocar los campos de formulario */
+    border-color: #7fbbf8 !important;
+    box-shadow: 0 0 0 0.2rem rgba(40, 148, 255, 0.25) !important;
+}
+
+.container {
+    /* Define la posición y el orden de apilamiento */
+    position: relative;
+    z-index: 2;
+}
+
+.error-border {
+    /* Borde de color rojo para campos con error */
+    border-color: red !important;
+}
+
+.error-message {
+    /* Estilos para mensajes de error */
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+}

@@ -1,0 +1,78 @@
+/* Estilos generales del body */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+}
+
+/* Asegura que html y body ocupen 100% de altura */
+html,
+body {
+    height: 100%;
+}
+
+/* Permite que el contenido principal ocupe el espacio disponible */
+main.container {
+    flex: 1 0 auto;
+}
+
+/* Estilos del header */
+header {
+    padding: 1rem;
+}
+
+/* Alineación vertical de celdas en tablas */
+.table th,
+.table td {
+    vertical-align: middle;
+}
+
+/* Estilos para la última columna de tablas */
+.table td:last-child,
+.table th:last-child {
+    width: 80px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Estilos del modal */
+.modal-header {
+    background-color: #0d6efd;
+    color: white;
+}
+
+/* Estilo del botón primario en el pie del modal */
+.modal-footer .btn-primary {
+    background-color: #0d6efd;
+}
+
+/* Estilos del footer */
+footer {
+    flex-shrink: 0;
+    background-color: #f1f1f1;
+    padding: 1rem;
+    border-top: 1px solid #dee2e6;
+}
+
+/* Estilos para el bloque de nombre de la empresa */
+.nombre-empresa {
+    border-radius: 5px;
+    background-color: #0093DD;
+    padding: 0.5rem 1rem;
+    text-align: center;
+}
+
+/* Título de la empresa */
+.nombre-empresa-title {
+    font-weight: bold;
+    font-size: calc(1rem + 0.5vw);
+    color: #333652;
+}
+
+/* Slogan de la empresa */
+.nombre-empresa-slogan {
+    font-style: italic;
+    font-size: 16px;
+    color: #333652;
+}
