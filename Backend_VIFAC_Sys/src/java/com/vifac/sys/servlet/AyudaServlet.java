@@ -19,7 +19,7 @@ import java.io.*;
 @MultipartConfig
 public class AyudaServlet extends HttpServlet {
 
-    private static final String RUTA_IMAGENES = "D:\\Mi_Proyecto_VIFAC-SysGIT\\Backend_VIFAC_Sys\\web\\uploads\\ayuda";
+    private static final String RUTA_IMAGENES = "/usr/local/tomcat/uploads/ayuda";
     private final AyudaDAO ayudaDAO = new AyudaDAO();
 
     @Override

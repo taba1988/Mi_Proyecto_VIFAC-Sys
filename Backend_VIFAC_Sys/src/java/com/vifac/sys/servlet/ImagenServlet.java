@@ -16,7 +16,7 @@ import javax.servlet.http.*;
 @WebServlet("/ImagenServlet")
 public class ImagenServlet extends HttpServlet {
 
-    private static final String RUTA_IMAGENES = "D:\\Mi_Proyecto_VIFAC-SysGIT\\Backend_VIFAC_Sys\\web\\uploads";
+    private static final String RUTA_IMAGENES = "/usr/local/tomcat/uploads";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

@@ -37,7 +37,7 @@ public class SubirImagenServlet extends HttpServlet {
             throws ServletException, IOException {
 
         // Ruta fija de la carpeta uploads
-        String uploadPath = "D:\\Mi_Proyecto_VIFAC-SysGIT\\Backend_VIFAC_Sys\\web\\uploads";
+        String uploadPath = "/usr/local/tomcat/uploads";
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) uploadDir.mkdirs();
 

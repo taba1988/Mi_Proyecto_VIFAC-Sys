@@ -19,7 +19,7 @@ import javax.servlet.http.*;
 @MultipartConfig
 public class ImagenPerfilServlet extends HttpServlet {
 
-    private static final String RUTA_PERFILES = "D:\\Mi_Proyecto_VIFAC-SysGIT\\Backend_VIFAC_Sys\\web\\uploads\\perfiles";
+    private static final String RUTA_PERFILES = "/usr/local/tomcat/uploads/perfiles";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

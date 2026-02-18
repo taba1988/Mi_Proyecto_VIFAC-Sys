@@ -30,7 +30,7 @@ import javax.servlet.http.Part;
 public class SubirImgPerfilServlet extends HttpServlet {
 
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();
-    private static final String RUTA_PERFILES = "D:\\Mi_Proyecto_VIFAC-SysGIT\\Backend_VIFAC_Sys\\web\\uploads\\perfiles";
+    private static final String RUTA_PERFILES = "/usr/local/tomcat/uploads/perfiles";
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
