@@ -11,7 +11,7 @@ RUN mkdir -p /usr/local/tomcat/uploads/perfiles
 RUN mkdir -p /usr/local/tomcat/uploads/ayuda
 
 # Ruta del war se debe ajustar si es diferente
-COPY dist/Mi_Proyecto_VIFAC-Sys.war /usr/local/tomcat/webapps/ROOT.war
+COPY Backend_VIFAC_Sys/dist/Mi_Proyecto_VIFAC-Sys.war /usr/local/tomcat/webapps/ROOT.war
 
 # este Expone el puerto
 EXPOSE 8080
