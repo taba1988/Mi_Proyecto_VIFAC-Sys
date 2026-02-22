@@ -32,7 +32,7 @@
                         <p class="lead text-wrap">La URL solicitada no se encontró en este servidor.</p>
 
                         <c:choose>
-                            <c:when test="${not empty sessionScope.usuario}">
+                            <c:when test="${not empty sessionScope.idUsuario}">
                                 <a href="${pageContext.request.contextPath}/indexServlet" class="return-button">
                                     <i class="bi bi-arrow-left me-1"></i> Atras
                                 </a>

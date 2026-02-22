@@ -156,10 +156,10 @@
                             <div id="collapseContabilidadOffcanvas" class="accordion-collapse collapse" data-bs-parent="#accordionMenusOffcanvas">
                                 <div class="accordion-body p-0">
                                     <ul class="list-group list-group-flush border-0">
-                                        <a href="Contabilidad.jsp" class="list-group-item list-group-item-action border-0">
+                                        <a href="ContabilidadServlet" class="list-group-item list-group-item-action border-0">
                                             <i class="bi bi-graph-up me-2 fs-5"></i><span class="fw-bold">Contabilidad</span>
                                         </a>
-                                        <a href="404.jsp" class="list-group-item list-group-item-action border-0">
+                                        <a href="MovimientosServlet" class="list-group-item list-group-item-action border-0">
                                             <i class="bi bi-journal-check me-2 fs-5"></i><span class="fw-bold">Movimientos</span>
                                         </a>
                                     </ul>
@@ -296,10 +296,10 @@
                             <div id="collapseContabilidadDesktop" class="accordion-collapse collapse" data-bs-parent="#accordionMenusDesktop">
                                 <div class="accordion-body p-0">
                                     <ul class="list-group list-group-flush border-0">
-                                        <a href="Contabilidad.jsp" class="list-group-item list-group-item-action border-0">
+                                        <a href="ContabilidadServlet" class="list-group-item list-group-item-action border-0">
                                             <i class="bi bi-graph-up me-2 fs-5"></i><span class="fw-bold">Contabilidad</span>
                                         </a>
-                                        <a href="404.jsp" class="list-group-item list-group-item-action border-0">
+                                        <a href="MovimientosServlet" class="list-group-item list-group-item-action border-0">
                                             <i class="bi bi-journal-check me-2 fs-5"></i><span class="fw-bold">Movimientos</span>
                                         </a>
                                     </ul>
@@ -532,8 +532,13 @@
                         </a>
                     </c:if>
                     <c:if test="${idRol eq 1 || idRol eq 3}">
-                        <a href="Contabilidad.jsp" class="list-group-item list-group-item-action">
-                            <i class="bi bi-graph-up-arrow me-2"></i>Reportes Contables
+                        <a href="ContabilidadServlet" class="list-group-item list-group-item-action">
+                            <i class="bi bi-bar-chart-fill me-2"></i>Contabilidad
+                        </a>
+                    </c:if>
+                    <c:if test="${idRol eq 1 || idRol eq 3}">
+                        <a href="MovimientosServlet" class="list-group-item list-group-item-action">
+                            <i class="bi bi-clipboard-data-fill me-2"></i>Movimientos                          
                         </a>
                     </c:if>
                 </div>
@@ -641,8 +646,21 @@
             </div>
         </div>
     </div>
-
-    <!-- Include temporizador -->
+    
+    <%-- 
+    IMPORTANTE: Este include es TEMPORAL. 
+    Se utiliza para cargar el modal de "Módulo en Desarrollo" mientras se 
+    implementa la lógica completa de Contabilidad y Movimientos.
+    Se debera eliminar una vez que el módulo sea funcional.
+    --%>
+    
+    <%@ include file="Contabilidad.jsp" %>
+    
+    <%-- 
+    Componente de seguridad: Controla el tiempo de inactividad de la sesión 
+    y realiza el cierre automático si es necesario. 
+    --%>
+    
     <%@ include file="temporizador.jsp" %>
 
     <!-- Scripts Bootstrap y custom -->

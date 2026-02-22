@@ -453,7 +453,10 @@ public boolean agregarUsuario(Usuario u) {
      */
     public Usuario buscarPorEmail(String email) {
          // Se ha añadido 'fotoPerfil' a la consulta SQL
-        String sql = "SELECT idUsuario, nombre, documento, telefono, email, direccion, nombreUsuario, cargo, idRol, idEmpresa, estado, intentosFallidos, token_recuperacion, token_expira, fotoPerfil FROM usuario WHERE email = ?";
+        String sql = "SELECT idUsuario, nombre, documento, telefono, "
+                   + "email, direccion, nombreUsuario, cargo, idRol, idEmpresa, "
+                   + "estado, intentosFallidos, token_recuperacion, token_expira, "
+                   + "fotoPerfil FROM usuario WHERE LOWER(email) = LOWER(?)";
         try (Connection conexion = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setString(1, email);
@@ -498,17 +501,22 @@ public boolean agregarUsuario(Usuario u) {
      * @return
      */
     public boolean guardarTokenRecuperacion(String email, String token) {
-        String sql = "UPDATE usuario SET token_recuperacion = ?, token_expira = DATE_ADD(NOW(), INTERVAL 1 HOUR) WHERE email = ?";
-        try (Connection conexion = ConexionBD.obtenerConexion();
-             PreparedStatement stmt = conexion.prepareStatement(sql)) {
-            stmt.setString(1, token);
-            stmt.setString(2, email);
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error al guardar token recuperación para email: " + email, e);
-            return false;
-        }
+    // 1. Cambiado INTERVAL 1 HOUR por 15 MINUTE
+    // 2. Añadido LOWER() en el WHERE para que encuentre el correo en la nube sin importar mayúsculas
+    String sql = "UPDATE usuario SET token_recuperacion = ?, "
+               + "token_expira = DATE_ADD(NOW(), INTERVAL 15 MINUTE) " 
+               + "WHERE LOWER(email) = LOWER(?)";
+               
+    try (Connection conexion = ConexionBD.obtenerConexion();
+         PreparedStatement stmt = conexion.prepareStatement(sql)) {
+        stmt.setString(1, token);
+        stmt.setString(2, email);
+        return stmt.executeUpdate() > 0;
+    } catch (SQLException e) {
+        LOGGER.log(Level.SEVERE, "Error al guardar token recuperación para email: " + email, e);
+        return false;
     }
+}
     
     /**
      * Guarda el token de recuperación y su expiración para un ID de usuario.
@@ -517,7 +525,8 @@ public boolean agregarUsuario(Usuario u) {
      * @return
      */
     public boolean guardarTokenRecuperacion(int idUsuario, String token) {
-        String sql = "UPDATE usuario SET token_recuperacion = ?, token_expira = DATE_ADD(NOW(), INTERVAL 1 HOUR) WHERE idUsuario = ?";
+        // CAMBIO: De 1 HOUR a 15 MINUTE
+        String sql = "UPDATE usuario SET token_recuperacion = ?, token_expira = DATE_ADD(NOW(), INTERVAL 15 MINUTE) WHERE idUsuario = ?";
         try (Connection conexion = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setString(1, token);
@@ -535,7 +544,7 @@ public boolean agregarUsuario(Usuario u) {
      * @return
      */
     public boolean existeUsuarioPorEmail(String email) {
-        String sql = "SELECT 1 FROM usuario WHERE email = ?";
+        String sql = "SELECT 1 FROM usuario WHERE LOWER(email) = LOWER(?)";
         try (Connection conexion = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setString(1, email);
@@ -628,7 +637,7 @@ public boolean agregarUsuario(Usuario u) {
     // Actualiza la contraseña de un usuario logueado.
 
     public boolean actualizarContrasena(int idUsuario, String nuevaContrasena) {
-        String sql = "UPDATE usuario SET contrasena = ?, intentosFallidos = 0 WHERE idUsuario = ?";
+        String sql = "UPDATE usuario SET contrasena = ?, intentosFallidos = 0, token_recuperacion = NULL, token_expira = NULL WHERE idUsuario = ?";
         try (Connection conexion = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conexion.prepareStatement(sql)) {
             String hash = BCrypt.hashpw(nuevaContrasena, BCrypt.gensalt());

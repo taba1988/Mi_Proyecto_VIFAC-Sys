@@ -27,18 +27,18 @@
                     <h1 class="error-code">500</h1>
                     <p class="error-message">Error Interno del Servidor</p>
                     <p class="lead text-wrap">Ha ocurrido un error inesperado en el servidor.</p>
-                        <c:choose>
-                            <c:when test="${not empty sessionScope.usuario}">
-                                <a href="${pageContext.request.contextPath}/indexServlet" class="return-button">
-                                    <i class="bi bi-arrow-left me-1"></i> Atras
-                                </a>
-                            </c:when>
-                            <c:otherwise>
-                                <a href="${pageContext.request.contextPath}/loginServlet" class="return-button">
-                                    <i class="bi bi-arrow-left me-1"></i> Atras
-                                </a>
-                            </c:otherwise>
-                        </c:choose>
+                    <c:choose>
+                        <c:when test="${not empty sessionScope.idUsuario}">
+                            <a href="${pageContext.request.contextPath}/indexServlet" class="return-button">
+                                <i class="bi bi-arrow-left me-1"></i> Atras
+                            </a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="${pageContext.request.contextPath}/loginServlet" class="return-button">
+                                <i class="bi bi-arrow-left me-1"></i> Atras
+                            </a>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </main>
         </div>

@@ -2,13 +2,11 @@ package com.vifac.sys.servlet;
 
 import com.google.gson.Gson;
 import com.vifac.sys.dao.UsuarioDAO;
-import com.vifac.sys.modelo.RespuestaJson;
 import com.vifac.sys.modelo.Usuario;
 import com.vifac.sys.util.MailSender;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Base64;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -62,7 +60,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             "Hola " + usuario.getNombre() + ",\n\n"
             + "Haga clic en el siguiente enlace para restablecer su contraseña:\n"
             + link + "\n\n"
-            + "Este enlace expira en 60 minutos."
+            + "Este enlace expira en 15 minutos."
     );
 
     if (!enviado) {

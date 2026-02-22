@@ -23,7 +23,7 @@
         <p class="error-message">Acceso No Autorizado</p>
         <p class="mb-3">Lo sentimos, no tiene los permisos necesarios para acceder a este recurso.</p>
         <c:choose>
-            <c:when test="${not empty sessionScope.usuario}">
+            <c:when test="${not empty sessionScope.idUsuario}">
                 <a href="${pageContext.request.contextPath}/indexServlet" class="return-button">
                     <i class="bi bi-arrow-left me-1"></i> Atras
                 </a>
