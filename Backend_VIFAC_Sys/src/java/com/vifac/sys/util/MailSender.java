@@ -37,17 +37,27 @@ public class MailSender {
         
         System.out.println("SMTP_USER: " + System.getenv("SMTP_USER"));
         System.out.println("SMTP_PASS: " + System.getenv("SMTP_PASS"));
+        
+        /*
+        * CONFIGURACIÓN EXTERNA PARA ENVIO DE CORREO LOCAL
+        * ---------------------------------------------------------
+        * Las credenciales SMTP no se almacenan en el código fuente.
+        * Se obtienen desde variables de entorno definidas en el
+        * archivo setenv.bat del servidor de aplicaciones (Tomcat) apache-tomcat-8.5.100\bin\setenv.bat.
+        *
+        * Para actualizar usuario o contraseña geenrado en contraseña de Aplicaciones en Google:
+        * 1. Modificar setenv.bat
+        * 2. Reiniciar el servidor
+        */
 
-        // Validar que las credenciales y destinatario existan
-        if (remitente == null || remitente.isEmpty()) {
-            System.err.println("Error: SMTP_USER no definido");
+        if (remitente == null || remitente.isEmpty() || clave == null || clave.isEmpty() || destinatario == null || destinatario.trim().isEmpty()) {
             return false;
         }
-        if (clave == null || clave.isEmpty()) {
+        if (clave.isEmpty()) {
             System.err.println("Error: SMTP_PASS no definido");
             return false;
         }
-        if (destinatario == null || destinatario.trim().isEmpty()) {
+        if (destinatario.trim().isEmpty()) {
             System.err.println("Error: destinatario nulo o vacío");
             return false;
         }
@@ -69,7 +79,9 @@ public class MailSender {
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.starttls.required", "true");
         props.put("mail.smtp.ssl.protocols", "TLSv1.2"); 
-        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+        props.put("mail.smtp.ssl.trust", "*"); 
+        props.put("mail.smtp.connectiontimeout", "10000");
+        props.put("mail.smtp.timeout", "10000");
 
         // Crear sesión autenticada con las credenciales
         Session session = Session.getInstance(props, new Authenticator() {
@@ -106,14 +118,14 @@ public class MailSender {
     public static void enviarCorreoLogin(String email, String nombre, HttpServletRequest request) {
         // Obtener IP real del usuario
         String ip = request.getHeader("X-Forwarded-For");
-        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) { 
+            ip = request.getHeader("Proxy-Client-IP"); 
         }
-        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) { 
+            ip = request.getHeader("WL-Proxy-Client-IP"); 
         }
-        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) { 
+            ip = request.getRemoteAddr(); 
         }
 
         String fechaHora = LocalDateTime.now().toString();
@@ -124,18 +136,19 @@ public class MailSender {
                         + "Fecha y hora: " + fechaHora + "\n"
                         + "IP de acceso: " + ip + "\n\n"
                         + "Si fuiste tú, ¡perfecto! Continúa usando el sistema con normalidad.\n"
+                
                         + "Si NO fuiste tú, por favor restablece tu contraseña de inmediato o comunícate con el administrador.\n\n"
                         + "Atentamente,\n"
                         + "Administrador VIFAC";
 
         boolean enviado = enviarCorreo(email, asunto, cuerpo);
 
-        if (!enviado) {
-            System.err.println("No se pudo enviar correo de inicio de sesión a: " + email);
+        if (!enviado) { 
+            System.err.println("No se pudo enviar correo de inicio de sesión a: " + email); 
         }
-    }
-
+     }
+    
     public static void enviarCorreoLogin(String email, String nombre) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        throw new UnsupportedOperationException("Not supported yet.");
+  }
 }

@@ -56,11 +56,15 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 
     boolean enviado = MailSender.enviarCorreo(
             usuario.getEmail(),
-            "Recuperación de contraseña VIFAC-Sys",
+            "Recuperación de contraseña - VIFAC-Sys",
             "Hola " + usuario.getNombre() + ",\n\n"
-            + "Haga clic en el siguiente enlace para restablecer su contraseña:\n"
+            + "Hemos recibido una solicitud para restablecer tu contraseña de VIFAC-Sys.\n"
+            + "Por favor, haz clic en el siguiente enlace para establecer una nueva contraseña:\n\n"
             + link + "\n\n"
-            + "Este enlace expira en 15 minutos."
+            + "Recuerda que este enlace solo será válido por 15 minutos.\n\n"
+            + "Si NO solicitaste restablecer contraseña, ignora este mensaje.\n\n"
+            + "¡Gracias!\n"
+            + "El equipo de soporte VIFAC-Sys"
     );
 
     if (!enviado) {

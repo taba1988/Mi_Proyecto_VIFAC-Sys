@@ -114,8 +114,8 @@
      <div class="modal fade show" id="responseModal" tabindex="-1" style="display:block;" aria-modal="true" role="dialog">
          <div class="modal-dialog">
              <div class="modal-content">
-                 <div class="modal-header bg-info text-white">
-                     <h5 class="modal-title">Operación Exitosa</h5>
+                 <div class="modal-header ${tituloModal == 'ERROR' ? 'bg-warning text-dark' : 'bg-info text-white'}">
+                     <h5 class="modal-title">${tituloModal}</h5>
                  </div>
                  <div class="modal-body">
                      <p>${mensaje}</p>

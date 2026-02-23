@@ -60,9 +60,11 @@ public class RestablecerContrasenaServlet extends HttpServlet {
          boolean actualizado = usuarioDAO.actualizarContrasenaPorToken(token, nuevaContrasena);
 
          if (actualizado) {
+             request.setAttribute("tituloModal", "OPERACIÓN EXITOSA");
              request.setAttribute("mensaje", "Contraseña recuperada correctamente.");
          } else {
-             request.setAttribute("mensaje", "Token inválido o expirado.");
+             request.setAttribute("tituloModal", "ERROR");
+             request.setAttribute("mensaje", "Token inválido: Este token ya expiró o ya fue utilizado.");
          }
 
          //          Redirigir al JSP que mostrará el modal con el mensaje
