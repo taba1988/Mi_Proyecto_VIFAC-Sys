@@ -71,17 +71,21 @@ public class MailSender {
             return false;
         }
 
-        // Configuración del servidor SMTP de Gmail
-        Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587"); 
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.starttls.required", "true");
-        props.put("mail.smtp.ssl.protocols", "TLSv1.2"); 
-        props.put("mail.smtp.ssl.trust", "*"); 
-        props.put("mail.smtp.connectiontimeout", "30000");
-        props.put("mail.smtp.timeout", "30000");
+// Configuración del servidor SMTP de Gmail (Puerto 465 - SSL)
+Properties props = new Properties();
+System.setProperty("java.net.preferIPv4Stack", "true"); 
+
+props.put("mail.smtp.host", "smtp.gmail.com");
+props.put("mail.smtp.port", "465");
+props.put("mail.smtp.auth", "true");
+props.put("mail.smtp.ssl.enable", "true"); 
+props.put("mail.smtp.socketFactory.port", "465");
+props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+props.put("mail.smtp.socketFactory.fallback", "false");
+props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+props.put("mail.smtp.ssl.trust", "*");
+props.put("mail.smtp.connectiontimeout", "30000");
+props.put("mail.smtp.timeout", "30000");
 
         // Crear sesión autenticada con las credenciales
         Session session = Session.getInstance(props, new Authenticator() {
