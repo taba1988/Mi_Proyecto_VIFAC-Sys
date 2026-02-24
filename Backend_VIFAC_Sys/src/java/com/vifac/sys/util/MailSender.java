@@ -76,12 +76,12 @@ public class MailSender {
          System.setProperty("java.net.preferIPv4Stack", "true"); 
 
          props.put("mail.smtp.host", "smtp-relay.brevo.com");
-         props.put("mail.smtp.port", "587");
+         props.put("mail.smtp.port", "2525");
          props.put("mail.smtp.auth", "true");
          props.put("mail.smtp.starttls.enable", "true");
          props.put("mail.smtp.starttls.required", "true");
-         props.put("mail.smtp.connectiontimeout", "15000");
-         props.put("mail.smtp.timeout", "15000");
+         props.put("mail.smtp.connectiontimeout", "10000");
+         props.put("mail.smtp.timeout", "10000");
 
         // Crear sesión autenticada con las credenciales
         Session session = Session.getInstance(props, new Authenticator() {
