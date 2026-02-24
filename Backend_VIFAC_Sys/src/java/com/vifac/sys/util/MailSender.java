@@ -80,8 +80,8 @@ public class MailSender {
         props.put("mail.smtp.starttls.required", "true");
         props.put("mail.smtp.ssl.protocols", "TLSv1.2"); 
         props.put("mail.smtp.ssl.trust", "*"); 
-        props.put("mail.smtp.connectiontimeout", "10000");
-        props.put("mail.smtp.timeout", "10000");
+        props.put("mail.smtp.connectiontimeout", "30000");
+        props.put("mail.smtp.timeout", "30000");
 
         // Crear sesión autenticada con las credenciales
         Session session = Session.getInstance(props, new Authenticator() {
