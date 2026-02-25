@@ -1,6 +1,6 @@
 /*
  * ImagenServlet.java
- * Propósito: Servir imágenes de la carpeta uploads para el carrusel
+ * Propósito: Servir imágenes para el carrusel
  *
  * Autor: ORLANDUVALIE TABARES GUTIERREZ
  * Fecha: 19/10/2025
@@ -21,34 +21,34 @@ public class ImagenServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    
+        String idStr = request.getParameter("id");
+        com.vifac.sys.dao.ImagenDestacadaDAO dao = new com.vifac.sys.dao.ImagenDestacadaDAO();
+    
+        try {
+            int id = Integer.parseInt(idStr);
+            com.vifac.sys.modelo.ImagenDestacada img = dao.obtenerPorId(id);
 
-        String nombreArchivo = request.getParameter("nombreArchivo");
-        if (nombreArchivo == null || nombreArchivo.trim().isEmpty()) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Nombre de archivo no especificado.");
-            return;
-        }
-
-        File archivo = new File(RUTA_IMAGENES, nombreArchivo);
-        if (!archivo.exists()) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Archivo no encontrado: " + nombreArchivo);
-            return;
-        }
-
-        // Determinar tipo MIME
-        String tipoMime = getServletContext().getMimeType(archivo.getName());
-        if (tipoMime == null) {
-            tipoMime = "application/octet-stream";
-        }
-        response.setContentType(tipoMime);
-
-        // Enviar archivo al navegador
-        try (FileInputStream fis = new FileInputStream(archivo);
-             OutputStream out = response.getOutputStream()) {
-            byte[] buffer = new byte[8192];
-            int bytesLeidos;
-            while ((bytesLeidos = fis.read(buffer)) != -1) {
-                out.write(buffer, 0, bytesLeidos);
-            }
+            if (img != null && img.getArchivoBinario() != null) {
+                String nombre = img.getNombreArchivo().toLowerCase();
+    
+                if (nombre.endsWith(".svg")) {
+                   response.setContentType("image/svg+xml");
+                } else if (nombre.endsWith(".png")) {
+                    response.setContentType("image/png");
+                } else if (nombre.endsWith(".gif")) {
+                    response.setContentType("image/gif");
+                } else {
+                    response.setContentType("image/jpeg");
+                }
+                    response.setContentLength(img.getArchivoBinario().length);
+                    response.getOutputStream().write(img.getArchivoBinario());
+                    response.getOutputStream().flush(); 
+                } else {
+                    response.sendError(404, "Imagen no encontrada en BD");
+                }
+            } catch (IOException | NumberFormatException e) {
+                   response.sendError(400, "ID inválido");
         }
     }
 }

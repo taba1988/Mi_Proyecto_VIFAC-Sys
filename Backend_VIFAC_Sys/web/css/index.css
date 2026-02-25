@@ -190,3 +190,10 @@ background-color: #ff9800; /* Naranja */
 border: 3px solid #ffffff; /* Centro blanco */
 box-shadow: 0 0 4px #ff9800;
 }
+
+/* Fuerza una altura constante y evita deformación */
+#dynamicCarousel .carousel-inner img {
+    height: 400px; /* Ajusta esta altura a tu gusto */
+    object-fit: cover; /* Corta la imagen proporcionalmente en lugar de estirarla */
+    border-radius: 10px;
+}

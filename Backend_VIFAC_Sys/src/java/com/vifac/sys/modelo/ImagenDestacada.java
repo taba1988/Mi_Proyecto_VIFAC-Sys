@@ -12,14 +12,16 @@ public class ImagenDestacada {
     private int id;                 // ID de la imagen
     private String nombreFijo;      // nombre fijo (banner1, banner1.1, etc.)
     private String nombreArchivo;   // nombre del archivo subido
+    private byte[] archivoBinario;  // Para los bytes de la imagen LONGBLOB
     private Timestamp fechaSubida;  // fecha de la última subida
 
     public ImagenDestacada() {}
 
-    public ImagenDestacada(int id, String nombreFijo, String nombreArchivo, Timestamp fechaSubida) {
+    public ImagenDestacada(int id, String nombreFijo, String nombreArchivo, byte[] archivoBinario, Timestamp fechaSubida) {
         this.id = id;
         this.nombreFijo = nombreFijo;
         this.nombreArchivo = nombreArchivo;
+        this.archivoBinario = archivoBinario;
         this.fechaSubida = fechaSubida;
     }
 
@@ -32,6 +34,9 @@ public class ImagenDestacada {
 
     public String getNombreArchivo() { return nombreArchivo; }
     public void setNombreArchivo(String nombreArchivo) { this.nombreArchivo = nombreArchivo; }
+    
+    public byte[] getArchivoBinario() { return archivoBinario; }
+    public void setArchivoBinario(byte[] archivoBinario) { this.archivoBinario = archivoBinario; }
 
     public Timestamp getFechaSubida() { return fechaSubida; }
     public void setFechaSubida(Timestamp fechaSubida) { this.fechaSubida = fechaSubida; }

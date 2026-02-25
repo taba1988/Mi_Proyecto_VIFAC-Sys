@@ -42,15 +42,16 @@
             </div>
         </div>
 
-        <!-- BLOCK PERFIL -->
+        <!-- Bloque Perfil se visualiza en el index al iniciar sesion -->
         <div class="profile-block col-12 col-sm-8 col-md-10 col-lg-6 position-relative d-flex align-items-center mt-2 me-0 flex-nowrap">
             <div class="col-12 col-md-10 d-flex align-items-center flex-nowrap">
                 <div class="rounded-circle border border-primary mb-2 overflow-hidden" style="width: 70px; height: 100px;">
-                 <img 
-                     src="${pageContext.request.contextPath}/ImagenPerfilServlet?nombreArchivo=${usuarioLogeado.fotoPerfil != null && !usuarioLogeado.fotoPerfil.isEmpty() ? usuarioLogeado.fotoPerfil : 'avatarperfil.png'}" 
-                     alt="Foto de usuario ${usuarioLogeado.nombre}" 
-                     class="w-100 h-100 object-fit-cover"
-                 />
+                  <img 
+                      src="${pageContext.request.contextPath}/ImagenPerfilServlet?idUsuario=${idUsuario}" 
+                      alt="Foto de perfil" 
+                      class="w-100 h-100 object-fit-cover"
+                      onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/img/avatarperfil.png';"
+                  />
                 </div>
                 <div class="ms-3">
                    <p class="mb-0"><strong>Usuario:</strong> <span class="text-uppercase">${nombre}</span></p>
@@ -199,13 +200,17 @@
                 <!-- Iconos fijos en móvil -->
                 <div class="fixed-icons mb-2" style="position: relative; bottom: -140px;">
                     <div class="d-flex justify-content-center gap-5 mt-2">
-                        <a href="indexServlet" class="menu-link fixed-icon-link" data-bs-toggle="tooltip" data-bs-placement="top" title="Inicio">
+                        <a href="indexServlet" class="menu-link fixed-icon-link" 
+                               data-bs-toggle="tooltip" data-bs-placement="top" title="Inicio">
                             <i class="bi bi-house-door-fill fs-2"></i>
                         </a>
-                        <a href="${pageContext.request.contextPath}/PerfilServlet" class="menu-link fixed-icon-link" data-bs-toggle="tooltip" data-bs-placement="top" title="Mi Perfil">
+                        <a href="${pageContext.request.contextPath}/PerfilServlet" 
+                              class="menu-link fixed-icon-link" data-bs-toggle="tooltip" 
+                              data-bs-placement="top" title="Mi Perfil">
                             <i class="bi bi-person-vcard-fill fs-2"></i>
                         </a>
-                        <a href="logoutServlet" class="menu-link fixed-icon-link" data-bs-toggle="tooltip" data-bs-placement="top" title="Cerrar sesión">
+                        <a href="logoutServlet" class="menu-link fixed-icon-link" 
+                               data-bs-toggle="tooltip" data-bs-placement="top" title="Cerrar sesión">
                             <i class="bi bi-box-arrow-right fs-2"></i>
                         </a>
                     </div>
@@ -339,13 +344,17 @@
                 <!-- Iconos fijos pantalla grande-->
                 <div class="fixed-icons mb-2" style="position: relative; bottom: -140px;">
                     <div class="d-flex justify-content-center gap-5 mt-2">
-                        <a href="indexServlet" class="menu-link fixed-icon-link" data-bs-toggle="tooltip" data-bs-placement="top" title="Inicio">
+                        <a href="indexServlet" class="menu-link fixed-icon-link" 
+                               data-bs-toggle="tooltip" data-bs-placement="top" title="Inicio">
                             <i class="bi bi-house-door-fill fs-2"></i>
                         </a>
-                        <a href="${pageContext.request.contextPath}/PerfilServlet" class="menu-link fixed-icon-link" data-bs-toggle="tooltip" data-bs-placement="top" title="Mi Perfil">
+                        <a href="${pageContext.request.contextPath}/PerfilServlet" 
+                               class="menu-link fixed-icon-link" data-bs-toggle="tooltip" 
+                               data-bs-placement="top" title="Mi Perfil">
                             <i class="bi bi-person-vcard-fill fs-2"></i>
                         </a>
-                        <a href="logoutServlet" class="menu-link fixed-icon-link" data-bs-toggle="tooltip" data-bs-placement="top" title="Cerrar sesión">
+                        <a href="logoutServlet" class="menu-link fixed-icon-link" 
+                               data-bs-toggle="tooltip" data-bs-placement="top" title="Cerrar sesión">
                             <i class="bi bi-box-arrow-right fs-2"></i>
                         </a>
                     </div>
@@ -424,9 +433,9 @@
                     <div class="carousel-inner">
                         <c:forEach var="img" items="${imagenesDestacadas}" varStatus="status">
                             <div class="carousel-item ${status.first ? 'active' : ''}">
-                                <img src="${pageContext.request.contextPath}/ImagenServlet?nombreArchivo=${img.nombreArchivo}" 
-                                     class="d-block w-100" 
-                                     alt="Imagen destacada ${status.index + 1}">
+                                <img src="${pageContext.request.contextPath}/ImagenServlet?id=${img.id}" 
+                                class="d-block w-100" 
+                                alt="Imagen destacada ${status.index + 1}">
                             </div>
                         </c:forEach>
                         <!-- Placeholder si no hay imágenes -->
@@ -438,7 +447,7 @@
                             </div>
                         </c:if>
                     </div>
-                    <!-- Controles del carrosel -->
+                    <!-- Controles del carrousel -->
                     <button class="carousel-control-prev" type="button" data-bs-target="#dynamicCarousel" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Previous</span>

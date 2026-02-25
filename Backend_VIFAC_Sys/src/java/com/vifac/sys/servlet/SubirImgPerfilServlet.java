@@ -10,8 +10,8 @@
 package com.vifac.sys.servlet;
 
 import com.vifac.sys.dao.UsuarioDAO;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -24,20 +24,20 @@ import javax.servlet.http.Part;
 @WebServlet("/SubirImgPerfilServlet")
 @MultipartConfig(
     fileSizeThreshold = 1024 * 1024,   // 1 MB
-    maxFileSize = 5 * 1024 * 1024,     // 5 MB
+    maxFileSize = 5 * 1024 * 1024,      // 5 MB
     maxRequestSize = 10 * 1024 * 1024  // 10 MB
 )
 public class SubirImgPerfilServlet extends HttpServlet {
 
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();
-    private static final String RUTA_PERFILES = "/usr/local/tomcat/uploads/perfiles";
+    // private static final String RUTA_PERFILES = "/usr/local/tomcat/uploads/perfiles";
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        File uploadDir = new File(RUTA_PERFILES);
-        if (!uploadDir.exists()) uploadDir.mkdirs();
+        // File uploadDir = new File(RUTA_PERFILES);
+        // if (!uploadDir.exists()) uploadDir.mkdirs();
 
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
@@ -53,17 +53,19 @@ public class SubirImgPerfilServlet extends HttpServlet {
 
             int idUsuario = Integer.parseInt(idParam);
 
-            // Generar nombre fijo para evitar conflictos
-            String nombreArchivo = "perfil_" + idUsuario + filePart.getSubmittedFileName()
-               .substring(filePart.getSubmittedFileName().lastIndexOf('.'));
+            // Leer los bytes de la imagen directamente del Part
+            byte[] fotoPerfil;
+            try (InputStream is = filePart.getInputStream()) {
+                fotoPerfil = is.readAllBytes();
+            }
 
 
             // Guardar archivo físicamente
-            File archivoDestino = new File(RUTA_PERFILES, nombreArchivo);
-               filePart.write(archivoDestino.getAbsolutePath());
+            // File archivoDestino = new File(RUTA_PERFILES, nombreArchivo);
+            // filePart.write(archivoDestino.getAbsolutePath());
 
             // Actualizar solo el nombre de archivo en la base de datos
-            boolean actualizado = usuarioDAO.actualizarFotoPerfil(idUsuario, nombreArchivo);
+            boolean actualizado = usuarioDAO.actualizarFotoPerfil(idUsuario, fotoPerfil);
 
                if (actualizado) {
                    out.write("{\"status\":\"success\",\"message\":\"Foto de perfil actualizada correctamente.\"}");

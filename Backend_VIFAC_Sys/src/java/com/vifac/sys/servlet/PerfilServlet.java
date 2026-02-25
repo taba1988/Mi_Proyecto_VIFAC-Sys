@@ -64,7 +64,7 @@ public class PerfilServlet extends HttpServlet {
         actualizado.setNotaSistema(nota);
 
         session.setAttribute("usuarioLogeado", actualizado);
-        request.setAttribute("usuario", actualizado);
+        request.setAttribute("usuarioLogeado", actualizado);
         request.getRequestDispatcher("Perfil.jsp").forward(request, response);
     }
 

@@ -143,7 +143,7 @@ public class UsuarioDAO extends ConexionBD {
                     rs.getString("dependencia"), // Lógica CASE AS dependencia
                     rs.getString("situacionLaboral"), // Alias u.estado AS situacionLaboral
                     rs.getString("notaSistema"), // Alias 'texto fijo' AS notaSistema
-                    rs.getString("fotoPerfil") // <-- AÑADIDO
+                    rs.getBytes("fotoPerfil")
                 );
             }
         } catch (SQLException e) {
@@ -222,7 +222,7 @@ public boolean agregarUsuario(Usuario u) {
         stmt.setInt(12, u.getIntentosFallidos());
         stmt.setString(13, null);
         stmt.setTimestamp(14, null);
-        stmt.setString(15, null);
+        stmt.setBytes(15, u.getFotoPerfil());
 
         return stmt.executeUpdate() > 0;
     } catch (SQLException e) {
@@ -265,7 +265,7 @@ public boolean agregarUsuario(Usuario u) {
             stmt.setString(index++, u.getEstado());
             stmt.setString(index++, u.getTokenRecuperacion());
             stmt.setTimestamp(index++, u.getTokenExpira());
-            stmt.setString(index++, u.getFotoPerfil());
+            stmt.setBytes(index++, u.getFotoPerfil());
             
             // Si hay contraseña nueva, la encripta y agrega
             if (actualizarContrasena) {
@@ -321,7 +321,7 @@ public boolean agregarUsuario(Usuario u) {
                     rs.getString("dependencia"), 
                     rs.getString("situacionLaboral"), 
                     rs.getString("notaSistema"),
-                    rs.getString("fotoPerfil") // <-- AÑADIDO
+                    rs.getBytes("fotoPerfil")
                 );
             }
         } catch (SQLException e) {
@@ -387,7 +387,7 @@ public boolean agregarUsuario(Usuario u) {
                     null, // dependencia
                     null, // situacionLaboral
                     null,  // notaSistema
-                    rs.getString("fotoPerfil") // <-- AÑADIDO
+                    rs.getBytes("fotoPerfil") // <-- AÑADIDO
                 );
                 lista.add(u);
             }
@@ -432,7 +432,7 @@ public boolean agregarUsuario(Usuario u) {
                     null, // dependencia
                     null, // situacionLaboral
                     null,  // notaSistema
-                    rs.getString("fotoPerfil") // <-- AÑADIDO
+                    rs.getBytes("fotoPerfil") // <-- AÑADIDO
                 );
                 lista.add(u);
             }
@@ -483,7 +483,7 @@ public boolean agregarUsuario(Usuario u) {
                         null, // dependencia
                         null, // situacionLaboral
                         null,  // notaSistema
-                        rs.getString("fotoPerfil") // <-- AÑADIDO
+                        rs.getBytes("fotoPerfil") // <-- AÑADIDO
                     );
                     return u;
                 }
@@ -601,12 +601,12 @@ public boolean agregarUsuario(Usuario u) {
      * @param fotoPerfil Ruta o nombre del archivo de la foto.
      * @return true si la actualización fue exitosa.
      */
-    public boolean actualizarFotoPerfil(int idUsuario, String fotoPerfil) {
+    public boolean actualizarFotoPerfil(int idUsuario, byte[]fotoPerfil) {
         String sql = "UPDATE usuario SET fotoPerfil = ? WHERE idUsuario = ?";
         try (Connection conexion = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conexion.prepareStatement(sql)) {
             
-            stmt.setString(1, fotoPerfil);
+            stmt.setBytes(1, fotoPerfil);
             stmt.setInt(2, idUsuario);
             
             return stmt.executeUpdate() > 0;

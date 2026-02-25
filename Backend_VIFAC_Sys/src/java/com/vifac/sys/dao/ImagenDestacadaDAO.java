@@ -21,30 +21,25 @@ import java.util.logging.Logger;
 public class ImagenDestacadaDAO extends ConexionBD {
 
     private static final Logger LOGGER = Logger.getLogger(ImagenDestacadaDAO.class.getName());
-
-    public boolean actualizarImagen(String nombreFijo, String nombreArchivo) {
-        String sql = "UPDATE imagen_destacada SET nombre_archivo = ?, fecha_subida = NOW() WHERE nombre_fijo = ?";
+    
+    public boolean actualizarImagen(ImagenDestacada img) {
+        String sql = "UPDATE imagen_destacada SET nombre_archivo = ?, archivo_binario = ?, fecha_subida = NOW() WHERE nombre_fijo = ?";
         try (Connection conexion = obtenerConexion();
              PreparedStatement stmt = conexion.prepareStatement(sql)) {
-
-            stmt.setString(1, nombreArchivo);
-            stmt.setString(2, nombreFijo);
+            stmt.setString(1, img.getNombreArchivo());
+            stmt.setBytes(2, img.getArchivoBinario());
+            stmt.setString(3, img.getNombreFijo());
             return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error al actualizar imagen " + nombreFijo, e);
+            LOGGER.log(Level.SEVERE, "Error al actualizar bytes", e);
             return false;
         }
     }
 
-    public boolean actualizarImagen(ImagenDestacada img) {
-        return actualizarImagen(img.getNombreFijo(), img.getNombreArchivo());
-    }
-
     public List<ImagenDestacada> obtenerTodas() {
         List<ImagenDestacada> lista = new ArrayList<>();
-        String sql = "SELECT id, nombre_fijo, nombre_archivo, fecha_subida FROM imagen_destacada ORDER BY id ASC";
-
+        String sql = "SELECT id, nombre_fijo, nombre_archivo, archivo_binario, fecha_subida FROM imagen_destacada ORDER BY id ASC";
         try (Connection conexion = obtenerConexion();
              PreparedStatement stmt = conexion.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
@@ -54,27 +49,29 @@ public class ImagenDestacadaDAO extends ConexionBD {
                 img.setId(rs.getInt("id"));
                 img.setNombreFijo(rs.getString("nombre_fijo"));
                 img.setNombreArchivo(rs.getString("nombre_archivo"));
+                img.setArchivoBinario(rs.getBytes("archivo_binario"));
                 img.setFechaSubida(rs.getTimestamp("fecha_subida"));
                 lista.add(img);
             }
-
+    
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error al obtener imágenes destacadas", e);
+            LOGGER.log(Level.SEVERE, "Error al listar carrusel", e);
         }
         return lista;
     }
 
     public boolean guardarImagen(ImagenDestacada img) {
-        String sql = "INSERT INTO imagen_destacada (nombre_fijo, nombre_archivo, fecha_subida) VALUES (?, ?, NOW())";
+        String sql = "INSERT INTO imagen_destacada (nombre_fijo, nombre_archivo, archivo_binario, fecha_subida) VALUES (?, ?, ?, NOW())";
         try (Connection conexion = obtenerConexion();
              PreparedStatement stmt = conexion.prepareStatement(sql)) {
-
+    
             stmt.setString(1, img.getNombreFijo());
             stmt.setString(2, img.getNombreArchivo());
+            stmt.setBytes(3, img.getArchivoBinario()); 
             return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error al guardar nueva imagen " + img.getNombreFijo(), e);
+            LOGGER.log(Level.SEVERE, "Error al guardar nueva imagen binaria", e);
             return false;
         }
     }
@@ -119,4 +116,26 @@ public class ImagenDestacadaDAO extends ConexionBD {
         }
         return null;
     }
+    
+    public ImagenDestacada obtenerPorId(int id) {
+    String sql = "SELECT id, nombre_fijo, nombre_archivo, archivo_binario, fecha_subida FROM imagen_destacada WHERE id = ?";
+    try (Connection conexion = obtenerConexion();
+         PreparedStatement stmt = conexion.prepareStatement(sql)) {
+        stmt.setInt(1, id);
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                ImagenDestacada img = new ImagenDestacada();
+                img.setId(rs.getInt("id"));
+                img.setNombreFijo(rs.getString("nombre_fijo"));
+                img.setNombreArchivo(rs.getString("nombre_archivo"));
+                img.setArchivoBinario(rs.getBytes("archivo_binario"));
+                img.setFechaSubida(rs.getTimestamp("fecha_subida"));
+                return img;
+            }
+        }
+    } catch (SQLException e) {
+        LOGGER.log(Level.SEVERE, "Error al obtener por ID", e);
+    }
+    return null;
+ }    
 }

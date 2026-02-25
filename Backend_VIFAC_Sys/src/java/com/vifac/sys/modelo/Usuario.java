@@ -40,14 +40,14 @@ public class Usuario {
     private String notaSistema;    
     
     // NUEVO campo para la foto de perfil
-    private String fotoPerfil;
+    private byte[] fotoPerfil;
 
     public Usuario() {}
 
     public Usuario(int idUsuario, String nombre, String documento, String telefono, String email, String direccion, String nombreUsuario,
                    String contrasena, String cargo, int idRol, int idEmpresa, String estado, int intentosFallidos,
                    String tokenRecuperacion, Timestamp tokenExpira, String empresa, String dependencia, 
-                   String situacionLaboral, String notaSistema, String fotoPerfil) {
+                   String situacionLaboral, String notaSistema, byte[] fotoPerfil) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.documento = documento;
@@ -72,8 +72,6 @@ public class Usuario {
     }
 
     // Getters y Setters existentes
-    // ... (mantener todos los getters y setters que ya tienes) ...
-
     public int getIdEmpresa() {
         return idEmpresa;
     }
@@ -115,11 +113,11 @@ public class Usuario {
     }
 
     // NUEVO getter y setter para fotoPerfil
-    public String getFotoPerfil() {
+    public byte[] getFotoPerfil() {
         return fotoPerfil;
     }
 
-    public void setFotoPerfil(String fotoPerfil) {
+    public void setFotoPerfil(byte[] fotoPerfil) {
         this.fotoPerfil = fotoPerfil;
     }
 
@@ -132,67 +130,67 @@ public class Usuario {
     }
     public String getNombre() {
         return nombre;
-    }
+    }    
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
+    }    
     public String getDocumento() {
         return documento;
-    }
+    }    
     public void setDocumento(String documento) {
         this.documento = documento;
-    }
+    }   
     public String getTelefono() {
         return telefono;
-    }
+    }   
     public void setTelefono(String telefono) {
         this.telefono = telefono;
-    }
+    }    
     public String getEmail() {
         return email;
-    }
+    }    
     public void setEmail(String email) {
         this.email = email;
-    }
+    }    
     public String getNombreUsuario() {
         return nombreUsuario;
-    }     
+    }       
     public void setNombreUsuario(String nombreUsuario) {
         this.nombreUsuario = nombreUsuario;
-    }
+    }   
     public String getDireccion() {
         return direccion;
-    }
+    }   
     public void setDireccion(String direccion) {
         this.direccion = direccion;
-    }
+    }   
     public String getContrasena() {
         return contrasena;
-    }
+    }  
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
-    }
+    }  
     public String getCargo() {
         return cargo;
-    }
+    }  
     public void setCargo(String cargo) {
         this.cargo = cargo;
-    }
+    }   
     public int getIdRol() {
         return idRol;
-    }
+    }  
     public void setIdRol(int idRol) {
         this.idRol = idRol;
-    }
+    }   
     public String getEstado() {
         return estado;
-    }
+    }   
     public void setEstado(String estado) {
         this.estado = estado;
-    }
+    }   
     public int getIntentosFallidos() {
         return intentosFallidos;
-    }
+    }   
     public void setIntentosFallidos(int intentosFallidos) {
         this.intentosFallidos = intentosFallidos;
     }
@@ -204,7 +202,7 @@ public class Usuario {
     }
     public Timestamp getTokenExpira() {
         return tokenExpira;
-    }
+    } 
     public void setTokenExpira(Timestamp tokenExpira) {
         this.tokenExpira = tokenExpira;
     }
