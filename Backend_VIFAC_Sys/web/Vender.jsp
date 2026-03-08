@@ -179,75 +179,83 @@
         </div>
     </footer>
     
-    <!-- Modal: Abrir Caja -->
-    <div class="modal fade" id="modalAbrirCaja" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalAbrirCajaLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Abrir Caja</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+<!-- Modal: Abrir Caja -->
+    <div class="modal fade" id="modalAbrirCaja" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title fw-semibold">💰 Apertura de Caja</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                      <label for="numero_caja">Número de Caja</label>
-                      <select id="numero_caja" name="numero_caja" class="form-control" required>
-                        <option value="">Seleccione una caja</option>
-                        <option value="1">Caja 1</option>
-                        <option value="2">Caja 2</option>
-                        <option value="3">Caja 3</option>
-                        <option value="4">Caja 4</option>
-                        <option value="5">Caja 5</option>
-                        <option value="6">Caja 6</option>
-                        <option value="7">Caja 7</option>
-                        <option value="8">Caja 8</option>
-                        <option value="9">Caja 9</option>
-                        <option value="10">Caja 10</option>
-                      </select>
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label for="numero_caja" class="form-label fw-semibold">Número de Caja</label>
+                    <select id="numero_caja" name="numero_caja" class="form-select">
+                            <option value="">Seleccione una caja</option>
+                            <option value="1">Caja 1</option>
+                            <option value="2">Caja 2</option>
+                            <option value="3">Caja 3</option>
+                            <option value="4">Caja 4</option>
+                            <option value="5">Caja 5</option>
+                            <option value="6">Caja 6</option>
+                            <option value="7">Caja 7</option>
+                            <option value="8">Caja 8</option>
+                            <option value="9">Caja 9</option>
+                            <option value="10">Caja 10</option>
+                        </select>
                     </div>
                     <div class="mb-3">
-                        <label for="montoInicialCaja" class="form-label">Monto Inicial en Caja:</label>
+                        <label for="montoInicialCaja" class="form-label fw-semibold">Monto Inicial en Caja</label>
                         <div class="input-group">
                             <span class="input-group-text">$</span>
-                            <input type="number" class="form-control" id="montoInicialCaja" placeholder="Ingrese el monto inicial" step="0.01">
+                            <input type="number"
+                                   class="form-control"
+                                   id="montoInicialCaja"
+                                   placeholder="0.00"
+                                   step="0.01">
                         </div>
-                    </div>
+                    </div>    
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-outline-success" id="btnConfirmarAbrirCaja">Confirmar</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+                    <button type="button" class="btn btn-outline-primary" id="btnConfirmarAbrirCaja">
+                        Confirmar
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal: Cerrar Caja -->
-    <div class="modal fade" id="modalCerrarCaja" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalCerrarCajaLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Cerrar Caja</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="montoFinalCaja" class="form-label">Monto Final en Caja:</label>
-                        <div class="input-group">
-                            <span class="input-group-text">$</span>
-                            <input type="number" class="form-control" id="montoFinalCaja" placeholder="Ingrese el monto final" step="0.01">
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="observacionesCierre" class="form-label">Observaciones (Opcional):</label>
-                        <textarea class="form-control" id="observacionesCierre" rows="3"></textarea>
+<!-- Modal: Cerrar Caja -->
+<div class="modal fade" id="modalCerrarCaja" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalCerrarCajaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">🔒 Cerrar Caja</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="montoFinalCaja" class="form-label">Monto Final en Caja:</label>
+                    <div class="input-group">
+                        <span class="input-group-text fw-semibold">$</span>
+                        <input type="number" class="form-control" id="montoFinalCaja" placeholder="0.00" step="0.01">
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-outline-danger" id="btnConfirmarCerrarCaja">Confirmar</button>
+                <div class="mb-3">
+                    <label for="observacionesCierre" class="form-label">Observaciones (Opcional):</label>
+                    <textarea class="form-control" id="observacionesCierre" rows="3"></textarea>
                 </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-outline-primary" id="btnConfirmarCerrarCaja">Confirmar</button>
             </div>
         </div>
     </div>
+</div>
 
     <!-- Modal: Descuento General -->
     <div class="modal fade" id="modalDescuento" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDescuentoLabel" aria-hidden="true">
@@ -445,6 +453,24 @@
             <button data-calc-clear="true" class="calc-clear-btn">C</button>
         </div>
         <button class="btn btn-sm btn-secondary mt-2 w-100" id="btnCerrarCalculadora">Cerrar</button>
+    </div>
+    
+    <!-- Modal Universal de Mensajes de alerta-->
+    <div class="modal fade" id="modalMensaje" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header bg-warning text-dark">
+            <h5 class="modal-title" id="modalMensajeTitulo">Mensaje</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body" id="modalMensajeBody">
+            <!-- Aquí se insertará el texto dinámicamente -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+          </div>
+        </div>
+      </div>
     </div>
     
     <%@ include file="temporizador.jsp" %>

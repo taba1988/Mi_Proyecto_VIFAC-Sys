@@ -171,7 +171,7 @@ function agregarAlCarrito(producto) {
     
     // Verificar si el stock es 0
     if (producto.stock <= 0) {
-        alert('Producto sin stock. No se puede vender.');
+        mostrarMensaje('Producto sin stock. No se puede vender.');
         return;
     }
     const carritoLista = document.getElementById('carritoLista');
@@ -198,7 +198,7 @@ function agregarAlCarrito(producto) {
         // Validación
         if (!producto.idProducto) {
             console.error(`Producto "${producto.nombre}" no tiene idProducto definido. No se puede agregar al carrito.`);
-            alert(`Error: el producto "${producto.nombre}" no tiene ID y no puede ser agregado.`);
+            mostrarMensaje(`Error: el producto "${producto.nombre}" no tiene ID y no puede ser agregado.`);
             return;
         }
 
@@ -399,7 +399,7 @@ function aplicarDescuentoModal() {
         console.log(`Descuento del ${porcentaje}% aplicado correctamente.`);
     } else {
         console.warn('Intento de aplicar un descuento inválido.');
-        alert('Por favor, ingrese un porcentaje de descuento válido (0-100).');
+        mostrarMensaje('Por favor, ingrese un porcentaje de descuento válido (0-100).');
     }
 }
 
@@ -527,7 +527,7 @@ function finalizarVenta() {
 
     if (isNaN(totalVenta) || totalVenta <= 0) {
         console.error('Intento de finalizar venta sin productos o con total inválido.');
-        alert("No hay productos en el carrito o el total es inválido.");
+        mostrarMensaje("No hay productos en el carrito o el total es inválido.");
         return;
     }
     console.log(`Total a pagar: $${totalVenta}. Método de pago: ${window.metodoDePagoSeleccionado}`);
@@ -588,12 +588,12 @@ function procesarPago(metodoPago) {
     console.log("Antes de procesarPago, cliente seleccionado:", window.clienteSeleccionado);
 
     if (!window.productosVenta || window.productosVenta.length === 0) {
-        alert("No hay productos en el carrito para procesar el pago.");
+        mostrarMensaje("No hay productos en el carrito para procesar el pago.");
         return;
     }
 
     if (!window.clienteSeleccionado || !window.clienteSeleccionado.idClientes) {
-        alert("Selecciona un cliente antes de vender.");
+        mostrarMensaje("Selecciona un cliente antes de vender.");
         console.error("No hay cliente seleccionado.");
         return;
     }
@@ -604,7 +604,7 @@ function procesarPago(metodoPago) {
     }
 
     if (!window.idUsuarioSesion) {
-        alert('Debe iniciar sesión para realizar la venta.');
+        mostrarMensaje('Debe iniciar sesión para realizar la venta.');
         return;
     }
 
@@ -633,11 +633,11 @@ function procesarPago(metodoPago) {
         if (metodoPago === "Efectivo") {
             const efectivoRecibido = parseFloat(document.getElementById('efectivoRecibido').value);
         if (isNaN(efectivoRecibido)) {
-            alert("Por favor, ingrese el efectivo recibido.");
+            mostrarMensaje("Por favor, ingrese el efectivo recibido.");
             return;
         }
         if (efectivoRecibido < totalAPagar) {
-            alert("El efectivo recibido es insuficiente. Venta cancelada.");
+            mostrarMensaje("El efectivo recibido es insuficiente. agrega el valor correcto.");
             return;
         }
     }
@@ -668,7 +668,7 @@ function procesarPago(metodoPago) {
     console.log("🔥 JSON que se enviará al backend:", JSON.stringify(datosVenta, null, 2));
 
     if (!datosVenta.idCliente || datosVenta.productosData.length === 0) {
-        alert("Error: No se ha seleccionado un cliente o no hay productos en el carrito.");
+        mostrarMensaje("Error: No se ha seleccionado un cliente o no hay productos en el carrito.");
         console.error("Intento de procesar venta sin cliente o productos.", datosVenta);
         return;
     }
@@ -710,7 +710,7 @@ function procesarPago(metodoPago) {
         }, 1000);
 
                 } else {
-                alert("Error al registrar la venta: " + (data.message || "desconocido"));
+                mostrarMensaje("Error al registrar la venta: " + (data.message || "desconocido"));
               }
            });
         }
@@ -843,7 +843,7 @@ async function buscarClientePorCedula() {
 function aceptarCliente() {
     if (!window.clienteSeleccionado || window.clienteSeleccionado.estado === "INACTIVO") {
         console.warn('Intento de aceptar sin un cliente seleccionado.');
-        alert("No hay cliente seleccionado");
+        mostrarMensaje("No hay cliente seleccionado");
         return;
     }
     
@@ -894,7 +894,7 @@ function abrirCaja() {
     const numeroCaja = document.getElementById('numero_caja') ? document.getElementById('numero_caja').value : null;
 
     if (!numeroCaja) {
-        alert("Por favor, seleccione el número de caja.");
+       mostrarMensaje("Por favor, seleccione el número de caja.");
         return;
     }
 
@@ -911,16 +911,16 @@ function abrirCaja() {
         .then(res => res.json())
         .then(data => {
             if (data.status === "ok") {
-                alert(`Caja N°${numeroCaja} abierta con un monto inicial de $${formatNumberWithCommas(monto)}.`);
+                mostrarMensaje(`Caja N°${numeroCaja} abierta con un monto inicial de $${formatNumberWithCommas(monto)}.`);
                 const modal = bootstrap.Modal.getInstance(document.getElementById('modalAbrirCaja'));
                 modal.hide();
             } else {
-                alert("Error al abrir caja: " + data.message);
+                mostrarMensaje("Error al abrir caja: " + data.message);
             }
         })
         .catch(err => console.error("Error al abrir caja:", err));
     } else {
-        alert("Por favor, ingrese el monto inicial.");
+        mostrarMensaje("Por favor, ingrese el monto inicial.");
     }
 }
 
@@ -930,7 +930,7 @@ function cerrarCaja() {
     const observaciones = document.getElementById('observacionesCierre').value;
 
     if (isNaN(monto) || monto < 0) {
-        alert("Por favor, ingrese un monto final válido.");
+        mostrarMensaje("Por favor, ingrese un monto final válido.");
         return;
     }
 
@@ -946,7 +946,7 @@ function cerrarCaja() {
     })
     .then(data => {
         if (!data || !data.idCaja) {
-            alert("No se encontró la caja activa en la base de datos.");
+            mostrarMensaje("No se encontró la caja activa en la base de datos.");
             return;
         }
 
@@ -967,23 +967,44 @@ function cerrarCaja() {
         })
         .then(resCerrar => {
             if (resCerrar.status === "ok") {
-                alert(`Caja cerrada correctamente: $${formatNumberWithCommas(monto)}`);
+                mostrarMensaje(`Caja cerrada correctamente: $${formatNumberWithCommas(monto)}`);
                 const modal = bootstrap.Modal.getInstance(document.getElementById('modalCerrarCaja'));
                 modal.hide();
             } else {
-                alert(`Error al cerrar caja: ${resCerrar.message}`);
+                mostrarMensaje(`Error al cerrar caja: ${resCerrar.message}`);
             }
         })
         .catch(err => {
             console.error('Error al cerrar caja:', err);
-            alert('No se pudo cerrar la caja. Revisa tu conexión o el servidor.');
+            mostrarMensaje('No se pudo cerrar la caja. Revisa tu conexión o el servidor.');
         });
     })
     .catch(err => {
         console.error('Error al obtener caja activa:', err);
-        alert('No se pudo obtener la caja activa.');
+        mostrarMensaje('No se pudo obtener la caja activa.');
     });
 }
+
+// --- Verificar automáticamente si hay caja abierta al cargar el módulo de ventas ---
+// Si no existe una caja activa, se abre el modal para obligar al usuario a aperturar caja
+
+document.addEventListener("DOMContentLoaded", function () {
+    fetch('VenderServlet', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ accion: 'obtenerCajaActiva' })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (!data || data.status === "error") {
+            setTimeout(() => {
+                const modal = new bootstrap.Modal(document.getElementById('modalAbrirCaja'));
+                modal.show();
+            }, 300);
+        }
+    })
+    .catch(err => console.error("Error verificando caja:", err));
+});
 
 // --- Función para aplicar descuento a un producto ---
 function aplicarDescuentoProducto() {
@@ -992,7 +1013,7 @@ function aplicarDescuentoProducto() {
     const idProducto = parseInt(inputModal.dataset.idProducto);
 
     if (isNaN(porcentaje) || porcentaje < 0 || porcentaje > 100) {
-        alert('Ingrese un porcentaje válido (0-100)');
+        mostrarMensaje('Ingrese un porcentaje válido (0-100)');
         return;
     }
 
@@ -1206,3 +1227,13 @@ document.addEventListener('DOMContentLoaded', () => {
     actualizarMensajeDescuentoProducto();
   });
 });
+
+function mostrarMensaje(mensaje, titulo = "Atención") {
+    const modalTitulo = document.getElementById("modalMensajeTitulo");
+    const modalBody = document.getElementById("modalMensajeBody");
+    modalTitulo.textContent = titulo;
+    modalBody.textContent = mensaje;
+
+    const modal = new bootstrap.Modal(document.getElementById('modalMensaje'));
+    modal.show();
+}

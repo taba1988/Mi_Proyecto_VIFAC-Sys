@@ -252,7 +252,7 @@
         <p class="mb-1">Banco Caja Social: cuenta de ahorros Nro. 000000000</p>
         <p class="mb-1">Bancolombia: Cuenta de ahorros Nro. 0000000</p>
         <p class="mb-1">Cuenta Nequi: 1234567890</p>
-        <p class="mb-1">Girar Cheque a nombre de Maxi-Limpieza S.A</p>
+        <p class="mb-1"><strong>Girar Cheque a nombre de:</strong> ${empresa.razon_social}</p>
         <p class="mb-1">Enviar consignacion a ${empresa.email}</p>
         <p class="mb-1">Tomar contacto a ${empresa.telefono}</p>
         <p class="mb-0">correo para atención al cliente: ${empresa.email}</p>

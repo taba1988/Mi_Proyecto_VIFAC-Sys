@@ -358,9 +358,16 @@ public class VenderServlet extends HttpServlet {
         ventaForm.setIdEmisor(1);
 
         Caja cajaActiva = cajaDAO.obtenerCajaActivaPorUsuario((Integer) session.getAttribute("idUsuario"));
-        if (cajaActiva != null) {
-            ventaForm.setIdCaja(cajaActiva.getIdCaja());
+        
+        if (cajaActiva == null) {
+            r.setStatus("error");
+            r.setMessage("No hay una caja abierta. Debes abrir una caja antes de realizar ventas.");
+            resp.getWriter().write(gson.toJson(r));
+            return;
         }
+
+        // Si hay caja abierta, se asigna a la venta
+        ventaForm.setIdCaja(cajaActiva.getIdCaja());
 
         int idVentaGenerada = ventaDAO.registrarVenta(ventaForm);
         
