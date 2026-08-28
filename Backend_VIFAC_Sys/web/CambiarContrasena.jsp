@@ -143,6 +143,7 @@
     </c:if>
 
      <%@ include file="temporizador.jsp" %>
+     <%@ include file="Bubbles.jsp" %>
      
     <!-- Scripts originales -->
     <script src="js/bootstrap.bundle.min.js"></script>

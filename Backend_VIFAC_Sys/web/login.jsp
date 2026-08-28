@@ -129,6 +129,7 @@
     </div>
   </div>
 </div>
+<%@ include file="Bubbles.jsp" %>
 <script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/login.js"></script>
 <script>

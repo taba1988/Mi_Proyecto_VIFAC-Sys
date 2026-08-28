@@ -116,7 +116,8 @@
           </div>
       </div>
   </div>
-            
+              
+    <%@ include file="Bubbles.jsp" %>        
     <!-- Scripts de Bootstrap y archivo JS propio -->
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/EnviarToken.js"></script>

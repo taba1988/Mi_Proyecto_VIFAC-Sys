@@ -110,7 +110,11 @@ body {
 /* --- Estilos para Elementos Fijos / Íconos Laterales (fixed-icons) --- */
 
 .fixed-icons {
-    transform: translateY(50px) !important;
+    position: fixed;
+    bottom: 20px;
+    left: 9%;
+    transform: translateX(-50%);
+    z-index: 9999;
 }
 
 /* Ajustes de posición en mobile para fixed-icons */

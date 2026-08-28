@@ -127,10 +127,10 @@
          </div>
      </div>
     </c:if>
-
+    <%@ include file="Bubbles.jsp" %>
     <!-- Scripts originales -->
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/recuperar.js"></script>
-
+    
 </body>
 </html>

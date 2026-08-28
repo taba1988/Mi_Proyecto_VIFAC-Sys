@@ -342,20 +342,20 @@
                 </div> <!-- Fin acordeón para pantallas grandes -->
 
                 <!-- Iconos fijos pantalla grande-->
-                <div class="fixed-icons mb-2" style="position: relative; bottom: -140px;">
+                <div class="fixed-icons mb-2">
                     <div class="d-flex justify-content-center gap-5 mt-2">
                         <a href="indexServlet" class="menu-link fixed-icon-link" 
                                data-bs-toggle="tooltip" data-bs-placement="top" title="Inicio">
-                            <i class="bi bi-house-door-fill fs-2"></i>
+                            <i class="bi bi-house-door-fill fs-3"></i>
                         </a>
                         <a href="${pageContext.request.contextPath}/PerfilServlet" 
                                class="menu-link fixed-icon-link" data-bs-toggle="tooltip" 
                                data-bs-placement="top" title="Mi Perfil">
-                            <i class="bi bi-person-vcard-fill fs-2"></i>
+                            <i class="bi bi-person-vcard-fill fs-3"></i>
                         </a>
                         <a href="logoutServlet" class="menu-link fixed-icon-link" 
                                data-bs-toggle="tooltip" data-bs-placement="top" title="Cerrar sesión">
-                            <i class="bi bi-box-arrow-right fs-2"></i>
+                            <i class="bi bi-box-arrow-right fs-3"></i>
                         </a>
                     </div>
                 </div>
