@@ -1,4 +1,5 @@
-/* Overlay transparente sobre la pantalla */
+
+/* Overlay transparente */
 #loadingOverlay {
     display: none;
     position: fixed;
@@ -12,51 +13,57 @@
     pointer-events: all;
 }
 
-/* Activar mensaje de carga */
 #loadingOverlay.activo {
     display: flex;
 }
 
-/* Texto centrado, sin fondo ni recuadro */
-.loading-label {
-    position: fixed;
-    top: var(--loading-top, 50%);
-    left: var(--loading-left, 50%);
-    transform: translate(-50%, calc(-50% + 30px));
-    margin: 0;
-    padding: 0;
-    background: transparent !important;
-    border: none !important;
-    border-radius: 0;
-    color: #333652;
-    font-size: 14px;
-    font-weight: 600;
-    text-align: center;
-    box-shadow: none !important;
-    animation: loadTxtFade 1.8s ease-in-out infinite;
+/* Indicador giratorio */
+.loading-spinner {
+    width: 5cm;
+    height: 5cm;
+    position: relative;
+    display: inline-block;
+    animation: loadingGiro 3s linear infinite;
 }
 
-/* Ocultar las burbujas */
-.loading-bub-wrap {
-    display: none !important;
+/* Rayitas giratorias */
+.loading-spinner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: repeating-conic-gradient(
+        #333652 0deg 15deg,
+        transparent 15deg 30deg
+    );
+
+    /* Centro transparente para formar las rayitas */
+    -webkit-mask: radial-gradient(
+        circle,
+        transparent 0 60%,
+        #000 63% 100%
+    );
+    mask: radial-gradient(
+        circle,
+        transparent 0 60%,
+        #000 63% 100%
+    );
 }
 
-/* Animación del texto */
-@keyframes loadTxtFade {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
+/* Animación */
+@keyframes loadingGiro {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
-/* Puntos animados */
-.loading-dots::after {
-   content: '';
-   animation: loadDots 1.8s linear infinite;
-}
-
-@keyframes loadDots {
-    0% { content: ''; }
-    25% { content: '.'; }
-    50% { content: '..'; }
-    75% { content: '...'; }
-    100% { content: ''; }
+/* Pantallas pequeñas */
+@media (max-width: 768px) {
+    .loading-spinner {
+        width: 2cm;
+        height: 2cm;
+    }
 }

@@ -1,3 +1,4 @@
+
 <%--
     Archivo: Loading.jsp
     Autor: Orlanduvalie Tabares Gutierrez
@@ -17,7 +18,7 @@
         <div class="loading-orbit ob3"></div>
         <div class="loading-main-bub"></div>
     </div>
-    <div class="loading-label" id="loadingTexto">Cargando<span class="loading-dots"></span></div>
+    <div class="loading-spinner" role="status" aria-label="Procesando"></div>
 </div>
 
 <script src="js/loading.js"></script>
