@@ -58,7 +58,7 @@
         <div class="profile-image-section d-none d-lg-flex flex-column align-items-center">
             <div class="rounded-circle border border-primary mb-2 overflow-hidden" style="width: 80px; height: 100px;">
             <img 
-                src="${pageContext.request.contextPath}/ImagenPerfilServlet?idUsuario=${usuarioLogeado.idUsuario}" 
+                src="${pageContext.request.contextPath}/ImagenPerfilServlet?idUsuario=${usuarioLogeado.idUsuario}&v=${System.currentTimeMillis()}"
                 alt="Foto de usuario ${usuarioLogeado.nombre}" 
                 class="w-100 h-100 object-fit-cover"
                 onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/img/avatarperfil.png';"
@@ -228,8 +228,9 @@
   </div>
 </div>
 
-<%-- Include temporizador --%>
+<%-- Includes --%>
 <%@ include file="temporizador.jsp" %>
+<%@ include file="Loading.jsp" %>
 
 <!-- Scripts -->
 <script src="js/bootstrap.bundle.min.js"></script>

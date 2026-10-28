@@ -272,7 +272,9 @@
     </div>
 </div>
 
+    <%-- Includes --%>
     <%@ include file="temporizador.jsp" %>
+    <%@ include file="Loading.jsp" %>
     
    <script src="js/bootstrap.bundle.min.js"></script>
    <script src="js/proveedores.js"></script>

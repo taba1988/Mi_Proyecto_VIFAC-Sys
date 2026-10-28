@@ -473,7 +473,9 @@
       </div>
     </div>
     
+    <%-- Includes --%>
     <%@ include file="temporizador.jsp" %>
+    <%@ include file="Loading.jsp" %>
 
     <script src="js/bootstrap.bundle.min.js"></script>
     <script> window.idUsuarioSesion = <%= session.getAttribute("idUsuario") %>;</script>

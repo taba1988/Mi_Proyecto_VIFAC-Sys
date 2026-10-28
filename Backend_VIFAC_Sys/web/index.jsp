@@ -582,7 +582,7 @@
          aria-labelledby="modalNotificacionesLabel" 
          aria-hidden="true"
          data-bs-backdrop="static"
-         data-bs-keyboard="false">>
+         data-bs-keyboard="false">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header bg-info text-white">
@@ -671,6 +671,7 @@
     --%>
     
     <%@ include file="temporizador.jsp" %>
+    <%@ include file="Loading.jsp" %>
 
     <!-- Scripts Bootstrap y custom -->
     <script src="js/bootstrap.bundle.min.js"></script>

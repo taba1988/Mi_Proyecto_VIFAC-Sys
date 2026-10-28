@@ -1,3 +1,4 @@
+
 /*
  * Clase modelo Notificacion utilizada para el manejo de notificaciones del sistema.
  * Permite representar y transportar la información relacionada con los eventos generados
@@ -18,16 +19,18 @@ public class Notificacion {
     private int idUsuario;
     private String mensaje;
     private String tipo;
-    private Integer referenciaId; // puede ser null
+    private Integer referenciaId;
     private boolean leido;
     private Timestamp fechaCreacion;
+    private boolean eliminado;
+    private Timestamp fechaEliminacion;
 
     // Constructor vacío
     public Notificacion() {}
 
-    // Constructor completo
+    // Constructor completo original (compatibilidad)
     public Notificacion(int idNotificacion, int idUsuario, String mensaje, String tipo,
-                         Integer referenciaId, boolean leido, Timestamp fechaCreacion) {
+                        Integer referenciaId, boolean leido, Timestamp fechaCreacion) {
         this.idNotificacion = idNotificacion;
         this.idUsuario = idUsuario;
         this.mensaje = mensaje;
@@ -35,17 +38,50 @@ public class Notificacion {
         this.referenciaId = referenciaId;
         this.leido = leido;
         this.fechaCreacion = fechaCreacion;
+        this.eliminado = false;
+        this.fechaEliminacion = null;
     }
 
-    // Constructor para insertar
-    public Notificacion(int idUsuario, String mensaje, String tipo,
-                         Integer referenciaId, boolean leido, Timestamp fechaCreacion) {
+    // Constructor completo con estado de eliminación
+    public Notificacion(int idNotificacion, int idUsuario, String mensaje, String tipo,
+                        Integer referenciaId, boolean leido, Timestamp fechaCreacion,
+                        boolean eliminado, Timestamp fechaEliminacion) {
+        this.idNotificacion = idNotificacion;
         this.idUsuario = idUsuario;
         this.mensaje = mensaje;
         this.tipo = tipo;
         this.referenciaId = referenciaId;
         this.leido = leido;
         this.fechaCreacion = fechaCreacion;
+        this.eliminado = eliminado;
+        this.fechaEliminacion = fechaEliminacion;
+    }
+
+    // Constructor para insertar original (compatibilidad)
+    public Notificacion(int idUsuario, String mensaje, String tipo,
+                        Integer referenciaId, boolean leido, Timestamp fechaCreacion) {
+        this.idUsuario = idUsuario;
+        this.mensaje = mensaje;
+        this.tipo = tipo;
+        this.referenciaId = referenciaId;
+        this.leido = leido;
+        this.fechaCreacion = fechaCreacion;
+        this.eliminado = false;
+        this.fechaEliminacion = null;
+    }
+
+    // Constructor para insertar con estado de eliminación
+    public Notificacion(int idUsuario, String mensaje, String tipo,
+                        Integer referenciaId, boolean leido, Timestamp fechaCreacion,
+                        boolean eliminado, Timestamp fechaEliminacion) {
+        this.idUsuario = idUsuario;
+        this.mensaje = mensaje;
+        this.tipo = tipo;
+        this.referenciaId = referenciaId;
+        this.leido = leido;
+        this.fechaCreacion = fechaCreacion;
+        this.eliminado = eliminado;
+        this.fechaEliminacion = fechaEliminacion;
     }
 
     public int getIdNotificacion() {
@@ -102,5 +138,21 @@ public class Notificacion {
 
     public void setFechaCreacion(Timestamp fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
+    }
+
+    public boolean isEliminado() {
+        return eliminado;
+    }
+
+    public void setEliminado(boolean eliminado) {
+        this.eliminado = eliminado;
+    }
+
+    public Timestamp getFechaEliminacion() {
+        return fechaEliminacion;
+    }
+
+    public void setFechaEliminacion(Timestamp fechaEliminacion) {
+        this.fechaEliminacion = fechaEliminacion;
     }
 }

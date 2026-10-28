@@ -129,7 +129,10 @@
     </div>
   </div>
 </div>
+        
+<%-- Includes --%>
 <%@ include file="Bubbles.jsp" %>
+<%@ include file="Loading.jsp" %>
 <script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/login.js"></script>
 <script>

@@ -1,0 +1,62 @@
+/* Overlay transparente sobre la pantalla */
+#loadingOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: transparent;
+    align-items: center;
+    justify-content: center;
+    pointer-events: all;
+}
+
+/* Activar mensaje de carga */
+#loadingOverlay.activo {
+    display: flex;
+}
+
+/* Texto centrado, sin fondo ni recuadro */
+.loading-label {
+    position: fixed;
+    top: var(--loading-top, 50%);
+    left: var(--loading-left, 50%);
+    transform: translate(-50%, calc(-50% + 30px));
+    margin: 0;
+    padding: 0;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0;
+    color: #333652;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: none !important;
+    animation: loadTxtFade 1.8s ease-in-out infinite;
+}
+
+/* Ocultar las burbujas */
+.loading-bub-wrap {
+    display: none !important;
+}
+
+/* Animación del texto */
+@keyframes loadTxtFade {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+/* Puntos animados */
+.loading-dots::after {
+   content: '';
+   animation: loadDots 1.8s linear infinite;
+}
+
+@keyframes loadDots {
+    0% { content: ''; }
+    25% { content: '.'; }
+    50% { content: '..'; }
+    75% { content: '...'; }
+    100% { content: ''; }
+}

@@ -142,8 +142,10 @@
      </div>
     </c:if>
 
+     <%-- Includes --%>
      <%@ include file="temporizador.jsp" %>
      <%@ include file="Bubbles.jsp" %>
+     <%@ include file="Loading.jsp" %>
      
     <!-- Scripts originales -->
     <script src="js/bootstrap.bundle.min.js"></script>
